@@ -18,8 +18,12 @@
     - 250 words individual post on forum
   - Assessment 1 Part A: Group Project Plan (Due 2nd Sept 5pm) (group)
     - Introduction & Project Motivation
+      - Work out project direction - what questions about the data do we want to ask? 
     - Brief Preliminary Literature Review
+      - Do we want multiple people doing this literature review?
     - Brief Initial Outline of Methods, Software & Description of Data
+      - What are key findings from literature review? Does the information guide what methods we should explore?
+      - What tools / algorithms / methods do we want to explore for our project?
     - A list of main of main tasks or activities to accomplish the project, role of team members aligned to tasks and a timeline
       - Gantt chart
       - Mind map? per team member with their individual skills, previous knowledge & experience, achievements, personal characteristics
