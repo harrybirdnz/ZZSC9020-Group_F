@@ -1,7 +1,7 @@
 # Meeting 1 Agenda
 
 - Introductions
-- Schedule weekly meeting
+- Schedule weekly meetings
 - Weekly Tasks
   - Elect a team leader
   - Define roles and responsibilities for each member of the team with proper justification
@@ -12,6 +12,14 @@
     - File sharing: Dropbox, SeaFile, OneDrive, Google Drive, other
     - Collaborative editing: Overleaf, Colab, Replit, other
     - Organise Group meetings: Teams, Zoom, Discord, Slack, other
+  - Establish / recap how to use GitHub
 - Assessments
-  - Weekly Reflective Portfolio
+  - Weekly Reflective Portfolio (individual)
     - 250 words individual post on forum
+  - Assessment 1 Part A: Group Project Plan (Due 2nd Sept 5pm) (group)
+    - Introduction & Project Motivation
+    - Brief Preliminary Literature Review
+    - Brief Initial Outline of Methods, Software & Description of Data
+    - A list of main of main tasks or activities to accomplish the project, role of team members aligned to tasks and a timeline
+      - Gantt chart
+      - Mind map? per team member with their individual skills, previous knowledge & experience, achievements, personal characteristics
