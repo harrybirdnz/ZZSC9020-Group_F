@@ -23,3 +23,5 @@
     - A list of main of main tasks or activities to accomplish the project, role of team members aligned to tasks and a timeline
       - Gantt chart
       - Mind map? per team member with their individual skills, previous knowledge & experience, achievements, personal characteristics
+  - Assessment 1 Part B: Individual implementation checklist (Due 2nd Sept 5pm) (individual)
+    - Complete individual checklist
