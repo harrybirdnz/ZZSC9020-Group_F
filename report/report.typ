@@ -1,6 +1,11 @@
+// Document Setup
 #set heading(numbering: "1.1")
 #set math.equation(numbering: "(1)")
-#set page(margin: 110pt, numbering: none)
+#set page(margin: 110pt)
+#set text(region: "AU", size:10pt, font: "New Computer Modern")
+
+// Heading Styles (to match template)
+#show heading: it => [#text(weight: "regular")[#it]]
 #let head(body) = {
   set align(center)
   set text(size: 14pt, weight: "regular")
@@ -8,7 +13,6 @@
   #body \
   #line(length: 100%)\ ]
 }
-#show heading: it => [#text(weight: "regular")[#it]]
 #show heading.where(level: 1, outlined:true).and(
   heading.where(body:[Introduction])).or(
   heading.where(body:[Literature Review])).or(
@@ -22,13 +26,12 @@
     #it.body
 ]
 ]
-#set text(region: "AU", size:10pt, font: "New Computer Modern")
-
+// Table Caption Above
 #show figure.where(
   kind: table
 ): set figure.caption(position: top)
 
-
+// Begin Document
 #place(
   top + center,
   scope: "parent",
@@ -40,7 +43,6 @@
   CAPSTONE PROJECT BY GROUP F\
 A DATA SCIENCE APPROACH TO FORECAST ELECTRICITY CONSUMPTION IN AUSTRALIA
 ]
-
 #v(20%)
 Cameron Botsford (z5496223)\
 Harry Bird (z5579579)\
@@ -54,10 +56,9 @@ September 2025\
 #v(20%)
 #align(bottom)[#smallcaps()[Submitted in partial fulfilment of the requirements of
 the capstone course ZZSC9020]]
-
-
   ],
 )
+
 #pagebreak()
 #counter(page).update(1)
 #set page(numbering: "i")
@@ -80,7 +81,6 @@ Signed: #box(height: 0pt)[#line(length: 45%)] #h(10%) Date: #box(height: 0pt)[#l
 Signed: #box(height: 0pt)[#line(length: 45%)] #h(10%) Date: #box(height: 0pt)[#line(length: 25%)]\
 #v(20pt)
 Signed: #box(height: 0pt)[#line(length: 45%)] #h(10%) Date: #box(height: 0pt)[#line(length: 25%)]\
-
 
 #pagebreak()
 #head[Acknowledgements]
@@ -120,7 +120,7 @@ Nidhi to complete
 === Long Short-Term Memory Network
 Cameron to complete
 === Transformer
-Harry to Complete
+The Transformer network architecture was introduced in 2017 by researchers at Google @google1. It was designed to replace and outperform the recurrence based models used at the time, both in increased performance and reduced training cost due to parallelisation @transformer2. The architecture is a specific instance of the encoder-decoder models that had become popular in the years prior @transformer1. The primary advancement from this architecture was in the space of natural language processing (NLP), with a myriad of models being developed and becoming familiar in the mainstream such as ChatGPT @transformer1. However, this architecture can also still be applied to forecasting problems, and has been successfully @transformer2. 
 
 
 #pagebreak()
@@ -131,15 +131,24 @@ want to use bash utilities such as awk or sed.
 Of course, to ensure reproducibility, you should use something like Git and
 RMarkdown (or a Jupyter Notebook). Do not use Word!
 == Description of the Data
-How are the data stored? What are the sizes of the data files? How many files?
-etc.
+#emph[How are the data stored? What are the sizes of the data files? How many files? etc.]
 == Pre-processing Steps
-What did you have to do to transform the data so that they become useable?
+#emph[What did you have to do to transform the data so that they become useable?]
+- Missing Values
+- Irregular Timesteps
+- Augmentation
+=== totaldemand_nsw
+This file contains 22 entries where datetime is null. These must be removed.
+There are 11 instances where 3 records have identical datetimes - all at 3am??? Daylight savings - need to document this better. There were no entries with valid datetime that had null demand.
+
+=== temperature_nsw.csv
+There are three missing days. Why???
+How should we deal with this?
 
 === Heating Degree Days (HDD) and Cooling Degree Days (CDD)
-HDD and CDD are variables that are used to measure heating and cooling requirements. This estimate is based on the difference between the air temperature and a critical temperature set by AEMO. For New South Wales, the HDD critical temperature is 17.0 degrees C and the CDD critical temperature is 19.5 degrees C. @hdd calculates the HDD and @cdd calculates CDD.
-$ "HDD" = "Max"(0, overline(T) - 17) $ <hdd>
-$ "CDD" = "Max"(0, C T - overline(T) ) $ <cdd>
+HDD and CDD are variables that are used to measure heating and cooling requirements. This estimate is based on the difference between the air temperature and a critical temperature set by AEMO. For New South Wales, the HDD critical temperature is 17.0 degrees C and the CDD critical temperature is 19.5 degrees C @aemo1. @hdd calculates the HDD and @cdd calculates CDD.
+$ "HDD" = "Max"(0, 17 - overline(T)) $ <hdd>
+$ "CDD" = "Max"(0, overline(T) - 19.5 ) $ <cdd>
 
 == Data Cleaning
 How did you deal with missing data? etc.
@@ -153,7 +162,9 @@ Nidhi to complete
 === Long Short-Term Memory Network
 Cameron to complete
 === Transformer
-Harry to Complete
+The transformer takes an input, which in NLP is a sentence or phrase, that is first converted to numbers by an embedding layer before being passed to the encoder portion of the transformer @transformer2. Sequentiality is captured through positional encoding. In our task, we aim to input sequential demand and temperature data, and output a prediction for the next 24 hours of electricity demand. 
+==== Input
+The input can be further broken down between historical data and contextual data. Historical data is the actual temperature and demand recordings. Contextual data is that which can be extracted from the date/time, such as day of the week and month of the year. 
 
 #pagebreak()
 = Exploratory Data Analysis
@@ -169,6 +180,10 @@ For example, one can use the linear regression model
 $ Y_i = beta_0 + beta_1x_(1i) + ... + beta_p x_(pi) + epsilon_i, i=1,...,n $
 
 where it is assumed that the $epsilon_i$’s are i.i.d. N(0, 1).
+
+== Accuracy
+Accuracy of each model was determined using mean absolute percentage error (MAPE), defined in @mape.
+$ "MAPE" = 1/N sum_(i=1)^N abs(y_i - hat(y)_i)/y_i $ <mape>
 
 #pagebreak()
 = Discussion

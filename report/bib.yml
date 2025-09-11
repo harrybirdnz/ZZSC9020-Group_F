@@ -5,7 +5,40 @@ aemo1:
   date: 2020-08
   url: https://www.aemo.com.au/-/media/files/electricity/nem/planning_and_forecasting/nem_esoo/electricity-demand-forecasting-methodology-information-paper.pdf
 
+transformer1:
+  type: misc
+  title: 'Transformer models: an introduction and catalog'
+  author:
+  - Amatriain, Xavier
+  - Sankar, Ananth
+  - Bing, Jie
+  - Bodigutla, Praveen Kumar
+  - Hazen, Timothy J.
+  - Kazi, Michaeel
+  date: 2024
+  url: https://arxiv.org/abs/2302.07730
+  serial-number:
+    arxiv: '2302.07730'
 
+transformer2:
+  type: article
+  title: Transformer-Based Model for Electrical Load Forecasting
+  author:
+  - L’Heureux, Alexandra
+  - Grolinger, Katarina
+  - Capretz, Miriam A. M.
+  date: 2022
+  url: https://www.mdpi.com/1996-1073/15/14/4993
+  serial-number:
+    doi: 10.3390/en15144993
+    issn: 1996-1073
+  parent:
+    type: periodical
+    title: Energies
+    issue: 14
+    volume: 15
+
+    
 
 
 
