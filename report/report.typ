@@ -168,7 +168,51 @@ The input can be further broken down between historical data and contextual data
 
 #pagebreak()
 = Exploratory Data Analysis
-This is where you explore your data using histograms, scatterplots, boxplots, numerical summaries, etc.
+#emph[This is where you explore your data using histograms, scatterplots, boxplots, numerical summaries, etc.] 
+
+#figure(
+  image("media/weekday_demand.png"),
+  caption: [Daily Average Demand]
+)
+#figure(
+  image("media/month_demand.png"),
+  caption: [Monthly Average Demand]
+)
+#figure(
+  image("media/seasonal_demand.png"),
+  caption: [Seasonal Average Demand]
+)
+#figure(
+  image("media/time_series.png"),
+  caption: [Time Series Exploration]
+)
+#figure(
+  image("media/seasonal_comparison.png"),
+  caption: [Seasonal Comparison]
+)
+#figure(
+  image("media/scatterplots.png"),
+  caption: [Scatterplots]
+)
+#figure(
+  image("media/scatterplots2.png"),
+  caption: [Scatterplots]
+)
+#figure(
+  image("media/scatterplots3.png"),
+  caption: [Scatterplots]
+)
+#figure(
+  image("media/scatterplots5.png"),
+  caption: [Scatterplots]
+)
+#figure(
+  image("media/correlation.png"),
+  caption: [Correlations]
+)
+
+
+
 
 
 #pagebreak()
