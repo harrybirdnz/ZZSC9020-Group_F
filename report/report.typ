@@ -30,7 +30,17 @@
 #show figure.where(
   kind: table
 ): set figure.caption(position: top)
-
+// Table Styling
+#show table.cell.where(y: 0): strong
+#set table(
+  stroke: (x, y) => if y == 0 {
+    (bottom: 0.5pt + black)
+  },
+  align: (x, y) => (
+    if x > 0 { center }
+    else { left }
+  )
+)
 // Begin Document
 #place(
   top + center,
@@ -91,6 +101,7 @@ his thesis style to be shamelessly copied.
 
 #pagebreak()
 #head[Abstract]
+// Harry
 The image below gives you some hint about how to write a good abstract.
 #image("media/abstract.png")
 
@@ -101,16 +112,22 @@ The image below gives you some hint about how to write a good abstract.
 #counter(page).update(1)
 #set page(numbering: "1")
 = Introduction
+// Nidhi
 This Template can be used for the ZZSC9020 course report. We suggest you organise your report using the following chapters but, depending on your own project, nothing prevents you to have a different organisation.
+
+To Assign.
 
 #pagebreak()
 = Literature Review
+// Cameron
 See #link("https://typst.app/docs/reference/model/ref/") for how to reference sources and figures.\ \
 In order to incorporate your own references in this report, we strongly advise you use BibTeX. Your references then needs to be recorded in the file references.bib.\ \
 Typst also supports the Hayagriva .yml format which I find is a lot easier to read than .bib, however most sources let you export directly as .bib so using the .yml requires conversion (https://jonasloos.github.io/bibtex-to-hayagriva-webapp/).\
 Here is a reference using .yml @aemo1.\
 Here is a reference using .bib @google1.\
 Both show up in the references so use whatever you prefer.
+
+Harry to copy across the literature review from project plan.
 
 == Model Specific
 === Linear Regression
@@ -120,11 +137,16 @@ Nidhi to complete
 === Long Short-Term Memory Network
 Cameron to complete
 === Transformer
-The Transformer network architecture was introduced in 2017 by researchers at Google @google1. It was designed to replace and outperform the recurrence based models used at the time, both in increased performance and reduced training cost due to parallelisation @transformer2. The architecture is a specific instance of the encoder-decoder models that had become popular in the years prior @transformer1. The primary advancement from this architecture was in the space of natural language processing (NLP), with a myriad of models being developed and becoming familiar in the mainstream such as ChatGPT @transformer1. However, this architecture can also still be applied to forecasting problems, and has been successfully @transformer2. 
+The Transformer network architecture (@trans-arc) was introduced in 2017 by researchers at Google @google1. It was designed to replace and outperform the primarily recurrence based models used at the time, both in increased performance and reduced training cost due to parallelisation @transformer2. The architecture is a specific instance of the encoder-decoder models that had become popular in the years prior @transformer1. The primary advancement from this architecture was in the space of natural language processing (NLP), with a myriad of models being developed and becoming familiar in the mainstream such as ChatGPT @transformer1. However, this architecture can also still be applied to forecasting problems, and has been successfully @transformer2. 
+#figure(
+  image("media/transformer.png"),
+  caption: [Transformer Architecture introduced by @google1]
+) <trans-arc>
 
 
 #pagebreak()
 = Material and Methods
+// Harry
 == Software
 R and Python of course are great software for Data Science. Sometimes, you might
 want to use bash utilities such as awk or sed.
@@ -161,14 +183,45 @@ Saba to complete
 Nidhi to complete
 === Long Short-Term Memory Network
 Cameron to complete
+
 === Transformer
-The transformer takes an input, which in NLP is a sentence or phrase, that is first converted to numbers by an embedding layer before being passed to the encoder portion of the transformer @transformer2. Sequentiality is captured through positional encoding. In our task, we aim to input sequential demand and temperature data, and output a prediction for the next 24 hours of electricity demand. 
+The transformer takes an input, which in NLP is a sentence or phrase, that is first converted to numbers by an embedding layer before being passed to the encoder portion of the transformer @transformer2. Sequentiality is captured through positional encoding. In our task, we aim to input sequential demand and temperature data, and output a prediction for the next 24 hours of electricity demand.
+
 ==== Input
 The input can be further broken down between historical data and contextual data. Historical data is the actual temperature and demand recordings. Contextual data is that which can be extracted from the date/time, such as day of the week and month of the year. 
 
+==== Structure
+In essence, the transformer is just another form of neural network. As our task is sequential prediction of only one value at a time, we can simplify the architecture introduced in @google1 and eliminate the need to refeed the already generated outputs back into the model. This allows us to create a straightforward structure as follows.
+- Input
+- Multi-Head Attention Layer
+- Feed Forward Layer
+- Multi-Head Attention Layer
+- Feed Forward Layer
+- Linear Layer
+- Output
+The novelty lies in allowing the attention mechanism (need more understanding) to capture a wide timeframe in training. 
+
+==== Output
+The output of the model is a simple floating point estimation of the total demand over the next 24 hours (Note that this is equivalent to the average demand multiplied by 24).
+
+==== Extension
+In simplifying the model architecture, the ability (and strength) of the model to perform recursive forecasting has been removed. Adding this back in could be a valuable technique in improving accuracy. For example, if the dataset were maintained at 30 minute intervals, and the model were asked to predict the next 24 hours demand at these intervals, then it may be possible to achieve greater accuracy, or results that are of more value to stakeholders.
+
 #pagebreak()
 = Exploratory Data Analysis
+// Saba
 #emph[This is where you explore your data using histograms, scatterplots, boxplots, numerical summaries, etc.] 
+
+From Wei:
+- Purpose is to show what's in the data - descriptive plots of key variables
+- Want to use results from EDA to guide analysis and decision making
+- EG non linear relationship may require transformation
+- May want to pay extra attention to interesting patterns
+- Select interesting/important ones, rest in the appendix.
+
+Saba to fill in.
+
+To Assign.
 
 #figure(
   image("media/weekday_demand.png"),
@@ -203,6 +256,10 @@ The input can be further broken down between historical data and contextual data
   caption: [Scatterplots]
 )
 #figure(
+  image("media/scatterplots4.png"),
+  caption: [Scatterplots]
+)
+#figure(
   image("media/scatterplots5.png"),
   caption: [Scatterplots]
 )
@@ -211,31 +268,40 @@ The input can be further broken down between historical data and contextual data
   caption: [Correlations]
 )
 
-
-
-
-
 #pagebreak()
 = Analysis and Results
-== A First Model
-Having a very simple model is always good so that you can benchmark any result
-you would obtain with a more elaborate model.\
-For example, one can use the linear regression model
-$ Y_i = beta_0 + beta_1x_(1i) + ... + beta_p x_(pi) + epsilon_i, i=1,...,n $
 
-where it is assumed that the $epsilon_i$’s are i.i.d. N(0, 1).
+== Model Performance
+@modelcomp shows the best performing model from each of the methodologies. 
+#figure(
+  table(
+  columns: 4,
+  table.header([Model], [Features], [Notes], [MAPE]),
+  [Linear regression], [], [], [],
+  [XGBoost], [], [], [],
+  [LSTM], [], [], [],
+  [Transformer], [Demand, Temperature], [Using Full Dataset + 80/20 sequential data split], [2.77%]
+  ),
+  caption: [Model Performance Comparison]
+) <modelcomp>
+
 
 == Accuracy
 Accuracy of each model was determined using mean absolute percentage error (MAPE), defined in @mape.
 $ "MAPE" = 1/N sum_(i=1)^N abs(y_i - hat(y)_i)/y_i $ <mape>
 
+
+
 #pagebreak()
 = Discussion
+// Nidhi
 Put the results you got in the previous chapter in perspective with respect to the
 problem studied.
 
+
 #pagebreak()
 = Conclusion and Further Issues
+// Cameron
 What are the main conclusions? What are your recommendations for the “client”?
 What further analysis could be done in the future?
 
