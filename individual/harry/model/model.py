@@ -10,11 +10,12 @@ from torch.utils.data import DataLoader, TensorDataset
 import torch.optim as optim
 import matplotlib.pyplot as plt
 import pandas as pd
+import os
 
 #global variables
 patience = 20
 num_epochs = 100
-input_dim = 2  # Number of features (demand and temperature)
+# input_dim = 2  # Number of features (demand and temperature)
 
 #helper functions and classes
 def create_sequences(data, seq_length):
@@ -172,21 +173,43 @@ def evaluate_model(model, X_val, y_val, device):
     return predictions
 
 def plot_results(train_losses, val_losses, y_val, predictions):
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(15, 5))
-    ax1.plot(train_losses, label='Training Loss')
-    ax1.plot(val_losses, label='Validation Loss')
-    ax1.set_xlabel('Epoch')
-    ax1.set_ylabel('MSE Loss')
-    ax1.set_title('Training History')
-    ax1.legend()
-    ax1.grid(True)
-    ax2.plot(y_val[:100], label='Actual', alpha=0.7)
-    ax2.plot(predictions[:100], label='Predicted', alpha=0.7)
-    ax2.set_xlabel('Time Step')
-    ax2.set_ylabel('Demand')
-    ax2.set_title('Predictions vs Actual (First 100 samples)')
-    ax2.legend()
-    ax2.grid(True)
+    fig, axs = plt.subplots(2, 2, figsize=(15, 10))
+
+    # Training and validation loss
+    axs[0, 0].plot(train_losses, label='Training Loss')
+    axs[0, 0].plot(val_losses, label='Validation Loss')
+    axs[0, 0].set_xlabel('Epoch')
+    axs[0, 0].set_ylabel('MSE Loss')
+    axs[0, 0].set_title('Training History')
+    axs[0, 0].legend()
+    axs[0, 0].grid(True)
+
+    # Predictions vs Actuals (first 100 samples)
+    axs[0, 1].plot(y_val[:100], label='Actual', alpha=0.7)
+    axs[0, 1].plot(predictions[:100], label='Predicted', alpha=0.7)
+    axs[0, 1].set_xlabel('Time Step')
+    axs[0, 1].set_ylabel('Demand')
+    axs[0, 1].set_title('Predictions vs Actual (First 100 samples)')
+    axs[0, 1].legend()
+    axs[0, 1].grid(True)
+
+    # Predictions vs Actuals (entire test set)
+    axs[1, 0].plot(y_val, label='Actual', alpha=0.7)
+    axs[1, 0].plot(predictions, label='Predicted', alpha=0.7)
+    axs[1, 0].set_xlabel('Time Step')
+    axs[1, 0].set_ylabel('Demand')
+    axs[1, 0].set_title('Predictions vs Actual (Full Test Set)')
+    axs[1, 0].legend()
+    axs[1, 0].grid(True)
+
+    # Histogram of prediction errors
+    errors = predictions - y_val
+    axs[1, 1].hist(errors, bins=30, alpha=0.7, color='orange')
+    axs[1, 1].set_xlabel('Prediction Error')
+    axs[1, 1].set_ylabel('Frequency')
+    axs[1, 1].set_title('Histogram of Prediction Errors')
+    axs[1, 1].grid(True)
+
     plt.tight_layout()
     plt.savefig('training_results.png', dpi=300, bbox_inches='tight')
     plt.show()
@@ -194,21 +217,22 @@ def plot_results(train_losses, val_losses, y_val, predictions):
 #load and prepare data
 def prepare_data(params):
     # 1. Load data
+    DATA_DIR = '/home/harry/personal/uni/project/data'
+
     if params["dataset"] == "2016-2019":
-        data = pd.read_csv('../../../data/processed/processed2.csv')
+        data = pd.read_csv(os.path.join(DATA_DIR, 'processed/processed2.csv'))
         datetimes = pd.to_datetime(data['datetime_au'])
     elif params["dataset"] == "2010-2019":
-        data = pd.read_csv('../../../data/processed/processed_full.csv')
+        data = pd.read_csv(os.path.join(DATA_DIR, 'processed/processed_full.csv'))
         datetimes = pd.to_datetime(data['datetime_au'], dayfirst=True)
 
     # Select desired features
-    data = data[['sum_30_min_demand', 'avg_temp']]
+    data = data[params['features']]
 
     # Convert to numpy array and then to torch tensor
     data_tensor = torch.tensor(data.values, dtype=torch.float32)
 
     # Prepare Data
-    # 2. Scale the data 
     scaler = StandardScaler()
 
     scaled_data = scaler.fit_transform(data_tensor.numpy())
@@ -227,14 +251,14 @@ def prepare_data(params):
 
     return sequences, targets, datetimes, scaler
 
-def postprocess(model, sequences, targets, scaler, train_losses, val_losses):
+def postprocess(model, sequences, targets, scaler, train_losses, val_losses, input_dim):
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     predictions = evaluate_model(model, sequences[-len(targets):].numpy(), 
                                 targets.numpy(), device)
 
     # Inverse transform predictions to original scale
     # Create dummy array for inverse transform
-    dummy = np.zeros((len(predictions), 2))
+    dummy = np.zeros((len(predictions), input_dim))
     dummy[:, 0] = predictions.flatten()
     predictions_original = scaler.inverse_transform(dummy)[:, 0]
 
@@ -255,3 +279,39 @@ def postprocess(model, sequences, targets, scaler, train_losses, val_losses):
 
     # Plot results
     plot_results(train_losses, val_losses, targets_original, predictions_original)
+
+## Optuna Function
+def objective(trial, params):
+    # Detect device
+    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+
+    # Suggest hyperparameters
+    # Restrict d_model and nhead to best from first optuna to get better insights (no inf)
+    d_model = 48
+    nhead = 6
+
+    input_dim = len(params['features'])
+
+    sequences, targets, datetimes, scaler_X = prepare_data(params)
+
+    # Build and train model
+    model, train_losses, val_losses = train_transformer_model(sequences, targets, input_dim, datetimes, params)
+
+    # 5. Evaluate and plot results
+    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    test_mask = pd.to_datetime(datetimes).dt.year == 2019
+    seq_mask = test_mask[params['seq_length']:].to_numpy()
+    predictions = evaluate_model(model, sequences[seq_mask], targets[seq_mask], device)
+
+    # Inverse transform predictions to original scale
+    # Create dummy array for inverse transform
+    dummy = np.zeros((len(predictions), input_dim))
+    dummy[:, 0] = predictions.flatten()
+    predictions_original = scaler_X.inverse_transform(dummy)[:, 0]
+
+    dummy[:, 0] = targets[seq_mask].numpy().flatten()
+    targets_original = scaler_X.inverse_transform(dummy)[:, 0]
+
+    # Calculate mae
+    mae = np.mean(np.abs(predictions_original - targets_original))
+    return mae
