@@ -1,9 +1,103 @@
 aemo1:
   type: Report
-  title: Electricity Demand Forecasting Methopdology Information Paper
+  title: Electricity Demand Forecasting Methodology Information Paper
   author: ["Australian Energy Market Operator"]
   date: 2020-08
   url: https://www.aemo.com.au/-/media/files/electricity/nem/planning_and_forecasting/nem_esoo/electricity-demand-forecasting-methodology-information-paper.pdf
+
+lstm1:
+  type: article
+  title: Industry 4.0-Oriented Deep Learning Models for Human Activity Recognition
+  author:
+  - Mohsen, Saeed
+  - Elkaseer, Ahmed
+  - Scholz, Steffen G.
+  date: 2021-11
+  vol: PP
+  parent: 
+    title: IEEE Access
+  serial-number:
+    doi: 10.1109/ACCESS.2021.3125733
+  
+
+lstm2:
+  type: web
+  title: The origins of LSTM (Long Short-Term Memory)
+  author: Byteplus.com
+  url: https://www.byteplus.com/en/topic/399646?title=the-origins-of-lstm-long-short-term-memory
+  date: 2025
+
+lstm3:
+  type: web
+  title: What is RNN? - Recurrent Neural Networks Explained - AWS
+  author: AWS
+  url: https://aws.amazon.com/what-is/recurrent-neural-network
+  date: 2025
+
+lstm4:
+  type: web
+  title: Understanding of LSTM Networks
+  author: GeeksforGeeks
+  url: https://www.geeksforgeeks.org/machine-learning/understanding-of-lstm-networks
+  date: 2020
+  
+lstm5: 
+  type: article
+  title: 'Drawbacks of LSTM Algorithm: A Case Study'
+  author:
+  - Kandadi, Thirupathi
+  - Shankarlingam, G.
+  date: 2025-01-01
+  url: http://dx.doi.org/10.2139/ssrn.5080605
+  serial-number:
+    doi: 10.2139/ssrm.5080605
+
+lstm6:
+  type: web
+  title: Understanding LSTM and its diagrams
+  author: Yan, Shi.
+  url: https://blog.mlreview.com/understanding-lstm-and-its-diagrams-37e2f46f1714
+  date: 2016-03-13
+
+lstm7:
+  type: web
+  title: How to Scale Data for Long Short-Term Memory Networks in Python
+  author: Brownlee, Jason
+  url: https://machinelearningmastery.com/how-to-scale-data-for-long-short-term-memory-networks-in-python/
+  date: 2019-08-05
+
+optuna1:
+  type: article
+  title: Advanced hyperparameter optimization of deep learning models for wind power prediction
+  author:
+  - Hanifi, Shahram
+  - Cammarono, Andrea
+  - Zare-Behtash, Hossein
+  date: 2024
+  page-range: '119700'
+  url: https://www.sciencedirect.com/science/article/pii/S0960148123016154
+  serial-number:
+    doi: https://doi.org/10.1016/j.renene.2023.119700
+    issn: 0960-1481
+  parent:
+    type: periodical
+    title: Renewable Energy
+    volume: 221
+
+optuna2:
+  type: misc
+  title: The kaggle way to tune hyperparameters with optuna
+  author: Prakash, Yash
+  date: 2025-03
+  url: https://towardsdatascience.com/the-kaggle-way-to-tune-hyperparameters-with-optuna-285e59a0b95a/
+
+optuna3:
+  type: misc
+  title: A comprehensive guide to hyperparameter tuning in Machine Learning
+  author: Babu, Aditi
+  date: 2025-02
+  publisher: Medium
+  url: https://medium.com/@aditib259/a-comprehensive-guide-to-hyperparameter-tuning-in-machine-learning-dd9bb8072d02
 
 transformer1:
   type: misc
@@ -38,8 +132,442 @@ transformer2:
     issue: 14
     volume: 15
 
+
+ref1:
+  type: Article
+  author: ["Zhang, Rui", "Dong, Zhao Yang", "Xu, Yan", "Meng, Ke", "Wong, Kit Po"]
+  title: Short-term load forecasting of Australian National Electricity Market by an ensemble model of extreme learning machine
+  parent:
+    title: IET Generation, Transmission & Distribution
+    volume: 7
+    issue: 4
+  page-range: 391-397
+  serial-number:
+    doi: 10.1049/iet-gtd.2012.0541
+  date: 2013
+  
+ref2:
+  type: article
+  author: ["Laial Alsmadi", "Gang Lei", "Li Li"]
+  title: Forecasting Day-Ahead Electricity Demand in Australia Using a CNN-LSTM Model with an Attention Mechanism
+  parent:
+    title: Applied Sciences
+    volume: 15
+    issue: 7
+  date: 2025
+  serial-number:
+    description: 3829
+    doi: 10.3390/app15073829 
+
+ref3:
+  type: article
+  title: The Importance of Environmental Factors in Forecasting Australian Power Demand
+  author: ["Eshragh, Ali", "Ganim, Benjamin", "Perkins, Terry", "Bandara, Kasun"]
+  date: 2021-11
+  page-range: 1-11
+  parent:
+    title: Environmental Modeling & Assessment
+    volume: 27
+    issue: 1
+    parent: 
+      title: Springer Science and Business Media LLC
+  serial-number:
+    doi: 10.1007/s10666-021-09806-1
+
+ref4:
+  type: Article
+  title: 'Artificial Intelligence and Statistical Techniques in Short-Term Load Forecasting: A Review'
+  author:
+    - Nassif, Ali Bou
+    - Soudan, Bassel
+    - Azzeh, Mohammad
+    - Attilli, Imtinan
+    - AlMulla, Omar
+  date: 2021
+  url: https://arxiv.org/abs/2201.00437
+  serial-number:
+    arxiv: '2201.00437'
+
+ref5:
+  type: web
+  title: AEMO’s updated forecasting methodology targets rapidly growing electricity loads, following industry consultation
+  author: AEMO
+  url: https://www.aemo.com.au/newsroom/news-updates/aemos-updated-forecasting-methodology-targets-rapidly-growing-electricity-loads
+  date: 2025-08-06
+
+ref6:
+  type: web
+  title: Forecasting increasingly critical to harnessing wind and solar for power systems
+  author: AEMO
+  url: https://www.aemo.com.au/newsroom/news-updates/forecasting-increasingly-critical-to-harnessing-wind-and-solar-for-power-systems
+  date: 2023-11-27
+
+ref7:
+  type: article
+  title: 'Short-Term Load Forecasting of Electricity Demand for the Residential Sector Based on Modelling Techniques: A Systematic Review'
+  author:
+  - Rodrigues, Filipe
+  - Cardeira, Carlos
+  - Calado, João M. F.
+  - Melicio, Rui
+  date: 2023
+  url: https://www.mdpi.com/1996-1073/16/10/4098
+  serial-number:
+    doi: 10.3390/en16104098
+    issn: 1996-1073
+  parent:
+    type: periodical
+    title: Energies
+    issue: 10
+    volume: 16
+
+ref8: 
+  type: article
+  title: Probabilistic Electricity Demand Forecasting with Transformer-Guided State Space Model
+  author:
+  - Cao, Yang
+  - Dang, Zhenzhen
+  - Wu, Feng
+  - Xu, Xovee
+  - Zhou, Fan
+  date: 2022
+  page-range: 964-969
+  serial-number:
+    doi: 10.1109/AUTEEE56487.2022.9994294
+  parent:
+    type: proceedings
+    title: 2022 IEEE 5th International Conference on Automation, Electronics and Electrical Engineering (AUTEEE)
     
+  
+ref9:
+  type: article
+  title: Probabilistic forecasting of operational demand in Australia
+  author: Mahdavi, Nariman
+  date: 2020
+  page-range: 139-144
+  serial-number:
+    doi: 10.1109/SGES51519.2020.00032
+  parent:
+    type: proceedings
+    title: 2020 International Conference on Smart Grids and Energy Systems (SGES)
 
+ref10:
+  type: article
+  title: Short-Term Load Forecasting With Deep Residual Networks
+  author:
+  - Chen, Kunjin
+  - Chen, Kunlong
+  - Wang, Qin
+  - He, Ziyu
+  - Hu, Jun
+  - He, Jinliang
+  date: 2019
+  page-range: 3943-3952
+  serial-number:
+    doi: 10.1109/TSG.2018.2844307
+  parent:
+    type: periodical
+    title: IEEE Transactions on Smart Grid
+    issue: 4
+    volume: 10
 
+ref11:
+  type: article
+  title: 'Day-Ahead Electricity Demand Forecasting Competition: Post-COVID Paradigm'
+  author:
+  - Farrokhabadi, Mostafa
+  - Browell, Jethro
+  - Wang, Yi
+  - Makonin, Stephen
+  - Su, Wencong
+  - Zareipour, Hamidreza
+  date: 2022
+  page-range: 185-191
+  serial-number:
+    doi: 10.1109/OAJPE.2022.3161101
+  parent:
+    type: periodical
+    title: IEEE Open Access Journal of Power and Energy
+    issue: ''
+    volume: 9
+    
+ref12:
+  type: Article
+  title: A composite k-nearest neighbor model for day-ahead load forecasting with limited temperature forecasts
+  author: ["Rui Zhang", "Yan Xu", "Zhao Yang Dong", "Weicong Kong", "Kit Po Wong"]
+  date: 2016
+  serial-number:
+    doi: 10.1109/PESGM.2016.7741097
 
+ref13:
+  type: Article
+  title: Short-term load forecasting using regression based moving windows with adjustable window-sizes
+  author: ["Dao H. Vu", "Kashem M. Muttaqi", "Ashish P. Agalgaonkar"]
+  parent:
+    title: 2014 IEEE Industry Application Society Annual Meeting
+  page-range: 1-8
+  serial-number:
+    doi: 10.1109/IAS.2014.6978380
+    
+ref14:
+  type: Article
+  title: Intra-day Electricity Demand and Temperature
+  parent:
+    title: The Energy Journal
+    volume: 41
+    issue: 3
+  date: 2017
+  page-range: 161-182
+  
+ref15:
+  type: Article
+  title: 'Short-Term Electricity Demand Forecasting: Impact Analysis of Temperature for Thailand'
+  author: ["Kamal Chapagain", " Somsak Kittipiyakul", " Pisut Kulthanavit"]
+  parent:
+    title: Energies
+    volume: 13
+    issue: 10
+  date: 2020
+  serial-number:
+    description: 2498
+  url: https://www.mdpi.com/1996-1073/13/10/2498
+  
+ref16:
+  type: Article
+  title: Short-term electricity demand forecasting with MARS, SVR and ARIMA models using aggregated demand data in Queensland, Australia
+  author:
+    ["Mohanad S. Al-Musaylh", "Ravinesh C. Deo", "Jan F. Adamowski", "Yan Li"]
+  date: 2018
+  parent:
+    title: Advanced Engineering Informatics
+    volume: 35
+  page-range: 1-16
+  serial-number:
+    doi: 10.1016/j.aei.2017.11.002
+    
+ref17:
+  type: Article
+  title: Interpretable Modeling for Short- and Medium-Term Electricity Demand Forecasting
+  author: Kei Hirose
+  parent:
+    title: Frontiers in Energy Research
+    volume: 9
+  date: 2021
+  serial-number:
+    doi: 10.3389/fenrg.2021.724780
 
+ref18:
+  type: web
+  title: 'Forecasting Electricity Demand with Weather Data: A Machine Learning Approach'
+  author: Gigi Dattaradon
+  date: 2024-03-09
+  url: https://medium.com/@gigi.dattaradon/forecasting-electricity-demand-with-weather-data-a-machine-learning-approach-80f7270bfd38
+
+pytorch1:
+  type: web
+  url: https://docs.pytorch.org/docs/stable/generated/torch.nn.TransformerEncoderLayer.html
+  title: TransformerEncoderLayer
+  author: PyTorch Contributors
+
+typst:
+  type: web
+  url: https://github.com/typst/typst
+  title: typst
+  author: Typst Contributors
+
+nw1:
+  type: web
+  title: Federated XGBoost Python API
+  url: https://federated-xgboost.readthedocs.io/en/latest/python/python_api.html
+
+nw2:
+  type: web
+  title: How to Tune XGBoost Hyperparameters
+  url: https://mljourney.com/how-to-tune-xgboost-hyperparameters/
+
+nw3:
+  type: web
+  title: Configure XGBoost n_estimators Parameter
+  url: https://xgboosting.com/configure-xgboost-n_estimators-parameter/
+
+nw4:
+  type: web
+  title: Introduction to Gradient Boosting Decision Trees
+  url: https://www.machinelearningplus.com/machine-learning/an-introduction-to-gradient-boosting-decision-trees/
+
+nw5:
+  type: web
+  title: Pros and Cons of Decision Tree Regression
+  url: https://www.geeksforgeeks.org/machine-learning/pros-and-cons-of-decision-tree-regression-in-machine-learning/
+
+nw6:
+  type: web
+  title: Flavors of Gradient Boosting
+  url: https://vyasenov.github.io/blog/flavors-gradient-boosting.html
+
+nw7:
+  type: web
+  title: Main Parameters in XGBoost
+  url: https://medium.com/@rithpansanga/the-main-parameters-in-xgboost-and-their-effects-on-model-performance-4f9833cac7c
+
+nw8:
+  type: web
+  title: Regularization in Machine Learning
+  url: https://www.geeksforgeeks.org/machine-learning/regularization-in-machine-learning/
+
+nw9:
+  type: web
+  title: CatBoost API Parameters
+  url: https://apxml.com/courses/mastering-gradient-boosting-algorithms/chapter-6-catboost-gradient-boosting/catboost-api-parameters
+
+nw10:
+  type: web
+  title: LightGBM Hyperparameter Tuning
+  url: https://www.machinelearningexpedition.com/lightgbm-hyperparameter-tuning/
+
+nw11:
+  type: web
+  title: Deep Dive into LightGBM Parameters
+  url: https://medium.com/@sarahzouinina/a-deep-dive-into-lightgbm-how-to-choose-and-tune-parameters-7c584945842e
+
+nw12:
+  type: article
+  title: Load Forecasting Using Random Forest Regression Algorithm in Machine Learning
+  author:
+  - K, Madhu Malini M
+  - B, Iswariya
+  - Prasad, H.
+  - TD, Sudhakar
+  date: 2024
+  page-range: 1-6
+  serial-number:
+    doi: 10.1109/ICSTEM61137.2024.10560982
+  parent:
+    type: proceedings
+    title: 2024 International Conference on Science Technology Engineering and Management (ICSTEM)
+    issue: ''
+    volume: 0
+
+nw13:
+  type: article
+  title: Electricity Demand Forecasting In Kerala Using Machine Learning Models
+  author:
+  - Saji, Anna
+  - Prakash, Arya
+  - Krishnan, M Soumya
+  date: 2023
+  page-range: 1-6
+  serial-number:
+    doi: 10.1109/CONIT59222.2023.10205925
+  parent:
+    type: proceedings
+    title: 2023 3rd International Conference on Intelligent Technologies (CONIT)
+    issue: ''
+    volume: 0
+
+nw14:
+  type: article
+  title: Novel Predictive Factors to Boost Short-Term Electricity Demand Forecasting Using Machine Learning Models
+  author:
+  - Sleem, Ahmad Abu
+  - Syed, Mujahid N.
+  date: 2025
+  page-range: 147265-147290
+  serial-number:
+    doi: 10.1109/ACCESS.2025.3600864
+  parent:
+    type: periodical
+    title: IEEE Access
+    issue: ''
+    volume: 13
+
+nw15:
+  type: article
+  title: "Random Forest vs Logistic Regression: Binary Classification for Heterogeneous Datasets"
+  author: 
+  - Kirasich, Kaitlin
+  - Smith, Trace
+  - Sadler Blvin
+  parent: 
+    title: SMU Data Science Review
+    volume: 1
+    number: 3
+    article: 9
+  date: 2018
+  url: https://scholar.smu.edu/datasciencereview/vol1/iss3/9
+
+nw16:
+  type: article
+  title: "Enhancing Demand Response Forecasting Through Random Forest Regression: A Case Study Analysis"
+  author: 
+  - Chatuanramtharnghaka, Benjamin 
+  - Deb, Subhasish
+  - Singh, Robert
+  container: 2024 6th International Conference on Energy, Power and Environment (ICEPE)
+  publisher: IEEE
+  year: 2024
+  location: Shillong, India
+  pages: 1–5
+  serial-number:
+    doi: 10.1109/ICEPE63236.2024.10668929
+
+nw17:
+  type: article
+  title: Comparative Analysis of Extreme Gradient Boosting Technique with LSTM and Layered RNN for Electricity Demand Forecast
+  author: s. singh and m. m. tripathi
+  parent:
+    title: 2021 International Conference on RTEICT
+    publisher: IEEE
+  date: 2021
+  location: Bangalore, India
+  page-range: 297–302
+  serial-number:
+    doi: 10.1109/RTEICT52294.2021.9573988
+
+nw18:
+  type: article
+  title: Performance Comparison of Simple Regression, Random Forest and XGBoost Algorithms for Forecasting Electricity Demand
+  author: 
+  - Gökçe, M. M.
+  - Duman, E
+  parent:
+    title: 2022 3rd International Informatics and Software Engineering Conference (IISEC)
+    publisher: IEEE
+  date: 2022
+  location: Ankara, Turkey
+  page-range: 1–6
+  serial-number:
+    doi: 10.1109/IISEC56263.2022.9998213
+
+nw19:
+  type: article
+  title: Comparative Evaluation of Gradient Boosting with Active Thresholding and Model Explainability for Peak Demand Forecasting
+  author: s. kahawala and d. haputhanthri and h. moraliyage and s. wimalaratne and d. alahakoon and a. jennings
+  container: 2022 15th International Conference on Human System Interaction (HSI)
+  publisher: IEEE
+  year: 2022
+  location: Melbourne, Australia
+  pages: 1–6
+  doi: 10.1109/HSI55341.2022.9869462
+
+nw20:
+  type: article
+  title: Load Demand Forecasting Using eXtreme Gradient Boosting (XGBoost)
+  author: m. mohamed and f. e. mahmood and m. a. abd and m. rezkallah and a. hamadi and a. chandra
+  container: 2023 IEEE Industry Applications Society Annual Meeting (IAS)
+  publisher: IEEE
+  year: 2023
+  location: Nashville, TN, USA
+  pages: 1–7
+  doi: 10.1109/IAS54024.2023.10406613
+
+nw21:
+  type: article
+  title: Extracting Baseline Electricity Usage Using Gradient Tree Boosting
+  author: t. kim and et al.
+  container: 2015 IEEE International Conference on Smart City/SocialCom/SustainCom (SmartCity)
+  publisher: IEEE
+  year: 2015
+  location: Chengdu, China
+  pages: 734–741
+  doi: 10.1109/SmartCity.2015.156
