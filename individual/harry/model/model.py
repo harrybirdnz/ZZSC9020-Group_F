@@ -15,7 +15,6 @@ import os
 #global variables
 patience = 20
 num_epochs = 100
-# input_dim = 2  # Number of features (demand and temperature)
 
 #helper functions and classes
 def create_sequences(data, seq_length):
@@ -162,7 +161,8 @@ def train_transformer_model(sequences, targets, input_dim, datetimes, params):
         if epochs_no_improve >= patience:
             break
 
-    return model, train_losses, val_losses
+    # Return train/test splits for postprocess
+    return model, train_losses, val_losses, X_train_tensor, y_train_tensor, X_val_tensor, y_val_tensor
 
 def evaluate_model(model, X_val, y_val, device):
     model.eval()
@@ -251,67 +251,61 @@ def prepare_data(params):
 
     return sequences, targets, datetimes, scaler
 
-def postprocess(model, sequences, targets, scaler, train_losses, val_losses, input_dim):
-    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    predictions = evaluate_model(model, sequences[-len(targets):].numpy(), 
-                                targets.numpy(), device)
-
-    # Inverse transform predictions to original scale
-    # Create dummy array for inverse transform
-    dummy = np.zeros((len(predictions), input_dim))
-    dummy[:, 0] = predictions.flatten()
-    predictions_original = scaler.inverse_transform(dummy)[:, 0]
-
-    dummy[:, 0] = targets.numpy().flatten()
-    targets_original = scaler.inverse_transform(dummy)[:, 0]
-
-    # Calculate metrics
-    mse = np.mean((predictions_original - targets_original) ** 2)
-    mae = np.mean(np.abs(predictions_original - targets_original))
-    rmse = np.sqrt(mse)
-    mape = np.mean(np.abs((predictions_original - targets_original) / targets_original)) * 100
-
-    print(f"\nFinal Metrics:")
-    print(f"MSE: {mse:.4f}")
-    print(f"MAE: {mae:.4f}")
-    print(f"RMSE: {rmse:.4f}")
-    print(f"MAPE: {mape:.4f}")
-
-    # Plot results
-    plot_results(train_losses, val_losses, targets_original, predictions_original)
-
-## Optuna Function
-def objective(trial, params):
-    # Detect device
+def postprocess(model, X_train, y_train, X_test, y_test, scaler, train_losses, val_losses, input_dim, visualise=False):
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
-    # Suggest hyperparameters
-    # Restrict d_model and nhead to best from first optuna to get better insights (no inf)
-    d_model = 48
-    nhead = 6
+    # Train set
+    train_predictions = evaluate_model(model, X_train.numpy(), y_train.numpy(), device)
+    dummy_train = np.zeros((len(train_predictions), input_dim))
+    dummy_train[:, 0] = train_predictions.flatten()
+    train_predictions_original = scaler.inverse_transform(dummy_train)[:, 0]
+    dummy_train[:, 0] = y_train.numpy().flatten()
+    train_targets_original = scaler.inverse_transform(dummy_train)[:, 0]
+    train_mse = np.mean((train_predictions_original - train_targets_original) ** 2)
+    train_mae = np.mean(np.abs(train_predictions_original - train_targets_original))
+    train_rmse = np.sqrt(train_mse)
+    train_mape = np.mean(np.abs((train_predictions_original - train_targets_original) / train_targets_original)) * 100
 
+    # Test set
+    test_predictions = evaluate_model(model, X_test.numpy(), y_test.numpy(), device)
+    dummy_test = np.zeros((len(test_predictions), input_dim))
+    dummy_test[:, 0] = test_predictions.flatten()
+    test_predictions_original = scaler.inverse_transform(dummy_test)[:, 0]
+    dummy_test[:, 0] = y_test.numpy().flatten()
+    test_targets_original = scaler.inverse_transform(dummy_test)[:, 0]
+    test_mse = np.mean((test_predictions_original - test_targets_original) ** 2)
+    test_mae = np.mean(np.abs(test_predictions_original - test_targets_original))
+    test_rmse = np.sqrt(test_mse)
+    test_mape = np.mean(np.abs((test_predictions_original - test_targets_original) / test_targets_original)) * 100
+
+    if visualise:
+        print(f"\nTrain Set Metrics:")
+        print(f"MSE: {train_mse:.4f}")
+        print(f"MAE: {train_mae:.4f}")
+        print(f"RMSE: {train_rmse:.4f}")
+        print(f"MAPE: {train_mape:.4f}")
+
+        print(f"\nTest Set Metrics:")
+        print(f"MSE: {test_mse:.4f}")
+        print(f"MAE: {test_mae:.4f}")
+        print(f"RMSE: {test_rmse:.4f}")
+        print(f"MAPE: {test_mape:.4f}")
+
+        # Plot results (test set)
+        plot_results(train_losses, val_losses, test_targets_original, test_predictions_original)
+
+    return test_mape
+
+def train_model(params):
     input_dim = len(params['features'])
 
     sequences, targets, datetimes, scaler_X = prepare_data(params)
 
-    # Build and train model
-    model, train_losses, val_losses = train_transformer_model(sequences, targets, input_dim, datetimes, params)
+    # Get train/test splits from train_transformer_model
+    model, train_losses, val_losses, X_train, y_train, X_test, y_test = train_transformer_model(
+        sequences, targets, input_dim, datetimes, params
+    )
 
-    # 5. Evaluate and plot results
-    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    test_mask = pd.to_datetime(datetimes).dt.year == 2019
-    seq_mask = test_mask[params['seq_length']:].to_numpy()
-    predictions = evaluate_model(model, sequences[seq_mask], targets[seq_mask], device)
+    mape = postprocess(model, X_train, y_train, X_test, y_test, scaler_X, train_losses, val_losses, input_dim, params['visualise'])
 
-    # Inverse transform predictions to original scale
-    # Create dummy array for inverse transform
-    dummy = np.zeros((len(predictions), input_dim))
-    dummy[:, 0] = predictions.flatten()
-    predictions_original = scaler_X.inverse_transform(dummy)[:, 0]
-
-    dummy[:, 0] = targets[seq_mask].numpy().flatten()
-    targets_original = scaler_X.inverse_transform(dummy)[:, 0]
-
-    # Calculate mae
-    mae = np.mean(np.abs(predictions_original - targets_original))
-    return mae
+    return mape
