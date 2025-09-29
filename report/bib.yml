@@ -19,7 +19,6 @@ lstm1:
   serial-number:
     doi: 10.1109/ACCESS.2021.3125733
   
-
 lstm2:
   type: web
   title: The origins of LSTM (Long Short-Term Memory)
@@ -363,6 +362,16 @@ ref18:
   date: 2024-03-09
   url: https://medium.com/@gigi.dattaradon/forecasting-electricity-demand-with-weather-data-a-machine-learning-approach-80f7270bfd38
 
+ref19:
+  type: article
+  author  : R. J. Hyndman and S. Fan
+  title   : Density forecasting for long-term peak electricity demand
+  journal : IEEE Transactions on Power Systems
+  volume  : 25
+  number  : 2
+  pages   : 1142--1153
+  year    : 2009
+  
 pytorch1:
   type: web
   url: https://docs.pytorch.org/docs/stable/generated/torch.nn.TransformerEncoderLayer.html
@@ -571,3 +580,295 @@ nw21:
   location: Chengdu, China
   pages: 734–741
   doi: 10.1109/SmartCity.2015.156
+
+ref20:
+  type: misc
+  title: National electricity forecasting methodology
+  author: Australian Energy Market Operator (AEMO)
+  date: 2019
+  
+ref21:
+  type: thesis
+  title: What Drives Residential Energy Demand? An Investigation of Smart Metered Electricity Data
+  author: Fan, H.
+  date: 2017
+  organization: UNSW Sydney
+  
+ref22:
+  type: article
+  title: Short-term load forecasting based on a semi-parametric additive model
+  author:
+  - Fan, S.
+  - Hyndman, R. J.
+  date: 2011
+  page-range: 134-141
+  parent:
+    type: periodical
+    title: IEEE Transactions on Power Systems
+    issue: 1
+    volume: 27
+  
+ref23:
+  type: misc
+  title: 'Artificial intelligence and statistical techniques in short-term load forecasting: a review'
+  author:
+  - Nassif, A. B.
+  - Soudan, B.
+  - Azzeh, M.
+  - Attilli, I.
+  - AlMulla, O.
+  date: 2021
+  
+ref24:
+  type: article
+  title: Novel Predictive Factors to Boost Short-Term Electricity Demand Forecasting Using Machine Learning Models
+  author:
+  - Sleem, A. A.
+  - Syed, M. N.
+  date: 2025
+  parent:
+    type: periodical
+    title: IEEE Access
+    
+ref25:
+  type: article
+  title: The importance of environmental factors in forecasting Australian power demand
+  author:
+  - Eshragh, A.
+  - Ganim, B.
+  - Perkins, T.
+  - Bandara, K.
+  date: 2022
+  page-range: 1-11
+  parent:
+    type: periodical
+    title: Environmental Modeling & Assessment
+    issue: 1
+    volume: 27
+    
+ref26:
+  type: article
+  title: The impact of climate change on electricity demand in Australia
+  author:
+  - Emodi, N. V.
+  - Chaiechi, T.
+  - Beg, A. R. Alam
+  date: 2018
+  page-range: 1263-1297
+  parent:
+    type: periodical
+    title: Energy & Environment
+    issue: 7
+    volume: 29
+    
+ref27:
+  type: article
+  title: Forecasting Day-Ahead Electricity Demand in Australia Using a CNN-LSTM Model with an Attention Mechanism
+  author:
+  - G., L. L.
+  - Alsmadi, L. L.
+  date: 2025
+  page-range: '3829'
+  parent:
+    type: periodical
+    title: Applied Sciences
+    issue: 7
+    volume: 15
+    
+ref28:
+  type: misc
+  title: Electricity Demand Forecasting Methodology
+  author: Australian Energy Market Operator (AEMO)
+  date: 2023
+  
+ref29:
+  type: article
+  title: Climate change impacts on electricity demand in the State of New South Wales, Australia
+  author:
+  - Ahmed, T.
+  - Muttaqi, K. M.
+  - Agalgaonkar, A. P.
+  date: 2012
+  page-range: 376-383
+  parent:
+    type: periodical
+    title: Applied Energy
+    volume: 98
+    
+ref30:
+  type: article
+  title: 'Electricity load forecasting: a weekday-based approach'
+  author:
+  - Koprinska, I.
+  - Rana, M.
+  - Agelidis, V. G.
+  date: 2012
+  parent:
+    type: proceedings
+    title: International Conference on Artificial Neural Networks
+    publisher:
+      name: Springer Berlin Heidelberg
+      location: Berlin, Heidelberg
+      
+ref31:
+  type: article
+  title: 'Short-term load forecasting methods: An evaluation based on European data'
+  author:
+  - Taylor, J. W.
+  - McSharry, P. E.
+  date: 2007
+  page-range: 2213-2219
+  parent:
+    type: periodical
+    title: IEEE Transactions on Power Systems
+    issue: 4
+    volume: 22
+
+ref32:
+  type: misc
+  title: Forecasting high frequency intra-day electricity demand using temperature
+  author:
+  - McCulloch, J.
+  - Ignatieva, K.
+  date: 2017
+
+lstmlit1:
+  type: article
+  title: 'LSTM-Based Models for Day-Ahead Electrical Load Forecast: A Novel Feature Selection Method Including Weather Data'
+  author:
+  - Vasenin, Dmitrii
+  - Pasetti, Marco
+  - Astolfi, Davide
+  - Savvin, Nikita
+  - Vasile, Antony
+  - Zizzo, Gaetano
+  date: 2025-07-02
+  page-range: '51'
+  url: https://doi.org/10.1007/s40866-025-00281-1
+  serial-number:
+    doi: 10.1007/s40866-025-00281-1
+    issn: 2731-8087
+  parent:
+    type: periodical
+    title: Smart Grids and Sustainable Energy
+    issue: 2
+    volume: 10
+
+lstmlit2:
+  type: article
+  title: Predicting electricity consumption for commercial and residential buildings using deep recurrent neural networks
+  author:
+  - Rahman, Aowabin
+  - Srikumar, Vivek
+  - Smith, Amanda D.
+  date: 2018
+  page-range: 372-385
+  url: https://www.sciencedirect.com/science/article/pii/S0306261917317658
+  serial-number:
+    doi: https://doi.org/10.1016/j.apenergy.2017.12.051
+    issn: 0306-2619
+  parent:
+    type: periodical
+    title: Applied Energy
+    volume: 212
+
+lstmlit3:
+  type: misc
+  title: Predicting Electricity Consumption using Deep Recurrent Neural Networks
+  author:
+  - Nugaliyadde, Anupiya
+  - Somaratne, Upeka
+  - Wong, Kok Wai
+  date: 2019
+  serial-number:
+    arxiv: '0902.0885'
+
+lstmlit4:
+  type: article
+  title: 'A comparative assessment of deep learning models for day-ahead load forecasting: Investigating key accuracy drivers'
+  author:
+  - Pelekis, Sotiris
+  - Seisopoulos, Ioannis-Konstantinos
+  - Spiliotis, Evangelos
+  - Pountridis, Theodosios
+  - Karakolis, Evangelos
+  - Mouzakitis, Spiros
+  - Askounis, Dimitris
+  date: 2023
+  page-range: '101171'
+  url: https://www.sciencedirect.com/science/article/pii/S2352467723001790
+  serial-number:
+    doi: https://doi.org/10.1016/j.segan.2023.101171
+    issn: 2352-4677
+  parent:
+    type: periodical
+    title: Sustainable Energy, Grids and Networks
+    volume: 36
+
+lstmlit5:
+  type: article
+  title: Weather Based Day-Ahead and Week-Ahead Load Forecasting using Deep Recurrent Neural Network
+  author:
+  - Zou, Mingzhe
+  - Fang, Duo
+  - Harrison, Gareth
+  - Djokic, Sasa
+  date: 2019
+  page-range: 341-346
+  serial-number:
+    doi: 10.1109/RTSI.2019.8895580
+  parent:
+    type: proceedings
+    title: 2019 IEEE 5th International forum on Research and Technology for Society and Industry (RTSI)
+    issue: ''
+    volume: 0
+
+lstmlit6:
+  type: article
+  title: Time-Series Forecasting of Energy Consumption Using LSTM Networks for Optimized Microgrid Management
+  author:
+  - Pandya, Kartik S.
+  - Tipu, Rupesh Kumar
+  - Pandya, Jigna K.
+  date: 2025
+  page-range: 1-6
+  serial-number:
+    doi: 10.1109/SETCOM64758.2025.10932629
+  parent:
+    type: proceedings
+    title: 2025 International Conference on Sustainable Energy Technologies and Computational Intelligence (SETCOM)
+    issue: ''
+    volume: 0
+
+lstmlit7:
+  type: article
+  title: Integration of LSTM based Model to guide short-term energy forecasting for green ICT networks in smart grids
+  author:
+  - Malik, Hamid
+  - Pouttu, Ari
+  date: 2022
+  page-range: 290-295
+  serial-number:
+    doi: 10.1109/SmartGridComm52983.2022.9960992
+  parent:
+    type: proceedings
+    title: 2022 IEEE International Conference on Communications, Control, and Computing Technologies for Smart Grids (SmartGridComm)
+    issue: ''
+    volume: 0
+
+lstmlit8:
+  type: article
+  title: Predicting residential energy consumption using CNN-LSTM neural networks
+  author:
+  - Kim, Tae-Young
+  - Cho, Sung-Bae
+  date: 2019
+  page-range: 72-81
+  url: https://www.sciencedirect.com/science/article/pii/S0360544219311223
+  serial-number:
+    doi: https://doi.org/10.1016/j.energy.2019.05.230
+    issn: 0360-5442
+  parent:
+    type: periodical
+    title: Energy
+    volume: 182
