@@ -102,7 +102,6 @@ def train_transformer_model(sequences, targets, input_dim, datetimes, params):
     val_loader   = DataLoader(val_dataset, batch_size=params['batch_size'], shuffle=False)
 
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    print(f"Using device: {device}")
 
     model = TransformerModel(
         input_dim=input_dim,
@@ -298,14 +297,19 @@ def postprocess(model, X_train, y_train, X_test, y_test, scaler, train_losses, v
 
 def train_model(params):
     input_dim = len(params['features'])
-
     sequences, targets, datetimes, scaler_X = prepare_data(params)
-
     # Get train/test splits from train_transformer_model
     model, train_losses, val_losses, X_train, y_train, X_test, y_test = train_transformer_model(
         sequences, targets, input_dim, datetimes, params
     )
-
     mape = postprocess(model, X_train, y_train, X_test, y_test, scaler_X, train_losses, val_losses, input_dim, params['visualise'])
-
     return mape
+
+def median_mape(params):
+    # Calculate median MAPE over 5 runs to reduce variance and impact of outliers - more confident estimate of true performance
+    mapes = []
+    # sd of 0.08 on 100 runs, therefore average over 5 runs to reduce variance to ~0.04
+    for i in range(5):  # Average over 5 runs to reduce variance
+        mapes.append(train_model(params))
+    median_mape = sorted(mapes)[len(mapes) // 2]  # Use median to reduce impact of outliers
+    return median_mape
