@@ -113,7 +113,7 @@ Here we report on four distinct methodologies for the task of forecasting the ne
 #pagebreak()
 #outline(
   title: [#head[Contents]], 
-  target: heading.where(level: 1).or(heading.where(level: 2))
+  target: heading.where(level: 1).or(heading.where(level: 2)).or(heading.where(level: 2))
 )
 
 #pagebreak()
@@ -320,13 +320,6 @@ Saba to complete
 ==== Key Findings
 - Add write-up of main findings
 
-The Transformer network architecture (@trans-arc) was introduced in 2017 by researchers at Google @google1. It was designed to replace and outperform the primarily recurrence based models used at the time, both in increased performance and reduced training cost due to parallelisation @transformer2. The architecture is a specific instance of the encoder-decoder models that had become popular in the years prior @transformer1. The primary advancement from this architecture was in the space of natural language processing (NLP), with a myriad of models being developed and becoming familiar in the mainstream such as ChatGPT @transformer1. However, this architecture can also still be applied to forecasting problems @transformer2. 
-#figure(
-  image("media/transformer.png", height: 40%),
-  caption: [Transformer Architecture introduced by @google1]
-) <trans-arc>
-The novelty of this method lies in the architecture's removal of recurrence entirely, instead relying entirely on attention mechanisms. Attention excels at learning long range dependencies, which is a key challenge in many sequence transduction tasks @google1. A self attention layer connects all positions with a constant ($OO(1)$) number of operations, executed sequentially. In comparison, a recurrent layer requires $OO(n)$ sequential operations. This means that self attention layers are faster than recurrent layers whenever the sequence length $n$ is less than the model dimensionality $d$. 
-
 == Literature Review Key Findings
 === Different datasets will generate different results
 - Add more info, include amount of data, location of dataset
@@ -344,7 +337,7 @@ The novelty of this method lies in the architecture's removal of recurrence enti
 == Software
 
 === Data Storage
-The provided datasets were stored in a PostgreSQL database. This has several benefits over CSV. First is column type, by explicitly casting each column to a specific type we get type safety. The second is the ability and strength of sql joins. As we had several tables that were formatted slightly differently, using sql made the joins easy. 
+The provided datasets were stored in a PostgreSQL database. This has several benefits over CSV. First is column type, by explicitly casting each column to a specific type we get type safety. The second is the ability and strength of SQL joins. As we had several tables that were formatted slightly differently, using SQL made the joins easy. 
 
 === Data Science
 Each team member conducted individual model investigations according to #highlight[schedule]. We each used Jupyter Notebooks, and some of us also used Google Colab. This methodology allowed us to easily share and reproduce results using GitHub. All code was written in Python, and packages used specified in #highlight[appendix].
@@ -356,7 +349,16 @@ Microsoft Teams was used for group coordination and collaboration. A group chat 
 The usage of Git was an essential part of ensuring that work was tracked and attributed correctly. In addition GitHub allows cloud based backup and sync of files, which made file sharing easy, and allowed us to track each other's progress.
 
 === Programming Language
-Python was chosen for 
+Python was the primary programming language chosen for our work due to its familiarity, ease of use, and robust ecosystem. In particular the extensibility through the packages in @py-packages.
+#figure(
+  table(
+    columns: 1,
+    table.header([Package]),
+    [Pandas], [Numpy], [MatPlotLib], [Seaborn], [Scikitlearn],
+    [Optuna], [xgboost], [tensorflow], [PyTorch]
+  ),
+  caption: [Python Packages Used]
+) <py-packages>
 
 == Description of the Data
 The data consists of three datasets covering the period from 1 January 2010 to 9 September 2020.
@@ -387,34 +389,36 @@ There are 11 instances where 3 records have identical datetimes - all at 3am. Th
 1. Data filtering - Data filtered for the years 2016-2019. 2020 was removed as COVID-19 caused atypical demand patterns. Four years of data history was chosen based on the tradeoff between recency and dataset size as determined in the literature review, where various studies used multiple years of data @ref9 @ref11.
 === Feature Selection & Feature Engineering
 ==== Data Transformation
-Various aggregations of all values to daily (24 hour) values (sum, average, min, max) will be calculated. The data will also be augmented with the addition of Heating Degree Days and Cooling Degree Days values @aemo1.  
+For ease of use with each model in Python, a master data CSV file was created (@app-code-data[Appendix]). This included the features seen in @app-data-features[Appendix]. This dataset contains many additional features that have been derived from the initial dataset. Various aggregations of all values to daily (24 hour) values (sum, average, min, max) were calculated. In addition, day of week, month, season, and weekday/weekend were derived from the date and one hot encoded. The data was finally augmented with the addition of Heating Degree Days and Cooling Degree Days values @aemo1.
 
 ==== Heating Degree Days (HDD) and Cooling Degree Days (CDD)
 HDD and CDD are variables that are used to measure heating and cooling requirements. This estimate is based on the difference between the air temperature and a critical temperature set by AEMO. For New South Wales, the HDD critical temperature is 17.0 degrees C and the CDD critical temperature is 19.5 degrees C @aemo1. @hdd calculates the HDD and @cdd calculates CDD.
 $ "HDD" = "Max"(0, 17 - overline(T)) $ <hdd>
 $ "CDD" = "Max"(0, overline(T) - 19.5 ) $ <cdd>
 ==== Precipitation
-==== Sunlight
+Daily precipitation totals were calculated from #highlight[dataset].
 
+==== Sunlight
+Average sunlight readings were totalled from #highlight[dataset].
 
 === Scaling and Normalisation
-Ensures variables have a consistent range across variables and aids training.
-- can mention this is descripted in modelling methods section per each model as they require different things
+Ensures variables have a consistent range across variables and aids training. 
+Scaling and Normalisation is an important step in the data preparation process. It ensures that variables have a consistent range which aids training. As there are four different models, the exact methods used are described in the appropriate sections (Linear Regression: @lr-dataprep, Gradient Boost: @gb-dataprep, LSTM: @lstm-dataprep, Transformer: @trans-dataprep).
 
 === Data Training / Testing Split
 Years 2016, 2017, 2018 will be used for training and 2019 used for testing.
 
-For ease of use with each model in Python, a master data CSV file was created (@app-code-data[Appendix]). This included the features seen in @app-data-features[Appendix]. This dataset contains many additional features that have been derived from the initial dataset. 
 
 == Assumptions
 #emph[What assumptions are you making on the data?]\
-Accuracy. 
-- When forecasting, temperature values for a given day (in real implementation) will not be known but rather forecasted values - we are assuming these values are accurate
+It is assumed that the supplied data is accurate and reliable. 
+
+In forecasting electricity demand, our models require an input based on their architecture and training dataset. For linear models that were trained on weather data, this is required as an input. In practice, this would come as the form of a weather forecast, and would add a layer of uncertainty and unreliability to the model. However for our purposes, we are assuming that the weather forecast is 100% accurate and therefore are supplying our Linear and Gradient Boosted models with the actual weather conditions on the day in question. As the architecture of the LSTM and Transformer model is designed to be fed sequential data from previous days, this was not implemented, and could therefore explain the performance gap between the methodologies.
 
 == Modelling Methods
 === Linear Regression
 Saba to complete
-==== Data Preparation
+==== Data Preparation <lr-dataprep>
 - Anything specific for your model / any feature engineering you did / data scaling / normalisation, etc. -> make these subheadings under the section
 ==== Model Design
 - Description of modelling method
@@ -451,7 +455,7 @@ Each of these models will be written in Python and make use of extensive Python 
 
 There are 2 key steps the design for each method will be separated into:  1 -  Data preparation and 2 - Model design. 
 
-===== Data Preparation
+===== Data Preparation <gb-dataprep>
 ====== Feature Engineering
 The inclusion of lag electricity demand forecasting was explored. The lag features included were:
 - Previous day (1 day prior) - average demand, minimum demand, maximum demand and total demand. 
@@ -543,7 +547,7 @@ min_data_in_leaf are the minimum number of data points allowed in a leaf @nw10. 
 >>>>Add Input info>>>>
 
 === Long Short-Term Memory Network
-==== Data Preparation
+==== Data Preparation <lstm-dataprep>
 - Anything specific for your model / any feature engineering you did / data scaling / normalisation, etc. -> make these subheadings under the section
 ==== Model Design
 - Description of modelling method
@@ -584,7 +588,7 @@ A stacked LSTM structure and a convolutional neural network (CNN) - LSTM hybrid 
 As in the other models used, the output will be a simple prediction of the sum of the electricity demand over the next 24 hour period.  The inverse of the scaling method used in the input processing step will be applied to convert the output to a scale consistent with the initial data for measuring the accuracy of the predictions.
 
 === Transformer
-==== Data Preparation
+==== Data Preparation <trans-dataprep>
 - Anything specific for your model / any feature engineering you did / data scaling / normalisation, etc. -> make these subheadings under the section
 ==== Model Design
 - Description of modelling method
@@ -594,6 +598,12 @@ As in the other models used, the output will be a simple prediction of the sum o
    - Were there certain parameters you had to define? Did you experiment with different values for these parameters? How did you select which parameter values you were going to test? (refer to literature)
 - Include code snippets???
 
+The Transformer network architecture (@trans-arc) was introduced in 2017 by researchers at Google @google1. It was designed to replace and outperform the primarily recurrence based models used at the time, both in increased performance and reduced training cost due to parallelisation @transformer2. The architecture is a specific instance of the encoder-decoder models that had become popular in the years prior @transformer1. The primary advancement from this architecture was in the space of natural language processing (NLP), with a myriad of models being developed and becoming familiar in the mainstream such as ChatGPT @transformer1. However, this architecture can also still be applied to forecasting problems @transformer2. 
+#figure(
+  image("media/transformer.png", height: 40%),
+  caption: [Transformer Architecture introduced by @google1]
+) <trans-arc>
+The novelty of this method lies in the architecture's removal of recurrence entirely, instead relying entirely on attention mechanisms. Attention excels at learning long range dependencies, which is a key challenge in many sequence transduction tasks @google1. A self attention layer connects all positions with a constant ($OO(1)$) number of operations, executed sequentially. In comparison, a recurrent layer requires $OO(n)$ sequential operations. This means that self attention layers are faster than recurrent layers whenever the sequence length $n$ is less than the model dimensionality $d$. 
 
 The transformer takes an input, which in NLP is a sentence or phrase, that is first converted to numbers by an embedding layer before being passed to the encoder portion of the transformer @transformer2. Sequentiality is captured through positional encoding. In our task, we aim to input sequential demand and temperature data, and output a prediction for the next 24 hours of electricity demand.
 
