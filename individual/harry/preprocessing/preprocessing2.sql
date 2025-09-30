@@ -4,14 +4,14 @@ SELECT
   d::date AS date_au,
   (d::timestamp AT TIME ZONE 'Australia/Sydney') AS datetime_au_start_tz 
 FROM generate_series(
-  '2016-01-01'::date,
+  '2010-01-01'::date,
   '2019-12-31'::date,
   '1 day'::interval
 ) AS gs(d);
 
 CREATE OR REPLACE VIEW intervals AS
 SELECT generate_series(
-    '2016-01-01 00:00:00+00'::timestamptz,  
+    '2010-01-01 00:00:00+00'::timestamptz,  
     '2019-12-31 23:30:00+00'::timestamptz,
     '30 mins'::interval
 ) AS interval_time_utc;
@@ -70,7 +70,7 @@ SELECT
   sunlight
 FROM sunlight_nsw;
 
-CREATE OR REPLACE VIEW processed2 AS
+CREATE OR REPLACE VIEW processed AS
 SELECT
   d.date_au AS datetime_au,    
   CASE WHEN EXTRACT(MONTH FROM d.date_au) IN (12,1,2) THEN 1 ELSE 0 END AS is_summer,
