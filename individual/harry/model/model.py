@@ -15,23 +15,68 @@ import os
 #global variables
 patience = 20
 num_epochs = 100
+one_hot_features = ['is_summer', 'is_autumn', 'is_winter', 'is_spring',
+                    'is_monday', 'is_tuesday', 'is_wednesday', 'is_thursday', 'is_friday', 'is_saturday', 'is_sunday',
+                    'is_weekday', 'is_weekend',
+                    'is_jan', 'is_feb', 'is_mar', 'is_apr', 'is_may', 'is_jun', 'is_jul', 'is_aug', 'is_sep', 'is_oct', 'is_nov', 'is_dec'
+                    ]
 
-#helper functions and classes
+#load and prepare data
+def prepare_data(params):
+    # 1. Load data
+    DATA_DIR = '/home/harry/personal/uni/project/data'
+
+    if params["dataset"] == "2016-2019":
+        data = pd.read_csv(os.path.join(DATA_DIR, 'processed/processed2.csv'))
+        datetimes = pd.to_datetime(data['datetime_au'])
+    elif params["dataset"] == "2010-2019":
+        data = pd.read_csv(os.path.join(DATA_DIR, 'processed/processed_full.csv'))
+        datetimes = pd.to_datetime(data['datetime_au'], dayfirst=True)
+
+    # Select desired features
+    data = data[params['features']]
+
+    # Separate one-hot and continuous features
+    continuous_features = [f for f in params['features'] if f not in one_hot_features]
+    one_hot_feats = [f for f in params['features'] if f in one_hot_features]
+
+    # Scale only continuous features
+    scaler = StandardScaler()
+    scaled_continuous = scaler.fit_transform(data[continuous_features].values)
+    scaled_continuous = torch.FloatTensor(scaled_continuous)
+
+    # Get one-hot features as tensor
+    one_hot_tensor = torch.FloatTensor(data[one_hot_feats].values)
+
+    # Concatenate scaled continuous and one-hot features
+    scaled_data = torch.cat([scaled_continuous, one_hot_tensor], dim=1)
+
+    # 3. Create sequences and targets
+    sequences = []
+    targets = []
+
+    for i in range(len(scaled_data) - params["seq_length"]):
+        sequences.append(scaled_data[i:i+params["seq_length"]])  # sequence of 7 days
+        targets.append(scaled_data[i+params["seq_length"], 0])   # predict next day's demand (column 0)
+
+    sequences = torch.stack(sequences)
+    targets = torch.FloatTensor(targets).unsqueeze(1)  # shape: (n, 1)
+
+    return sequences, targets, datetimes, scaler
+
 def create_sequences(data, seq_length):
     """Create sequences of length seq_length from the data"""
     sequences = []
     for i in range(len(data) - seq_length):
-        # Get sequence of features
         seq = data[i:i+seq_length]
         sequences.append(seq)
     return torch.stack(sequences)
 
 def create_targets(data, seq_length):
-    """Create targets for each sequence (the next value after the sequence)"""
+    """Create targets for each sequence (the next demand value after the sequence)"""
     targets = []
     for i in range(seq_length, len(data)):
-        # For demand forecasting, predict only demand
-        target = data[i, 0]  
+        target = data[i, 0]  # Assuming demand is the first feature
         targets.append(target)
     return torch.stack(targets)
 
@@ -91,7 +136,6 @@ def train_transformer_model(sequences, targets, input_dim, datetimes, params):
         X_train, y_train = sequences[seq_train_mask], targets[seq_train_mask]
         X_val,   y_val   = sequences[seq_test_mask], targets[seq_test_mask]
     
-
     X_train_tensor = torch.FloatTensor(X_train)
     X_val_tensor   = torch.FloatTensor(X_val)
     y_train_tensor = torch.FloatTensor(y_train)
@@ -118,7 +162,6 @@ def train_transformer_model(sequences, targets, input_dim, datetimes, params):
     optimizer = optim.Adam(model.parameters(), lr=params["learning_rate"], weight_decay=1e-5)
     scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, patience=5, factor=0.5)
 
-    
     best_val_loss = float('inf')
     epochs_no_improve = 0
     train_losses = []
@@ -171,6 +214,99 @@ def evaluate_model(model, X_val, y_val, device):
         predictions = predictions.cpu().numpy()
     return predictions
 
+
+def postprocess(model, X_train, y_train, X_test, y_test, scaler, train_losses, val_losses, params, visualise=False):
+    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+
+    # Get continuous feature count
+    continuous_features = [f for f in range(len(params['features'])) if f not in [params['features'].index(f) for f in one_hot_features if f in params['features']]]
+    n_cont = len(continuous_features)
+
+    # Train set
+    train_predictions = evaluate_model(model, X_train.numpy(), y_train.numpy(), device)
+    dummy_train = np.zeros((len(train_predictions), n_cont))
+    dummy_train[:, 0] = train_predictions.flatten()
+    train_predictions_original = scaler.inverse_transform(dummy_train)[:, 0]
+    dummy_train[:, 0] = y_train.numpy().flatten()
+    train_targets_original = scaler.inverse_transform(dummy_train)[:, 0]
+    train_mse = np.mean((train_predictions_original - train_targets_original) ** 2)
+    train_mae = np.mean(np.abs(train_predictions_original - train_targets_original))
+    train_rmse = np.sqrt(train_mse)
+    train_mape = np.mean(np.abs((train_predictions_original - train_targets_original) / train_targets_original)) * 100
+
+    # Test set
+    test_predictions = evaluate_model(model, X_test.numpy(), y_test.numpy(), device)
+    dummy_test = np.zeros((len(test_predictions), n_cont))
+    dummy_test[:, 0] = test_predictions.flatten()
+    test_predictions_original = scaler.inverse_transform(dummy_test)[:, 0]
+    dummy_test[:, 0] = y_test.numpy().flatten()
+    test_targets_original = scaler.inverse_transform(dummy_test)[:, 0]
+    test_mse = np.mean((test_predictions_original - test_targets_original) ** 2)
+    test_mae = np.mean(np.abs(test_predictions_original - test_targets_original))
+    test_rmse = np.sqrt(test_mse)
+    test_mape = np.mean(np.abs((test_predictions_original - test_targets_original) / test_targets_original)) * 100
+
+
+    results = {
+        'train_mse': train_mse,
+        'train_mae': train_mae,
+        'train_rmse': train_rmse,
+        'train_mape': train_mape,
+        'test_mse': test_mse,
+        'test_mae': test_mae,
+        'test_rmse': test_rmse,
+        'test_mape': test_mape,
+        'train_losses': train_losses,
+        'val_losses': val_losses,
+        'test_targets_original': test_targets_original,
+        'test_predictions_original': test_predictions_original
+    }
+    return test_mape, results
+
+    return test_mape
+
+def train_model(params):
+    input_dim = len(params['features'])
+    sequences, targets, datetimes, scaler_X = prepare_data(params)
+    # Get train/test splits from train_transformer_model
+    model, train_losses, val_losses, X_train, y_train, X_test, y_test = train_transformer_model(
+        sequences, targets, input_dim, datetimes, params
+    )
+    mape, results = postprocess(model, X_train, y_train, X_test, y_test, scaler_X, train_losses, val_losses, params, params['visualise'])
+    return mape, results
+
+def median_mape(params):
+    # Calculate median MAPE over 5 runs to reduce variance and impact of outliers - more confident estimate of true performance
+    results_list = []
+    mapes = []
+    # sd of 0.08 on 100 runs, therefore average over 5 runs to reduce variance to ~0.04
+    for i in range(5):  # Average over 5 runs to reduce variance
+        mape, results = train_model(params)
+        mapes.append(mape)
+        results_list.append(results)
+    median_idx = sorted(range(len(mapes)), key=lambda i: mapes[i])[len(mapes) // 2]
+    median_mape_val = mapes[median_idx]
+    # Visualise only the best (median) model
+    visualise_model_results(results_list[median_idx])
+    return median_mape_val
+
+def visualise_model_results(results):
+    print("Median Model Results after 5 runs:")
+    print(f"\nTrain Set Metrics:")
+    print(f"MSE: {results['train_mse']:.4f}")
+    print(f"MAE: {results['train_mae']:.4f}")
+    print(f"RMSE: {results['train_rmse']:.4f}")
+    print(f"MAPE: {results['train_mape']:.4f}")
+
+    print(f"\nTest Set Metrics:")
+    print(f"MSE: {results['test_mse']:.4f}")
+    print(f"MAE: {results['test_mae']:.4f}")
+    print(f"RMSE: {results['test_rmse']:.4f}")
+    print(f"MAPE: {results['test_mape']:.4f}")
+
+    # Plot results (test set)
+    plot_results(results['train_losses'], results['val_losses'], results['test_targets_original'], results['test_predictions_original'])
+
 def plot_results(train_losses, val_losses, y_val, predictions):
     fig, axs = plt.subplots(2, 2, figsize=(15, 10))
 
@@ -212,104 +348,3 @@ def plot_results(train_losses, val_losses, y_val, predictions):
     plt.tight_layout()
     plt.savefig('training_results.png', dpi=300, bbox_inches='tight')
     plt.show()
-
-#load and prepare data
-def prepare_data(params):
-    # 1. Load data
-    DATA_DIR = '/home/harry/personal/uni/project/data'
-
-    if params["dataset"] == "2016-2019":
-        data = pd.read_csv(os.path.join(DATA_DIR, 'processed/processed2.csv'))
-        datetimes = pd.to_datetime(data['datetime_au'])
-    elif params["dataset"] == "2010-2019":
-        data = pd.read_csv(os.path.join(DATA_DIR, 'processed/processed_full.csv'))
-        datetimes = pd.to_datetime(data['datetime_au'], dayfirst=True)
-
-    # Select desired features
-    data = data[params['features']]
-
-    # Convert to numpy array and then to torch tensor
-    data_tensor = torch.tensor(data.values, dtype=torch.float32)
-
-    # Prepare Data
-    scaler = StandardScaler()
-
-    scaled_data = scaler.fit_transform(data_tensor.numpy())
-    scaled_data = torch.FloatTensor(scaled_data)
-
-    # 3. Create sequences and targets
-    sequences = []
-    targets = []
-
-    for i in range(len(scaled_data) - params["seq_length"]):
-        sequences.append(scaled_data[i:i+params["seq_length"]])  # sequence of 7 days
-        targets.append(scaled_data[i+params["seq_length"], 0])   # predict next day's demand (column 0)
-
-    sequences = torch.stack(sequences)
-    targets = torch.FloatTensor(targets).unsqueeze(1)  # shape: (n, 1)
-
-    return sequences, targets, datetimes, scaler
-
-def postprocess(model, X_train, y_train, X_test, y_test, scaler, train_losses, val_losses, input_dim, visualise=False):
-    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-
-    # Train set
-    train_predictions = evaluate_model(model, X_train.numpy(), y_train.numpy(), device)
-    dummy_train = np.zeros((len(train_predictions), input_dim))
-    dummy_train[:, 0] = train_predictions.flatten()
-    train_predictions_original = scaler.inverse_transform(dummy_train)[:, 0]
-    dummy_train[:, 0] = y_train.numpy().flatten()
-    train_targets_original = scaler.inverse_transform(dummy_train)[:, 0]
-    train_mse = np.mean((train_predictions_original - train_targets_original) ** 2)
-    train_mae = np.mean(np.abs(train_predictions_original - train_targets_original))
-    train_rmse = np.sqrt(train_mse)
-    train_mape = np.mean(np.abs((train_predictions_original - train_targets_original) / train_targets_original)) * 100
-
-    # Test set
-    test_predictions = evaluate_model(model, X_test.numpy(), y_test.numpy(), device)
-    dummy_test = np.zeros((len(test_predictions), input_dim))
-    dummy_test[:, 0] = test_predictions.flatten()
-    test_predictions_original = scaler.inverse_transform(dummy_test)[:, 0]
-    dummy_test[:, 0] = y_test.numpy().flatten()
-    test_targets_original = scaler.inverse_transform(dummy_test)[:, 0]
-    test_mse = np.mean((test_predictions_original - test_targets_original) ** 2)
-    test_mae = np.mean(np.abs(test_predictions_original - test_targets_original))
-    test_rmse = np.sqrt(test_mse)
-    test_mape = np.mean(np.abs((test_predictions_original - test_targets_original) / test_targets_original)) * 100
-
-    if visualise:
-        print(f"\nTrain Set Metrics:")
-        print(f"MSE: {train_mse:.4f}")
-        print(f"MAE: {train_mae:.4f}")
-        print(f"RMSE: {train_rmse:.4f}")
-        print(f"MAPE: {train_mape:.4f}")
-
-        print(f"\nTest Set Metrics:")
-        print(f"MSE: {test_mse:.4f}")
-        print(f"MAE: {test_mae:.4f}")
-        print(f"RMSE: {test_rmse:.4f}")
-        print(f"MAPE: {test_mape:.4f}")
-
-        # Plot results (test set)
-        plot_results(train_losses, val_losses, test_targets_original, test_predictions_original)
-
-    return test_mape
-
-def train_model(params):
-    input_dim = len(params['features'])
-    sequences, targets, datetimes, scaler_X = prepare_data(params)
-    # Get train/test splits from train_transformer_model
-    model, train_losses, val_losses, X_train, y_train, X_test, y_test = train_transformer_model(
-        sequences, targets, input_dim, datetimes, params
-    )
-    mape = postprocess(model, X_train, y_train, X_test, y_test, scaler_X, train_losses, val_losses, input_dim, params['visualise'])
-    return mape
-
-def median_mape(params):
-    # Calculate median MAPE over 5 runs to reduce variance and impact of outliers - more confident estimate of true performance
-    mapes = []
-    # sd of 0.08 on 100 runs, therefore average over 5 runs to reduce variance to ~0.04
-    for i in range(5):  # Average over 5 runs to reduce variance
-        mapes.append(train_model(params))
-    median_mape = sorted(mapes)[len(mapes) // 2]  # Use median to reduce impact of outliers
-    return median_mape
