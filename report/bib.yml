@@ -65,6 +65,130 @@ lstm7:
   url: https://machinelearningmastery.com/how-to-scale-data-for-long-short-term-memory-networks-in-python/
   date: 2019-08-05
 
+lstm8:
+  type: article
+  title: 'LSTM: A Search Space Odyssey'
+  author:
+  - Greff, Klaus
+  - Srivastava, Rupesh K.
+  - Koutník, Jan
+  - Steunebrink, Bas R.
+  - Schmidhuber, Jürgen
+  date: 2017
+  page-range: 2222-2232
+  serial-number:
+    doi: 10.1109/TNNLS.2016.2582924
+  parent:
+    type: periodical
+    title: IEEE Transactions on Neural Networks and Learning Systems
+    issue: 10
+    volume: 28
+
+lstm9:
+  type: misc
+  title: 'TensorFlow: Large-Scale Machine Learning on Heterogeneous Systems'
+  author:
+  - Abadi, Martín
+  - Agarwal, Ashish
+  - Barham, Paul
+  - Brevdo, Eugene
+  - Chen, Zhifeng
+  - Citro, Craig
+  - Corrado, Greg S.
+  - Davis, Andy
+  - Dean, Jeffrey
+  - Devin, Matthieu
+  - Ghemawat, Sanjay
+  - Goodfellow, Ian
+  - Harp, Andrew
+  - Irving, Geoffrey
+  - Isard, Michael
+  - Jia, Yangqing
+  - Jozefowicz, Rafal
+  - Kaiser, Lukasz
+  - Kudlur, Manjunath
+  - Levenberg, Josh
+  - Mané, Dandelion
+  - Monga, Rajat
+  - Moore, Sherry
+  - Murray, Derek
+  - Olah, Chris
+  - Schuster, Mike
+  - Shlens, Jonathon
+  - Steiner, Benoit
+  - Sutskever, Ilya
+  - Talwar, Kunal
+  - Tucker, Paul
+  - Vanhoucke, Vincent
+  - Vasudevan, Vijay
+  - Viégas, Fernanda
+  - Vinyals, Oriol
+  - Warden, Pete
+  - Wattenberg, Martin
+  - Wicke, Martin
+  - Yu, Yuan
+  - Zheng, Xiaoqiang
+  date: 2015
+  note: Software available from tensorflow.org
+
+lstm10:
+  type: article
+  title: 'Dropout as a Bayesian Approximation: Representing Model Uncertainty in Deep Learning'
+  author:
+  - Gal, Yarin
+  - Ghahramani, Zoubin
+  date: 2016
+  page-range: 1050-1059
+  url: https://proceedings.mlr.press/v48/gal16.html
+  parent:
+    type: proceedings
+    title: Proceedings of the 33rd International Conference on Machine Learning (ICML)
+    publisher: PMLR
+    volume: 48
+    parent:
+      type: proceedings
+      title: Proceedings of Machine Learning Research
+
+lstm11:
+  type: anthos
+  title: A Study on Effect of Learning Rates Using Adam Optimizer in LSTM Deep Intelligent Model for Detection of DDoS Attack to Support Fog Based IoT Systems
+  author:
+  - Gudla, S. P. K.
+  - Bhoi, S. K.
+  date: 2023
+  page-range: 289-300
+  url: https://doi.org/10.1007/978-981-99-6274-9_24
+  serial-number:
+    doi: 10.1007/978-981-99-6274-9_24
+  parent:
+    type: anthology
+    title: Computing, Communication and Learning
+    publisher: Springer
+    volume: 1729
+    parent:
+      type: anthology
+      title: Communications in Computer and Information Science
+
+lstm12:
+  type: article
+  title: Determination of Optimal Batch Size of Deep Learning Models with Time Series Data
+  author:
+  - Hwang, Jae-Sung
+  - Lee, Sung-Soo
+  - Gil, Jae-Won
+  - Lee, Chang-Ki
+  date: 2024
+  page-range: '5936'
+  url: https://doi.org/10.3390/su16145936
+  serial-number:
+    doi: 10.3390/su16145936
+  parent:
+    type: periodical
+    title: Sustainability
+    publisher: MDPI
+    issue: 14
+    volume: 16
+
 optuna1:
   type: article
   title: Advanced hyperparameter optimization of deep learning models for wind power prediction
@@ -130,7 +254,50 @@ transformer2:
     title: Energies
     issue: 14
     volume: 15
+    
+transformer3:
+  type: article
+  title: Transformer network for data imputation in electricity demand data
+  author:
+  - Lotfipoor, Ashkan
+  - Patidar, Sandhya
+  - Jenkins, David P.
+  date: 2023
+  page-range: '113675'
+  url: https://www.sciencedirect.com/science/article/pii/S0378778823009052
+  serial-number:
+    doi: https://doi.org/10.1016/j.enbuild.2023.113675
+    issn: 0378-7788
+  parent:
+    type: periodical
+    title: Energy and Buildings
+    volume: 300
 
+transformer4:
+  type: article
+  title: Transformer-Based Multi-industry Electricity Demand Forecasting
+  author:
+  - Deng, Zhenli
+  - Deng, Fangzhao
+  - Yang, Meng
+  - Guo, Xingwu
+  - Si, Jianan
+  - Yu, Boning
+  - Feng, Boxiang
+  date: 2024
+  editor:
+  - Huang, De-Shuang
+  - Premaratne, Prashan
+  - Yuan, Changan
+  page-range: 25-35
+  serial-number:
+    isbn: 978-981-97-0827-7
+  parent:
+    type: proceedings
+    title: Applied Intelligence
+    publisher:
+      name: Springer Nature Singapore
+      location: Singapore
 
 ref1:
   type: Article
@@ -523,7 +690,9 @@ nw16:
 nw17:
   type: article
   title: Comparative Analysis of Extreme Gradient Boosting Technique with LSTM and Layered RNN for Electricity Demand Forecast
-  author: s. singh and m. m. tripathi
+  author:
+  - Singh, Surbhi
+  - Tripathi, Madan Mohan
   parent:
     title: 2021 International Conference on RTEICT
     publisher: IEEE
@@ -580,6 +749,14 @@ nw21:
   location: Chengdu, China
   pages: 734–741
   doi: 10.1109/SmartCity.2015.156
+
+nw22:
+  type: article
+  author: Baekho Lab
+  title: "Part 6: Random Forest Hyperparameters & Tuning Strategies"
+  url: "https://baekholab.com/2025/03/22/part-6-random-forest-hyperparameters-tuning-strategies/"
+  date: 2025-03-22
+  accessed: 2025-09-30
 
 ref20:
   type: misc
@@ -732,6 +909,17 @@ ref32:
   - Ignatieva, K.
   date: 2017
 
+ref33:
+  type: misc
+  title: 'Adam: A Method for Stochastic Optimization'
+  author:
+  - Kingma, Diederik P.
+  - Ba, Jimmy
+  date: 2017
+  url: https://arxiv.org/abs/1412.6980
+  serial-number:
+    arxiv: '1412.6980'
+
 lstmlit1:
   type: article
   title: 'LSTM-Based Models for Day-Ahead Electrical Load Forecast: A Novel Feature Selection Method Including Weather Data'
@@ -872,3 +1060,507 @@ lstmlit8:
     type: periodical
     title: Energy
     volume: 182
+
+lstmlit9:
+  type: article
+  title: An electricity load forecasting model based on multilayer dilated LSTM network and attention mechanism
+  author:
+  - Wang, Ye
+  - Jiang, Wenshuai
+  - Wang, Chong
+  - Song, Qiong
+  - Zhang, Tingting
+  - Dong, Qi
+  - Li, Xueling
+  date: 2023
+  url: https://www.frontiersin.org/journals/energy-research/articles/10.3389/fenrg.2023.1116465
+  serial-number:
+    issn: 2296-598X
+  note: Original Research
+  parent:
+    type: periodical
+    title: Frontiers in Energy Research
+
+Reg1:
+  type: article
+  title: A variance inflation factor and backward elimination based robust regression model for forecasting monthly electricity demand using climatic variables
+  author:
+  - Vu, Dinh
+  - Muttaqi, Kashem M.
+  - Agalgaonkar, Alok
+  date: 2015
+  page-range: 385-394
+  serial-number:
+    doi: 10.1016/j.apenergy.2015.04.049
+    issn: 0306-2619
+  parent:
+    type: periodical
+    title: Applied Energy
+    volume: 150
+
+reg2:
+  type: article
+  title: 'Short-term electricity demand forecasting: Impact analysis of temperature for Thailand'
+  author:
+  - Chapagain, K.
+  - Kittipiyakul, S.
+  - Kulthanavit, P.
+  date: 2020
+  page-range: '2498'
+  serial-number:
+    doi: 10.3390/en13102498
+    issn: 1996-1073
+  parent:
+    type: periodical
+    title: Energies
+    issue: 10
+    volume: 13
+
+reg3:
+  type: article
+  title: Performance analysis of short-term electricity demand with atmospheric variables
+  author:
+  - Chapagain, K.
+  - Kittipiyakul, S.
+  date: 2018
+  page-range: '818'
+  serial-number:
+    doi: 10.3390/en11040818
+    issn: 1996-1073
+  parent:
+    type: periodical
+    title: Energies
+    issue: 4
+    volume: 11
+
+reg4:
+  type: article
+  title: Machine learning based cost effective electricity load forecasting model using correlated meteorological parameters
+  author:
+  - Jawad, M.
+  - Nadeem, M. S. A.
+  - Shim, S. O.
+  - Khan, I. R.
+  - Shaheen, A. H. N.
+  - Aziz, W.
+  date: 2020
+  page-range: 146847-146864
+  serial-number:
+    doi: 10.1109/ACCESS.2020.3015265
+    issn: 2169-3536
+  parent:
+    type: periodical
+    title: IEEE Access
+    volume: 8
+
+reg5:
+  type: article
+  title: Interpretable modeling for short-and medium-term electricity demand forecasting
+  author: Hirose, K.
+  date: 2021
+  page-range: '724780'
+  serial-number:
+    doi: 10.3389/fenrg.2021.724780
+    issn: 2296-598X
+  parent:
+    type: periodical
+    title: Frontiers in Energy Research
+    volume: 9
+
+reg6:
+  type: article
+  title: Forecasting Short-Term Electricity Load Using Validated Ensemble Learning
+  author:
+  - Sankalpa, C.
+  - Kittipiyakul, S.
+  - Laitrakun, S.
+  date: 2022
+  page-range: '8567'
+  serial-number:
+    doi: 10.3390/en15228567
+    issn: 1996-1073
+  parent:
+    type: periodical
+    title: Energies
+    issue: 22
+    volume: 15
+
+reg7:
+  type: article
+  title: Probabilistic hourly load forecasting using additive quantile regression models
+  author:
+  - Sigauke, C.
+  - Nemukula, M. M.
+  - Maposa, D.
+  date: 2018
+  page-range: '2208'
+  serial-number:
+    doi: 10.3390/en11092208
+    issn: 1996-1073
+  parent:
+    type: periodical
+    title: Energies
+    issue: 9
+    volume: 11
+
+ref34:
+  type: report
+  title: National electricity forecasting methodology
+  author: AEMO
+  date: 2019
+  organization: Australian Energy Market Operator (AEMO)
+ref35:
+  type: thesis
+  title: What Drives Residential Energy Demand? An Investigation of Smart Metered Electricity Data
+  author: Fan, H.
+  date: 2017
+  organization: UNSW Sydney
+ref36:
+  type: article
+  title: Short-term electricity load forecasting using a new intelligence-based application
+  author: Khan, S.
+  date: 2023
+  page-range: '12311'
+  serial-number:
+    doi: 10.3390/su151612311
+    issn: 2071-1050
+  parent:
+    type: periodical
+    title: Sustainability
+    issue: 16
+    volume: 15
+ref37:
+  type: article
+  title: Short-term residential load forecasting based on {LSTM} recurrent neural network
+  author:
+  - Kong, W.
+  - Dong, Z. Y.
+  - Jia, Y.
+  - Hill, D. J.
+  - Xu, Y.
+  - Zhang, Y.
+  date: 2019
+  page-range: 841-851
+  serial-number:
+    doi: 10.1109/TSG.2017.2753802
+    issn: 1949-3053
+  parent:
+    type: periodical
+    title: IEEE Transactions on Smart Grid
+    issue: 1
+    volume: 10
+ref38:
+  type: article
+  title: Forecasting short-term electricity load with combinations of singular spectrum analysis
+  author: Zhang, X.
+  date: 2023
+  page-range: 1609-1624
+  serial-number:
+    doi: 10.1007/s13369-022-06908-3
+    issn: 2193-567X
+  parent:
+    type: periodical
+    title: Arabian Journal for Science and Engineering
+    issue: 2
+    volume: 48
+ref39:
+  type: article
+  title: Performance analysis of short-term electricity demand with atmospheric variables
+  author:
+  - Chapagain, K.
+  - Kittipiyakul, S.
+  date: 2018
+  page-range: '818'
+  serial-number:
+    doi: 10.3390/en11040818
+    issn: 1996-1073
+  parent:
+    type: periodical
+    title: Energies
+    issue: 4
+    volume: 11
+ref40:
+  type: article
+  title: Short term electricity forecasting using individual smart meter data
+  author:
+  - Gajowniczek, K.
+  - Ząbkowski, T.
+  date: 2014
+  page-range: 589-597
+  serial-number:
+    doi: 10.1016/j.procs.2014.08.128
+    issn: 1877-0509
+  parent:
+    type: proceedings
+    title: Procedia Computer Science
+    volume: 35
+ref41:
+  type: article
+  title: Local short and middle term electricity load forecasting with semi-parametric additive models
+  author:
+  - Goude, Y.
+  - Nedellec, R.
+  - Kong, N.
+  date: 2014
+  page-range: 440-446
+  serial-number:
+    doi: 10.1109/TSG.2013.2274379
+    issn: 1949-3053
+  parent:
+    type: periodical
+    title: IEEE Transactions on Smart Grid
+    issue: 1
+    volume: 5
+ref42:
+  type: article
+  title: The importance of environmental factors in forecasting Australian power demand
+  author:
+  - Eshragh, A.
+  - Ganim, B.
+  - Perkins, T.
+  - Bandara, K.
+  date: 2022
+  page-range: 1-11
+  serial-number:
+    doi: 10.1007/s10666-021-09768-6
+    issn: 1573-2967
+  parent:
+    type: periodical
+    title: Environmental Modeling & Assessment
+    issue: 1
+    volume: 27
+
+ref43:
+  type: article
+  title: Short term load forecasting using multiple linear regression for big data
+  author:
+  - Saber, A. Y.
+  - Alam, A. R.
+  date: 2017
+  page-range: 1-6
+  parent:
+    type: proceedings
+    title: 2017 IEEE Symposium Series on Computational Intelligence (SSCI)
+    publisher: IEEE
+
+ref44:
+  type: article
+  title: 'Short-term load forecasting in smart grids: An intelligent modular approach'
+  author:
+  - Ahmad, A.
+  - Javaid, N.
+  - Mateen, A.
+  - Awais, M.
+  - Khan, Z. A.
+  date: 2019
+  page-range: '164'
+  serial-number:
+    doi: 10.3390/en12010164
+  parent:
+    type: periodical
+    title: Energies
+    publisher: MDPI
+    issue: 1
+    volume: 12
+
+ref45:
+  type: article
+  title: Short term load forecasting using multiple linear regression for big data
+  author:
+  - Saber, A. Y.
+  - Alam, A. R.
+  date: 2017
+  page-range: 1-6
+  serial-number:
+    doi: 10.1109/SSCI.2017.8280946
+  parent:
+    type: proceedings
+    title: 2017 IEEE Symposium Series on Computational Intelligence (SSCI)
+    organization: IEEE
+ref46:
+  type: article
+  title: 'Short-term load forecasting in smart grids: An intelligent modular approach'
+  author:
+  - Ahmad, A.
+  - Javaid, N.
+  - Mateen, A.
+  - Awais, M.
+  - Khan, Z. A.
+  date: 2019
+  page-range: '164'
+  serial-number:
+    doi: 10.3390/en12010164
+    issn: 1996-1073
+  parent:
+    type: periodical
+    title: Energies
+    issue: 1
+    volume: 12
+ref47:
+  type: article
+  title: Density forecasting for long-term peak electricity demand
+  author:
+  - Hyndman, R. J.
+  - Fan, S.
+  date: 2009
+  page-range: 1142-1153
+  serial-number:
+    doi: 10.1109/TPWRS.2009.2016367
+    issn: 1558-0679
+  parent:
+    type: periodical
+    title: IEEE Transactions on Power Systems
+    issue: 2
+    volume: 25
+ref48:
+  type: article
+  title: Short-term load forecasting based on a semi-parametric additive model
+  author:
+  - Fan, S.
+  - Hyndman, R. J.
+  date: 2012
+  page-range: 134-141
+  serial-number:
+    doi: 10.1109/TPWRS.2011.2163029
+    issn: 1558-0679
+  parent:
+    type: periodical
+    title: IEEE Transactions on Power Systems
+    issue: 1
+    volume: 27
+ref49:
+  type: manuscript
+  title: Forecasting high frequency intra-day electricity demand using temperature
+  author:
+  - McCulloch, J.
+  - Ignatieva, K.
+  date: 2017
+  note: Working paper
+ref50:
+  type: article
+  title: The importance of environmental factors in forecasting Australian power demand
+  author:
+  - Eshragh, A.
+  - Ganim, B.
+  - Perkins, T.
+  - Bandara, K.
+  date: 2022
+  page-range: 1-11
+  serial-number:
+    doi: 10.1007/s10666-021-09768-6
+    issn: 1573-2967
+  parent:
+    type: periodical
+    title: Environmental Modeling & Assessment
+    issue: 1
+    volume: 27
+ref51:
+  type: article
+  title: The impact of climate change on electricity demand in Australia
+  author:
+  - Emodi, N. V.
+  - Chaiechi, T.
+  - Beg, A. R. Alam
+  date: 2018
+  page-range: 1263-1297
+  serial-number:
+    doi: 10.1177/0958305X18776585
+    issn: 0958-305X
+  parent:
+    type: periodical
+    title: Energy & Environment
+    issue: 7
+    volume: 29
+ref52:
+  type: thesis
+  title: Short-term electricity demand forecasting for Thailand and Japan
+  author:
+  - Chapagain, K.
+  - Kittipiyakul, S.
+  date: 2019
+  organization: Thammasat University
+
+ref53:
+  type: article
+  title: Short-term load forecasting based on a semi-parametric additive model
+  author:
+  - Fan, S.
+  - Hyndman, R. J.
+  date: 2012
+  page-range: 134-141
+  serial-number:
+    doi: 10.1109/TPWRS.2011.2163029
+    issn: 1558-0679
+  parent:
+    type: periodical
+    title: IEEE Transactions on Power Systems
+    issue: 1
+    volume: 27
+ref54:
+  type: article
+  title: 'Short-term electricity demand forecasting: Impact analysis of temperature for Thailand'
+  author:
+  - Chapagain, K.
+  - Kittipiyakul, S.
+  - Kulthanavit, P.
+  date: 2020
+  page-range: '2498'
+  serial-number:
+    doi: 10.3390/en13102498
+    issn: 1996-1073
+  parent:
+    type: periodical
+    title: Energies
+    issue: 10
+    volume: 13
+ref55:
+  type: article
+  title: Interpretable modeling for short-and medium-term electricity demand forecasting
+  author: Hirose, K.
+  date: 2021
+  page-range: '724780'
+  serial-number:
+    doi: 10.3389/fenrg.2021.724780
+    issn: 2296-598X
+  parent:
+    type: periodical
+    title: Frontiers in Energy Research
+    volume: 9
+ref56:
+  type: article
+  title: 'Short-term load forecasting in smart grids: An intelligent modular approach'
+  author:
+  - Ahmad, A.
+  - Javaid, N.
+  - Mateen, A.
+  - Awais, M.
+  - Khan, Z. A.
+  date: 2019
+  page-range: '164'
+  serial-number:
+    doi: 10.3390/en12010164
+    issn: 1996-1073
+  parent:
+    type: periodical
+    title: Energies
+    issue: 1
+    volume: 12
+ref57:
+  type: article
+  title: Machine learning based cost effective electricity load forecasting model using correlated meteorological parameters
+  author:
+  - Jawad, M.
+  - Nadeem, M. S. A.
+  - Shim, S. O.
+  - Khan, I. R.
+  - Shaheen, A. H. N.
+  - Aziz, W.
+  date: 2020
+  page-range: 146847-146864
+  serial-number:
+    doi: 10.1109/ACCESS.2020.3015265
+    issn: 2169-3536
+  parent:
+    type: periodical
+    title: IEEE Access
+    volume: 8
