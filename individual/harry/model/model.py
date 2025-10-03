@@ -1,7 +1,6 @@
 #imports
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
 import numpy as np
 import math
 from sklearn.preprocessing import StandardScaler
@@ -11,6 +10,9 @@ import torch.optim as optim
 import matplotlib.pyplot as plt
 import pandas as pd
 import os
+import shap
+from sklearn.metrics import r2_score
+from matplotlib.gridspec import GridSpec
 
 #global variables
 patience = 20
@@ -261,9 +263,7 @@ def postprocess(model, X_train, y_train, X_test, y_test, scaler, train_losses, v
         'test_targets_original': test_targets_original,
         'test_predictions_original': test_predictions_original
     }
-    return test_mape, results
-
-    return test_mape
+    return results
 
 def train_model(params):
     input_dim = len(params['features'])
@@ -272,26 +272,37 @@ def train_model(params):
     model, train_losses, val_losses, X_train, y_train, X_test, y_test = train_transformer_model(
         sequences, targets, input_dim, datetimes, params
     )
-    mape, results = postprocess(model, X_train, y_train, X_test, y_test, scaler_X, train_losses, val_losses, params, params['visualise'])
-    return mape, results
+    results = postprocess(model, X_train, y_train, X_test, y_test, scaler_X, train_losses, val_losses, params, params['visualise'])
+    return results, model, X_train, y_train, X_test, y_test
 
-def median_mape(params):
-    # Calculate median MAPE over 5 runs to reduce variance and impact of outliers - more confident estimate of true performance
-    results_list = []
-    mapes = []
-    # sd of 0.08 on 100 runs, therefore average over 5 runs to reduce variance to ~0.04
-    for i in range(5):  # Average over 5 runs to reduce variance
-        mape, results = train_model(params)
-        mapes.append(mape)
-        results_list.append(results)
-    median_idx = sorted(range(len(mapes)), key=lambda i: mapes[i])[len(mapes) // 2]
-    median_mape_val = mapes[median_idx]
+def median_model(params, runs):
+    # Calculate median MAPE over 'runs' runs, saving all model parameters for each run
+    models_list = []
+    # Run 'runs' times, save all results
+    for i in range(runs):
+        results, model, X_train, y_train, X_test, y_test = train_model(params)
+        models_list.append({
+            'results': results,
+            'model': model,
+            'X_train': X_train,
+            'y_train': y_train,
+            'X_test': X_test,
+            'y_test': y_test,
+        })
+    # Find the median MAPE index
+    # Find the median MAPE index robustly (works for even or odd runs)
+    test_mapes = [entry['results']['test_mape'] for entry in models_list]
+    median_mape = np.median(test_mapes)
+    # Find the index of the model whose test_mape is closest to the median
+    median_idx = np.argmin(np.abs(np.array(test_mapes) - median_mape))
+    median_entry = models_list[median_idx]
     # Visualise only the best (median) model
-    visualise_model_results(results_list[median_idx])
-    return median_mape_val
+    if params['visualise']:
+        visualise_model_results(median_entry['results'], runs)
+    return median_entry
 
-def visualise_model_results(results):
-    print("Median Model Results after 5 runs:")
+def visualise_model_results(results, runs):
+    print(f"Median Model Results after {runs} runs:")
     print(f"\nTrain Set Metrics:")
     print(f"MSE: {results['train_mse']:.4f}")
     print(f"MAE: {results['train_mae']:.4f}")
@@ -308,43 +319,80 @@ def visualise_model_results(results):
     plot_results(results['train_losses'], results['val_losses'], results['test_targets_original'], results['test_predictions_original'])
 
 def plot_results(train_losses, val_losses, y_val, predictions):
-    fig, axs = plt.subplots(2, 2, figsize=(15, 10))
+    fig = plt.figure(figsize=(22, 7))
+    gs = GridSpec(1, 3, width_ratios=[1, 1, 2])  # 25%, 25%, 50%
 
-    # Training and validation loss
-    axs[0, 0].plot(train_losses, label='Training Loss')
-    axs[0, 0].plot(val_losses, label='Validation Loss')
-    axs[0, 0].set_xlabel('Epoch')
-    axs[0, 0].set_ylabel('MSE Loss')
-    axs[0, 0].set_title('Training History')
-    axs[0, 0].legend()
-    axs[0, 0].grid(True)
+    # 1. Predicted vs Actual (Scatter)
+    ax0 = fig.add_subplot(gs[0])
+    ax0.scatter(y_val, predictions, color='blue', alpha=0.7, s=20)
+    ax0.plot([min(y_val), max(y_val)], [min(y_val), max(y_val)], 'r--', label='Perfect Prediction')
+    r2 = r2_score(y_val, predictions)
+    ax0.text(0.05, 0.95, f'$R^2$ = {r2:.4f}', transform=ax0.transAxes, fontsize=13, verticalalignment='top', bbox=dict(boxstyle="round", fc="w"))
+    ax0.set_xlabel('Actual Values')
+    ax0.set_ylabel('Predicted Values')
+    ax0.set_title('Predicted vs Actual (Test Data)')
+    ax0.legend()
+    ax0.grid(True)
 
-    # Predictions vs Actuals (first 100 samples)
-    axs[0, 1].plot(y_val[:100], label='Actual', alpha=0.7)
-    axs[0, 1].plot(predictions[:100], label='Predicted', alpha=0.7)
-    axs[0, 1].set_xlabel('Time Step')
-    axs[0, 1].set_ylabel('Demand')
-    axs[0, 1].set_title('Predictions vs Actual (First 100 samples)')
-    axs[0, 1].legend()
-    axs[0, 1].grid(True)
+    # 2. Residuals Plot
+    ax1 = fig.add_subplot(gs[1])
+    residuals = predictions - y_val
+    ax1.scatter(predictions, residuals, color='green', alpha=0.7, s=20)
+    ax1.axhline(0, color='red', linestyle='--')
+    ax1.set_xlabel('Predicted Values')
+    ax1.set_ylabel('Residuals')
+    ax1.set_title('Residuals Plot')
+    ax1.grid(True)
 
-    # Predictions vs Actuals (entire test set)
-    axs[1, 0].plot(y_val, label='Actual', alpha=0.7)
-    axs[1, 0].plot(predictions, label='Predicted', alpha=0.7)
-    axs[1, 0].set_xlabel('Time Step')
-    axs[1, 0].set_ylabel('Demand')
-    axs[1, 0].set_title('Predictions vs Actual (Full Test Set)')
-    axs[1, 0].legend()
-    axs[1, 0].grid(True)
-
-    # Histogram of prediction errors
-    errors = predictions - y_val
-    axs[1, 1].hist(errors, bins=30, alpha=0.7, color='orange')
-    axs[1, 1].set_xlabel('Prediction Error')
-    axs[1, 1].set_ylabel('Frequency')
-    axs[1, 1].set_title('Histogram of Prediction Errors')
-    axs[1, 1].grid(True)
+    # 3. Time Series Comparison (first 365 points)
+    ax2 = fig.add_subplot(gs[2])
+    ax2.plot(y_val[-365:], label='Actual', color='blue')
+    ax2.plot(predictions[-365:], label='Predicted', color='red')
+    ax2.set_xlabel('Time Index')
+    ax2.set_ylabel('Demand Values')
+    ax2.set_title('Time Series Comparison (365 points)')
+    ax2.legend()
+    ax2.grid(True)
 
     plt.tight_layout()
     plt.savefig('training_results.png', dpi=300, bbox_inches='tight')
+    plt.show()
+
+def explain_transformer_feature_importance(model, X_train, X_test, params):
+    # Flatten sequences for SHAP
+    X_train_flat = X_train.numpy().reshape(X_train.shape[0], -1)
+    X_test_flat  = X_test.numpy().reshape(X_test.shape[0], -1)
+
+    # Prediction function for SHAP
+    def predict_fn(x):
+        x_torch = torch.FloatTensor(x).reshape(-1, params['seq_length'], len(params['features']))
+        device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+        model.eval()
+        with torch.no_grad():
+            preds = model(x_torch.to(device)).cpu().numpy()
+        return preds
+
+    # Select background and samples to explain
+    background = X_train_flat
+    X_explain  = X_test_flat
+
+    # SHAP KernelExplainer
+    explainer = shap.KernelExplainer(predict_fn, background)
+    shap_values = explainer.shap_values(X_explain, nsamples=100)
+
+    # Reshape SHAP values to (samples, seq_length, features)
+    shap_values_reshaped = np.array(shap_values).reshape(X_explain.shape[0], params['seq_length'], len(params['features']))
+
+    # Aggregate importance across samples and timesteps
+    feature_importance = np.mean(np.abs(shap_values_reshaped), axis=(0, 1))
+
+    # Plot
+    feature_names = params['features']
+    sorted_idx = np.argsort(feature_importance)[::-1]
+    plt.figure(figsize=(10, 6))
+    plt.barh(np.array(feature_names)[sorted_idx], feature_importance[sorted_idx])
+    plt.xlabel("Mean |SHAP value|")
+    plt.title("Feature Importance (Transformer)")
+    plt.gca().invert_yaxis()
+    plt.tight_layout()
     plt.show()
