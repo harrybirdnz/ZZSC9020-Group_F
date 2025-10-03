@@ -3,28 +3,31 @@
 #set math.equation(numbering: "(1)")
 #set page(margin: 110pt)
 #set text(region: "AU", size:10pt, font: "New Computer Modern")
-
+#set par(spacing: 12pt)
 // Heading Styles (to match template)
-#show heading: it => [#text(weight: "regular")[#it]]
+#show heading: it => [#text(weight: "bold")[#it]]
+#show heading: set block(spacing: 0.5em, above: 1.2em, below: 0.7em)
 #let head(body) = {
   set align(center)
-  set text(size: 14pt, weight: "regular")
+  set text(size: 14pt, weight: "bold")
   [#line(length: 100%)
   #body \
   #line(length: 100%)\ ]
 }
-#show heading.where(level: 1, outlined:true).and(
-  heading.where(body:[Introduction])).or(
-  heading.where(body:[Literature Review])).or(
-  heading.where(body:[Material and Methods])).or(
-  heading.where(body:[Exploratory Data Analysis])).or(
-  heading.where(body:[Analysis and Results])).or(
-  heading.where(body:[Discussion])).or(
-  heading.where(body:[Conclusion and Further Issues])): it => [
-  #head[
-    #smallcaps[Chapter] #counter(heading).display()\
-    #it.body
-]
+
+#show heading.where(level: 1, outlined: true).and(
+  heading.where(body: [Introduction])).or(
+  heading.where(body: [Literature Review])).or(
+  heading.where(body: [Material and Methods])).or(
+  heading.where(body: [Exploratory Data Analysis])).or(
+  heading.where(body: [Analysis and Results])).or(
+  heading.where(body: [Discussion])).or(
+  heading.where(body: [Conclusion and Further Issues])
+): it => [
+    #head[
+      #smallcaps[Chapter] #counter(heading).display()\
+      #it.body
+  ]
 ]
 
 // Table Caption Above
@@ -116,8 +119,9 @@ Signed: #box(height: 0pt)[#line(length: 45%)] #h(10%) Date: #box(height: 0pt)[#l
 #head[Abstract]
 // Harry
 Electricity demand forecasting is an essential part of the modern electricity grid #highlight[REF]. In particular, it allows key stakeholders the ability to make adjustments to supply and pricing levers to ensure stable and reliable operation. \
-This paper thoroughly investigates and compares the performance of four distinct methodologies for the task of forecasting the net total electricity demand over a 24 hour period. On the 2019 test set, the Linear Regression, XGBoost, LSTM, and Transformer acheived MAPES of 2.22%, #highlight[XXX%], 2.76%, and 2.79% respectively.
-These results show that basic methods are able to produce results that are competitive with more complex models, and stakeholders should not disregard them in their design of forecasting algorithms. 
+This paper thoroughly investigates and compares the performance of four distinct methodologies for the task of forecasting the net total electricity demand over a 24 hour period. On the 2019 test set, the Linear Regression, CatBoost, LSTM, and Transformer achieved MAPE values of 2.22%, 1.93%, 2.76%, and 2.79% respectively.
+These results show that basic methods are able to produce results that are competitive with more complex models, and stakeholders should not disregard them in their design of forecasting algorithms.
+
 
 #pagebreak()
 #outline(
@@ -130,31 +134,31 @@ These results show that basic methods are able to produce results that are compe
 #set page(numbering: "1", margin: 40pt)
 = Introduction
 == Problem & Motivation 
-Electricity demand forecasting has a central role in maintaining the stability and efficiency of modern power systems. Short-term demand forecasting is essential to estimate the daily need for electricity @nw13. Accurate short-term predictions - especially up to 24 hours - helps bodies such as regulators, businesses and electricity operators to make informed decisions to better balance supply and demand, improve infrastructure, avoid costly over- or under-supply situations, aid policy and regulation making, optimise strategies for traders and more. 
+Electricity demand forecasting has a central role in maintaining the stability and efficiency of modern power systems. Short-term demand forecasting is essential to estimate the daily need for electricity @nw13. Accurate short-term predictions - especially up to 24 hours - helps bodies such as regulators, businesses and electricity operators to make informed decisions to better balance supply and demand, reduce operational disruptions, plan production and routine schedules to ensure optimal allocation of resources and staff @nw13, avoid costly over- or under-supply situations, aid  regulation making, optimise strategies for traders and more. 
 
 Climate factors, namely temperature, weather and unexpected events, are known to strongly influence electricity consumption. By using historical electricity demand data and analysing climate factors, forecasting electricity demand using various data modelling techniques has been proved to produce accurate results in literature. 
 
 Endgame Economics is a technology-led consultancy that advises their clients that operate in the National Electricity Market (NEM). As such, an important question they wish to address is: How can electricity demand accurately be forecasted, specifically for the New South Wales, Australia Region?
 
 == Research Question 
-The goal of this project is to address Endgame Economics’ question, which can be explored through the research question: “How can different data modelling techniques be used to accurately forecast short-term (24-hour ahead) electricity demand in NSW with temperature data and other factors?“ 
-== Proposed Project Solution & Design Choices 
+The goal of this project is to address Endgame Economics’ question, which can be explored through the research question: "How can different data modelling techniques be used to accurately forecast short-term (24-hour ahead) electricity demand in NSW with temperature data and other factors?" 
+== Project Aims
 
-This research question can be guided by the following: 
+This research question can be guided by the following sub-questions: 
 
 #underline[1. What statistical and machine learning techniques can be developed for this forecasting task?]
 
-Prior studies show that statistical and machine learning methods are effective for short term load forecasting. This includes the application of linear regression [ADD REFERENCES], tree-based ensemble methods such as gradient boosting and gradient bagging implementations [ADD REFERENCES], Long Short-Term Memory models [ADD REFERENCES] and Transformer models [ADD REFERENCES]. 
+Prior studies show that statistical and machine learning methods are effective for short term load forecasting. This includes the application of linear regression @Reg1 @reg3, tree-based ensemble methods such as gradient boosting and gradient bagging implementations @ref18 @nw19 @nw14, Long Short-Term Memory models @lstmlit1 @lstmlit3 and transformer models @transformer2 @transformer4. These methods will be explored in this project.
 
-#underline[2. What level of accuracy can these models achieve when using standard evaluation metrics such as Mean Absolute Error (MAE), Mean Absolute Percentage Error (MAPE), and Root Mean Squared Error (RMSE)? ]
+#underline[2. What level of accuracy can these models achieve when using standard evaluation metrics such as Mean Absolute Error (MAE), Mean Absolute Percentage Error (MAPE) and Root Mean Squared Error (RMSE)? ]
 
 The literature demonstrates accuracy comparison using these metrics for Australian and international datasets @ref1 @ref2 @ref7. AEMO highlights the importance of forecast precision in operations @ref5 @ref6. 
 
-#underline[3. Does adding multiple explanatory inputs (e.g. min/max/avg temperature @ref12 @ref18, heating & cooling degree days @ref2 @ref13 @ref18, day-of-week @ref12 @ref13 @ref15, seasonality @ref13 @ref15) improve accuracy over only temperature?]
+#underline[3. Does adding multiple explanatory inputs (min/max/avg temperature @ref12 @ref18, heating & cooling degree days @ref2 @ref13 @ref18, day-of-week @ref12 @ref13 @ref15, seasonality @ref13 @ref15 improve accuracy over only temperature?]
 
-Evidence across the studies referenced shows that incorporating such environmental and calendar features significantly enhances predictive performance, with systematic reviews further confirming the value of including external variables @ref7.
+Evidence across the studies referenced shows that incorporating such environmental and calendar features significantly enhances predictive performance, with systematic reviews further confirming the value of including external variables @ref7. The use of these explanatory inputs will be explored in this project.
 
-#underline[4. How do the top-performance models in this project compare to broader literature on electricity demand forecasting? ]
+#underline[4. How do the top-performance models in this project compare to literature on electricity demand forecasting?]
 Benchmarking against published results in Australia @ref1 @ref2 @ref3 and internationally @ref4 @ref7 is important. 
 
 By answering these questions, this research seeks to provide both practical insights and results for Endgame Economics and their clients. The findings will help identify the best methods for forecasting demand in NSW, and contribute to the growing literature on combining data modelling techniques in energy forecasting, particularly for applications in Australia. 
@@ -162,7 +166,7 @@ By answering these questions, this research seeks to provide both practical insi
 
 #pagebreak()
 = Literature Review
-// All of the following is from the project plan
+
 == Importance of Forecasting Electricity Demand
 A common through line of the recent studies into modelling energy demand forecasts is the clear need for accurate forecasting capabilities for the energy sector.  Globally, this would allow energy providers to strengthen their networks to avoid undersupply and wastage. With an adaptable and robust model that captures accurate energy requirements, governments and energy providers can make informed decisions on investment, policy and supply @ref11.  
 == Forecasting Features <features>
@@ -176,31 +180,39 @@ Multiple strategies have also been utilised to account for variability in temper
 Lagged demand features provide information on the persistence of electricity use across time. Prior day’s maximum and minimum demand are discussed as strong predictors for next-day demand in short-term load forecasting @ref1,@ref2. Studies also employ lagged  demand at different horizons such as daily, weekly, and monthly intervals to represent temporal dependence @ref3. The interaction of lagged demand with climatic variable and calendar dummies has been shown to improve forecasting accuracy @ref4. Some regression models also incorporate lagged demand with additive or semi-parametric specifications which estimate nonlinear effects while maintaining model interpretability @ref2,@ref5.
 === Precipitation
 Precipitation has been used as an additional climatic feature in electricity demand forecasting, though its influence is often weaker compared to temperature or humidity. Several studies have used rainfall and rainy days into regression and hybrid models to explain demand variations in regions with seasonal rainfalls @ref6,@ref6. In humid or monsoon climates, rainfall is associated with cooling and heating requirements, and may indirectly influence demand by altering temperature, solar radiation, and humidity levels @ref8 . 
-=== Sunlight exposure
+=== Sunlight Exposure
 Sunlight exposure has been considered as an explanatory factor in electricity demand forecasting due to its impact on lighting, cooling requirements, and solar generation. High levels of solar exposure reduce lighting demand but may increase cooling load in warmer regions. To improve short-term forecasting accuracy, regression-based models often include solar radiation or sunshine hours as predictors, sometimes in interaction with temperature @ref8@ref9.
 == Application of Data Modelling
 Both traditional statistical modelling techniques and more modern machine learning algorithms were documented in the literature reviewed. 
 === Statistical Methods
 Traditional statistical methods are often used for time-series based regression tasks such as forecasting energy demand.  Studies referenced the use of Multiple Linear Regression as the basic building blocks for more complex regression models such as ARIMA @ref8, Time Series Decomposition @ref11 and the novel Moving Window Regression method, which fits models over rolling time windows to adapt to changing demand patterns @ref13. 
 ==== Linear Regression
-Linear regression is one of the most established approaches for electricity demand forecasting. It models the linear relationship between electricity demand and explanatory features such as temperature, lagged demand, and calendar features @ref10,@ref6. Extending the OLS estimation method, generalized least squares (GLS) has been used for auto-correlated errors [53] [54]. Moreover, regularized techniques such as Lasso and Ridge, have been used to improve parameter stability in high-dimensional @ref13. Empirical studies show that regression models with weather variables and day-type effects can achieve forecasting errors close to machine learning models for day-ahead and monthly forecasting horizons@ref13,@ref14,@ref15 . Due to its interpretability and consistent performance, linear regression models are often used as baseline benchmarks in electricity demand forecasting research.
+Linear regression is one of the most established approaches for electricity demand forecasting. It models the linear relationship between electricity demand and explanatory features such as temperature, lagged demand, and calendar features @ref10,@ref6. Extending the OLS estimation method, generalised least squares (GLS) has been used for auto-correlated errors @ref11 @ref12. Moreover, regularised techniques such as Lasso and Ridge, have been used to improve parameter stability in high-dimensional @ref13. Empirical studies show that regression models with weather variables and day-type effects can achieve forecasting errors close to machine learning models for day-ahead and monthly forecasting horizons @ref13,@ref14,@ref15. Due to its interpretability and consistent performance, linear regression models are often used as baseline benchmarks in electricity demand forecasting research.
 
 === Machine Learning Methods
 The literature presented numerous machine learning methods as suitable for the task.  These included algorithms such as K-Nearest Neighbours @ref12, Random Forests @ref11, Gradient Boosting methods including XGBoost @ref15, and SVM (Support Vector Machines)@ref15. More recently, neural network-based analysis has taken place, including basic Artificial Neural Networks (ANNs), Convolutional Neural Networks (CNNs) @ref2, Long Short-Term Memory (LSTM) @ref2 and Transformer-Based Models @ref8, along with many combinations and hybrids of these methods. All were presented in the studies as having relevance based upon the dataset used and the specific research. 
 ==== Tree-Based Ensemble Methods
+
+Tree-based ensemble methods - specifically gradient boosting methods and gradient bagging methods - are popular and effective modelling techniques for time-series regression forecasting. These ensemble-based methods iteratively learn from previous errors which make them highly effective for capturing complex and non-linear patterns in data @nw13. Furthermore, these methods are flexible and optimised to handle different types of data (numerical and categorical), making them versatile and adaptable to various applications @nw12. The reviewed literature shows popular choices of these methods as XGBoost, CatBoost and Random Forest. The inclusion of weather features as well as historical demand data to these models have shown to aid accuracy of these models. Further details of these models as well as their effectiveness for short-term electricity demand forecasting are explored in @tree-lit-review-table. 
+
 ==== LSTM <lstm_app>
 
 As described in @lstm_desc, the long short-term memory method has gained in popularity over recent times for time series prediction tasks.  The reviewed literature presents the base single layer LSTM into a densely connected layer as the most often used @lstmlit1 @lstmlit3 @lstmlit4 @lstmlit6 @lstmlit7, but also presents extensions on the base.  This includes integration with a multi-layer perceptron @lstmlit3, a stacked bi-directional LSTM @lstmlit5, a single bi-directional LSTM @lstmlit8, a CNN-LSTM hybrid @lstmlit8 and an LSTM combined with an attention mechanism @lstmlit8.  Results of these studies in the literature are summarised in @lstmlitrevtable and will be discussed briefly in @lstmlitrev_disc.
 
 ==== Transformers
-The transformer was introduced in 2017 by Vaswani et al in the paper "Attention is All You Need" @google1. As the name implies, the architecture eschewed recurrence in favour of the attention mechanism that was gaining popularity at the time @transformer1. The reviewed literature shows that while it excels in natural language processing, it also provides competitive performance in forecasting tasks @transformer2 @transformer3 @transformer4. Modifications for this task include division of known and predicted sequences @transformer2, and integration of densely connected layers for advanced feature recognition @transformer4. The results of these studies are shown in @translitrevtable and discussed in @translitrevdisc.
+The transformer was introduced in 2017 in the paper "Attention is All You Need" @google1. As the name implies, the architecture eschewed recurrence in favour of the attention mechanism that was gaining popularity at the time @transformer1. The reviewed literature shows that while it excels in natural language processing, it also provides competitive performance in forecasting tasks @transformer2 @transformer3 @transformer4. Modifications for this task include division of known and predicted sequences @transformer2, and integration of densely connected layers for advanced feature recognition @transformer4. The results of these studies are shown in @translitrevtable and discussed in @translitrevdisc.
 
 == Data Modelling Results
 The most common evaluation metrics used in the experiments from the sources cited in the reviewed literature were Mean Absolute Percentage Error (MAPE), Mean Absolute Error (MAE) and Root Mean Squared Error (RMSE).  RMSE is sensitive to outliers, so its use is restricted to datasets that are missing outliers or have undertaken pre-processing to deal with these outliers.  MAE reports the average error amount (Watts) between the prediction and actual demand values.  As the studies were based on differing datasets, comparing MAE values here is unhelpful.  Instead, using MAPE as an evaluation method shows a percentage error and is thus suitable for comparison of models presented in the literature.  With a large variety of methods being utilised to model the forecast electricity demand, there was not a high variation in reported MAPE, with the highest at 5.18% (Bayesian Neural Networks) @ref9 and the lowest at 1.82% (Ensemble KNN Method) @ref12.
 
-Based on the initial literature review (for details, see @litrevtable) four modelling methods were chosen for use in this report, and specific literature reviews were undertaken.  Information on these are outlined in the following section.   
+== Model Specific Literature Review
 
-== Model Specific
+Based on the complete literature review (see @litrevtable), four modelling methods were chosen for use in this project - Linear Regression, Tree-Based Ensemble Methods, LSTM and Transformer. These methods were selected based on a few factors:
+- Produced comparatively accurate results in literature on a similar dataset to this project, specifically data covering regions in NSW, Australia or wider in Australia
+- Produced comparatively accurate results in other regions that could potentially produce accurate results for the dataset in this project
+- Commonly explored models for time-series regression electricity forecasting in literature that produced accurate results
+Specific literature reviews were undertaken for each model and are  outlined in the following section.   
+
 === Linear Regression
 
 ==== Comparison Table
@@ -219,7 +231,7 @@ Based on the initial literature review (for details, see @litrevtable) four mode
   [Multiple Linear Regression with VIF analysis and Backward Elimination],
   [MAPE \ MLR: 1.35%],
   
-  [@reg2],
+  [@ref15],
   [Thailand],
   [National electricity demand and weather datasets],
   [Half-hourly],
@@ -389,7 +401,7 @@ Machine learning models as alternatives often resulted in marginal gains, but no
 )}, caption: [Tree-Based Ensemble Methods Literature Review]
 ) <tree-lit-review-table>
 ==== Key Findings
-- Add write-up of main findings
+Most popular tree-based ensemble methods producing accurate results include: XGBoost, CatBoost and Random Forest.  These methods prove to be effective modelling techniques for forecasting electricity demand across many different countries, regions and cities with different climates, as observed by existing studies across Australia @nw19 and @ref18, USA @nw17 and @nw20, Turkey @nw18, Jordan @nw14 and India @nw13. Literature also suggests that these models are flexible to short and long-term forecasting, both very short at hourly, daily and week-ahead. Common model input features include temperature, humidity, day of week / weekday and historical hourly or daily load. Overall, tree-based ensemble methods also comparatively produce accurate results to other modelling methods for electricity demand forecasting as observed in @app-2. 
 
 === Long Short-Term Memory Network
 ==== Comparison Table
@@ -454,58 +466,59 @@ The studies involving LSTM and hybrid LSTM-based models are somewhat hard to com
 ) <translitrevtable>
 
 ==== Key Findings <translitrevdisc>
-- Add write-up of main findings
+Firstly, the existence of these studies demonstrates the ability of transformer architecture, primarily used for natural language processing, to be adapted for forecasting. @transformer3 demonstrate the application on a micro scale of one household, while @transformer2 and @transformer4 apply the technique on a macro scale. A unique approach of @transformer2 was that they implemented a sequential prediction of half hour intervals in order to produce 12, 24, and 36 hour predictions. This capitalised on the ability of the transformer to use its own generated sequence as an input in predicting the next value.
 
-== Literature Review Key Findings
+== Overall Literature Review Key Findings
+The studies covered in @app-2 analysed 
+show that there has, and there continues to be, many varied approaches to modelling energy demand forecasts.  Some key findings include: 
+
 === Different datasets will generate different results
 //Add more info, include amount of data, location of dataset
 //Include ideally our results should be compared to those in literature that use same dataset
+Different datasets will generate different results as observed in @app-2. This could be due to factors such as:
 
+1. Location - For datasets that are based in different regions, factors such as climate and cultural habits can influence electricity demand. Locations with different climates could have more temperature fluctuations, be prone to extreme weather conditions, have different seasons and more, all of which will have different electricity usage patterns. Different regions can also mean there are different daily routines, holidays, work schedules and more that all affect demand cycles. Given these are common features used to forecast electricity demand as observed in literature, these factors will change results. 
 
+2. Data Size - Various studies in literature use different size datasets. Having larger datasets may offer richer data patterns, capturing seasonal or long-term trends as well as having more data for models to be trained on, all of which may influence a model's prediction ability.
 
+For these reasons, the final selected model should ideally be compared to studies with the same dataset. 
 
 === Differences in models will generate different results
 
-
+The evaluation results for the reviewed studies suggest no model is the definitive solution to the problem of electricity demand forecasting and further experimentation is necessary.
 
 === Different features will generate different results
 //Add more info, include different features in literature a bit
+As described in @features, evidence suggests that the integration of various weather features, seasonal trends and daily and weekly trends from lagged demand features can improve forecasting accuracy. The literature reviewed also suggests there is no one combination of features that achieve maximal results and hence the use of different features will be experimented.  
 
 == Project Novelty
 
-This project differs from those in the reviewed literature in a number of key ways.  Firstly, the studies cited that focus on the NSW region tend to have a singular focus in terms of the methods used @ref2 @ref13 @ref14 @ref18, however we have chosen to extend the modelling to a wide range of methods to compare on the same dataset.  Our project is also unique among those focusing on the NSW region, in that it is the first making use of the transformer architecture to model energy demand forecasting.
-
-This project has also chosen a set of features (as described in @features) that has not been seen in the specific combination that we present here.
+This project differs from those in the reviewed literature in a number of key ways:
+1. The studies cited that focus on the NSW region tend to have a singular focus in terms of the modelling methods used @ref2 @ref13 @ref14 @ref18. However, this project  extends the modelling to a wide range of methods to compare on the same dataset. 
+2. This project is also unique among those focusing on the NSW region, in that it is the first making use of the transformer architecture to model energy demand forecasting.
+3. This project has also chosen a set of features (as described in @features) that has not been seen in the specific combination that is utilised in this project.
 
 #pagebreak()
 = Material and Methods
-// Harry
-== Software
-=== Data Storage
-The provided datasets were stored in a PostgreSQL database. This has several benefits over CSV. First is column type, by explicitly casting each column to a specific type we get type safety. The second is the ability and strength of SQL joins. As we had several tables that were formatted slightly differently, using SQL made the joins easy. 
 
-=== Data Science
-Each team member conducted individual model investigations. We each used Jupyter Notebooks, and some of us also used Google Colab. This methodology allowed us to easily share and reproduce results using GitHub. All code was written in Python, and packages used specified in @prog-lang-sect.
-//#figure(
-//  table(
-//    columns: 2,
-//    table.header([Model], [Assigned To]),
-//    [Linear Regression], [Saba],
-//    [Tree Based Ensemble Methods], [Nidhi],
-//    [LSTM], [Cameron],
-//    [Transformer], [Harry]
-//  ),
-//  caption: [Model Investigation Assignment Schedule]
-//) <work-schedule>
+== Assumptions
+There are a number of different assumptions that were made throughout this project:
+1. The supplied data is accurate and reliable, and that the statistical properties of the data do not change significantly over time. A known event that violates this assumption is the COVID-19 pandemic, which caused significant changes to electricity demand patterns. To mitigate this, data from 2020 was excluded.\
+2. The weather data from Bankstown Airport is representative of the entire NSW region. While this is not strictly true, it is a reasonable approximation given the scope of this project.\
+3. The features selected are sufficient to capture the underlying patterns in electricity demand. While other features may also be relevant, the selected features are based on a combination of domain knowledge and literature review.\
+4. There are no major policy or infrastructure changes that would significantly alter electricity demand patterns during the study period.\
+5. Unusual events (e.g., natural disasters, major sporting events) that could impact electricity demand are either absent or have a negligible effect on the overall patterns observed in the data.\
+6. In forecasting electricity demand, some models require an input based on their architecture and training dataset. Speficially, these models require weather data as an input for a day-ahead forecast prediction. In practice, this would come as the form of a weather forecast for the day-ahead, adding a layer of uncertainty and unreliability to the model. For the purposes of this project, it is assumed that the weather forecast is 100% accurate and therefore are supplying the Linear and Tree-Based Ensemble models with the actual weather conditions on the day in question. As the architecture of the LSTM and Transformer model is designed to be fed sequential data from previous days, this was not implemented.
 
-=== Collaboration
-Microsoft Teams was used for group coordination and collaboration. A group chat allowed quick questions to be asked and answered, while team channels provided a space for more formal/important communications. In addition weekly team meetings were scheduled and held, both with just the team and also with Wei Tian. 
+== Materials
+=== Software
+==== Data Storage
+The provided datasets were stored in a PostgreSQL database. This has several benefits over CSV. The first is column type - by explicitly casting each column to a specific type, type safety is achieved. The second is the ability and strength of SQL joins. As there were several tables that were formatted slightly differently, using SQL made data joins easier.
 
-=== Version Control
-The usage of Git was an essential part of ensuring that work was tracked and attributed correctly. In addition GitHub allows cloud based backup and sync of files, which made file sharing easy, and allowed us to track each other's progress. The repository can be found at https://github.com/harrybirdnz/ZZSC9020-Group_F.
 
-=== Programming Language <prog-lang-sect>
-Python was the primary programming language chosen for our work due to its familiarity, ease of use, and robust ecosystem. In particular the extensibility through the following packages: Panda, NumPy, Matplotlib, Seaborn, scikit-learn, Optuna, XGBoost, Tensorflow and PyTorch.
+
+==== Programming Language <prog-lang-sect>
+Python was the primary programming language chosen for this project due to its familiarity, ease of use, and robust ecosystem. In particular the extensibility through the following packages: Panda, NumPy, Matplotlib, Seaborn, scikit-learn, Optuna, XGBoost, Tensorflow and PyTorch.
 
 // List in text instead of table to save space
 //#figure(
@@ -518,7 +531,7 @@ Python was the primary programming language chosen for our work due to its famil
 //  caption: [Python Packages Used]
 //) <py-packages>
 
-== Description of the Data
+=== Data
 The data used consists of four datasets.
 - Electricity demand data for NSW in MW per half hour from AEMO 
 - Half hourly temperature (°C) recordings from Bankstown Airport 
@@ -527,62 +540,60 @@ The data used consists of four datasets.
 These datasets were each filtered to the period of interest (2016-2019).
 Full dataset information can be found in @app-3[Appendix].
 
-== Data Preparation
+== Methodology
 
-=== Data Cleaning
-==== Demand Dataset
-This file contains 22 entries where datetime is null. These must be removed.
-There are 11 instances where 3 records have identical datetimes - all at 3am. This is due to daylight savings, however as we are focussed on taking aggregate values over a 24 hour period, the aggregation will still work and so we can safely ignore this.
+There are 5 key steps the data modelling will be separated into:  1 -  Data preparation, 2 - Model design, 3 - Model optimisation and 4 -  Model evaluation and analysis.
 
-==== Temperature Dataset
+Four different data modelling techniques were explored - Linear Regression, Tree-Based Ensemble Methods, LSTM and Transformer.
+
+=== Data Preparation
+
+==== Data Cleaning
+===== Demand Dataset
+The dataset contains 22 entries where datetime is null. These entries were removed.
+There are 11 instances where three records have identical datetimes - all at 3AM due to daylight savings. However, as this project is focussed on taking aggregate values over a 24 hour period, the aggregation will still work and can safely ignore this.
+
+===== Temperature Dataset
 There are three missing days, the 16th, 17th, and 18th of July 2016. Dealing with these gaps is model dependent. For the two sequential models, a gap in the sequence will be detrimental to model performance. For the other two models, gaps in data should not have as big of an effect on performance, and therefore the null values can be omitted. 
 
-=== Data Pre-Processing
+==== Data Pre-Processing
 
-==== Data filtering
+===== Data Filtering
 Data filtered for the years 2016-2019. 2020 was removed as COVID-19 caused atypical demand patterns. Four years of data history was chosen based on the tradeoff between recency and dataset size as determined in the literature review, where various studies used multiple years of data @ref9 @ref11.
-=== Feature Selection & Feature Engineering
-==== Data Transformation <agg>
-For ease of use with each model in Python, a master data CSV file was created (@app-code-data[Appendix]). This included the features seen in @app-data-features[Appendix]. This dataset contains many additional features that have been derived from the initial dataset. Various aggregations of all values to daily (24 hour) values (sum, average, min, max) were calculated. In addition, day of week, month, season, and weekday/weekend were derived from the date and one hot encoded. The data was finally augmented with the addition of Heating Degree Days and Cooling Degree Days values @aemo1.
+==== Feature Selection & Feature Engineering
+===== Data Transformation <agg>
+For ease of use with each model in Python, a master data CSV file was created. This included the features seen in @app-data-features[Appendix]. This dataset contains many additional features that have been derived from the initial dataset. Various aggregations of all values to daily (24 hour) values (sum, average, min, max) were calculated. In addition, day of week, month, season, and weekday/weekend were derived from the date and one hot encoded. The data was finally augmented with the addition of Heating Degree Days and Cooling Degree Days values @aemo1.
 
-==== Heating Degree Days (HDD) and Cooling Degree Days (CDD)
+===== Heating Degree Days (HDD) and Cooling Degree Days (CDD)
 HDD and CDD are variables that are used to measure heating and cooling requirements. This estimate is based on the difference between the air temperature and a critical temperature set by AEMO. For New South Wales, the HDD critical temperature is 17.0 degrees C and the CDD critical temperature is 19.5 degrees C @aemo1. @hdd calculates the HDD and @cdd calculates CDD.
 $ "HDD" = "Max"(0, 17 - overline(T)) $ <hdd>
 $ "CDD" = "Max"(0, overline(T) - 19.5 ) $ <cdd>
-==== Precipitation
-Daily precipitation was derived as area-averaged time series using AIRS, SSMI GPCPDAY v3.3 (mm/day) for the period 2016-01-01 to 2019-12-31. The data was extracted over the bounding box of New South Wales (141°E,37.5°S,153.6°E,28°S) from NASA Giovanni (https://giovanni.gsfc.nasa.gov/giovanni).
+===== Precipitation
+Daily precipitation was derived as area-averaged time series using AIRS, SSMI GPCPDAY v3.3 (mm/day) for the period 2016-01-01 to 2019-12-31. The data was extracted over the bounding box of New South Wales (141°E,37.5°S,153.6°E,28°S) from @nasa-precip.
 
-==== Sunlight
-Daily solar exposure data was collected from the Sydney Airport weather station, provided by the Australian Bureau of Meteorology (https://www.bom.gov.au/climate/data/)
+===== Sunlight
+Daily solar exposure data was collected from the Sydney Airport weather station, provided by the Australian Bureau of Meteorology @bom-sunlight.
 
-=== Scaling and Normalisation
+==== Scaling and Normalisation
 Ensures variables have a consistent range across variables and aids training. 
 Scaling and Normalisation is an important step in the data preparation process. It ensures that variables have a consistent range which aids training. As there are four different models, the exact methods used are described in the appropriate sections (Linear Regression: @lr-dataprep, Gradient Boost: @gb-dataprep, LSTM: @lstm-dataprep, Transformer: @trans-dataprep).
 
-=== Data Training / Testing Split <train_test_split>
+==== Data Training / Testing Split <train_test_split>
 Years 2016, 2017, 2018 will be used for training and 2019 used for testing.
 
-== Assumptions
-1. It is assumed that the supplied data is accurate and reliable, and that the statistical properties of the data do not change significantly over time. A known event that violates this assumption is the COVID-19 pandemic, which caused significant changes to electricity demand patterns. To mitigate this, data from 2020 was excluded from our analysis.\
-2. It is also assumed that the weather data from Bankstown Airport is representative of the entire NSW region. While this is not strictly true, it is a reasonable approximation given the scope of this project.\
-3. It is assumed that the features selected are sufficient to capture the underlying patterns in electricity demand. While other features may also be relevant, the selected features are based on a combination of domain knowledge and literature review.\
-4. It is assumed that there are no major policy or infrastructure changes that would significantly alter electricity demand patterns during the study period.\
-5. It is assumed that unusual events (e.g., natural disasters, major sporting events) that could impact electricity demand are either absent or have a negligible effect on the overall patterns observed in the data.\
-6. In forecasting electricity demand, our models require an input based on their architecture and training dataset. For linear models that were trained on weather data, this is required as an input. In practice, this would come as the form of a weather forecast, and would add a layer of uncertainty and unreliability to the model. However for our purposes, we are assuming that the weather forecast is 100% accurate and therefore are supplying our Linear and Gradient Boosted models with the actual weather conditions on the day in question. As the architecture of the LSTM and Transformer model is designed to be fed sequential data from previous days, this was not implemented.
+=== Modelling Methods
+==== Linear Regression <lr-model-sect>
+Linear regression is one of the mostly applied statistical methods for forecasting electricity demand @ref10 @ref22. It estimates the relationship between a response and one or more explanatory variables by fitting a linear function to the observed data. The coefficients demonstrate the marginal effect of each explanatory variable on demand, while the model minimises the sum of squared errors to provide efficient estimates under the Gauss-Markov assumptions. Compared with machine learning models such as decision trees or ensemble methods, linear regression is often preferred for its interpretability.
 
-== Modelling Methods
-=== Linear Regression
-Linear regression is one of the mostly applied statistical methods for forecasting electricity demand @ref10 @ref53. It estimates the relationship between a response and one or more explanatory variables by fitting a linear function to the observed data. The coefficients demonstrate the marginal effect of each explanatory variable on demand, while the model minimises the sum of squared errors to provide efficient estimates under the Gauss-Markov assumptions. Compared with machine learning models such as decision trees or ensemble methods, linear regression is often preferred for its interpretability.
-
-==== Data Preparation <lr-dataprep>
-Data preprocessing included creation of polynomial temperature terms e.g., average temp2, min temp2, and max temp2. It also included encoding of calendar-based categorical features; season, quarter, weekend, holidays. Interaction features were also included for conditional effects, such as summer × average temperature, Q1 × average temperature, Q3 × sunlight exposure, and Q4 × average temperature. Precipitation was tested but dropped due to statistical insignificance
-==== Model Design
+===== Data Preparation <lr-dataprep>
+Data preprocessing included creation of polynomial temperature terms e.g., average $"temp"^2$, min $"temp2"^2$, and max $"temp"^2$. It also included encoding of calendar-based categorical features; season, quarter, weekend, holidays. Interaction features were also included for conditional effects, such as summer × average temperature, Q1 × average temperature, Q3 × sunlight exposure, and Q4 × average temperature. Precipitation was tested but dropped due to statistical insignificance
+===== Model Design
 
 The regression model was specified as an ordinary least squares (OLS) multiple linear regression (MLR) to estimate the total daily electricity demand. Let $D_d$ denote the electricity demand on day d. Mathematically, the model can be expressed as seen in @lr-eqn1.
 $ D_d=β_0  +∑_(i=1)^k (β_i  X_id )+ε_d $ <lr-eqn1>
 In this model, $β_0$ is the intercept, $β_i$ are the regression coefficients, $X_id$ represents the explanatory variables on day d, and $ε_d$ is the random error term assumed to be independently and identically distributed with mean zero and constant variance. For regression analysis, the explanatory variables are grouped into four components,
 1. Deterministic terms ($"Det"_d$) for calendar and seasonal influences on demand. It includes indicators for weekend, holiday, seasons, and quarters.
-2. Temperature terms ($"Temp"_d$) to add the functional relationship between demand and weather conditions. It includes average temperature, minimum temperature, maximum temperature, and their squared terms to estimate the nonlinear effects, cooling degree days (CD), heating degree days (HD), and sunlight exposure.
+2. Temperature terms ($"Temp"_d$) to add the functional relationship between demand and weather conditions. It includes average temperature, minimum temperature, maximum temperature, and their squared terms to estimate the nonlinear effects, cooling degree days (CDD), heating degree days (HDD), and sunlight exposure.
 3. Historical demand terms ($"DHist"_d$) to represent the short-term persistence of demand. It includes previous day’s minimum and maximum demand.
 4. Interaction terms ($"ITerms"_d$) for conditional effects i.e., the influence of temperature or solar exposure may differ across seasons and quarters. It includes summer × average temperature, Q1 × average temperature, Q3 × sunlight exposure, and Q4 × average temperature
 Therefore, the regression model can be expressed as follows in @lr-eqn2.
@@ -590,18 +601,18 @@ $ D_d  = "Det"_d  + "Temp"_d  + "DHist"_d  + "ITerms"_d  +ε_d $ <lr-eqn2>
 Here, $ε_d$ denotes the stochastic error component. The model is estimated using ordinary least squares (OLS) to minimise the sum of squared residuals and to obtain unbiased efficient coefficient estimates under the Gauss-Markov assumptions.
 
 Weekend and public-holiday indicators are helpful to detect behavioral differences in electricity use. Studies report the demand being usually lower on weekends and holidays compared to weekdays @ref18. This pattern has also been recognised by AEMO’s operational forecasts @ref1,@ref2. Season and quarter indicators adjust for repeated annual variation in load. Higher demand in winter and summer relates to heating and cooling needs, while spring and autumn are milder with lower demand. Australian studies have shown that seasonal dummies improve forecast accuracy when used alongside temperature variables @ref19,@ref20.
-Minimum, maximum, and average temperatures are often included with polynomial terms to incorporate non-linear effects @ref21. Studies have discussed the importance of including the non-linearity of temperature respective to demand @ref51. Studies in Japan, Thailand, and Australia have used MLR with weather and calendar features to gain low forecasting errors (e.g., MAPE < 3%) @ref17,@ref16. Lagged demand and temperature-based predictors such as HDD & CDD are discussed as strong explanatory factors for short-term load forecasting @ref23,@ref24. The motivation to apply OLS MLR in this study was the inspiration from these empirical findings, as well as the need for a computationally efficient method to benchmark against more complex machine learning models.
+Minimum, maximum, and average temperatures are often included with polynomial terms to incorporate non-linear effects @ref21. Studies have discussed the importance of including the non-linearity of temperature respective to demand @ref26. Studies in Japan, Thailand, and Australia have used MLR with weather and calendar features to gain low forecasting errors (e.g., MAPE < 3%) @ref17,@ref16. Lagged demand and temperature-based predictors such as HDD & CDD are discussed as strong explanatory factors for short-term load forecasting @ref4,@nw14. The motivation to apply OLS MLR in this study was the inspiration from these empirical findings, as well as the need for a computationally efficient method to benchmark against more complex machine learning models.
 
-=== Tree-Based Ensemble Methods
-Tree-based machine learning models are commonly used for regression forecasting problems, as explored in @tree-lit-review-table in @tree-ensemble-section. 
+==== Tree-Based Ensemble Methods
+Tree-based machine learning models are commonly used for regression forecasting problems, as seen in @tree-ensemble-section. 
 
 Tree-based machine learning models are based on decision trees. Decision trees recursively partition data based on the value of input features, where each internal node of the tree represents a decision based on a specific feature, leading to a subsequent split eventually leading to the leaf nodes that contain a predicted numerical outcome @nw5. An example of a decision tree for a regression problem looks like @eg-decision-tree. 
 #figure(
-  image("media/Example Decision Tree.png", height:17%),
+  image("media/Example Decision Tree.png", height:15%),
   caption: [Example of Decision Tree for Regression - Image from  @nw21]
 ) <eg-decision-tree>
 Ensemble learning is commonly used with tree-based machine learning models. Ensemble learning combines a number of different models, that usually results in models with less bias and less variance @nw4. The two most popular ensemble learning methods are boosting and bagging. Boosting is where a number of models are trained sequentially, where each model learns from the previous mistakes of the previous models @nw4. Bagging is where a number of models are trained in parallel, where each model learns from a random subset of the data @nw4. The application of boosting is found in gradient boosting decision trees and bagging is found in random forests. 
-==== Gradient Boosting Decision Trees
+===== Gradient Boosting Decision Trees
 
 In gradient boosting decision trees, the idea is to have many weak learners that when combined create a strong learner. All trees are connected in series and each subsequent tree or weak learner tries to minimise the error of the previous tree by fitting into the residuals of the previous step @nw4. The final model aggregates the result of each step and eventually a strong learner is created. An example of this is shown in @eg-gradboost.
 #figure(
@@ -616,50 +627,41 @@ where y is the true value and ŷ is the predicted value and N the total number o
 
 In this project, three gradient boosting decision tree models were explored: XGBoost, LightGBM and CatBoost. These models are popular methods to perform regression forecasting and achieve accurate results according to literature @nw13, @nw14, @nw17, @nw18, @nw19 & @nw20 . They are all more advanced algorithms that have been developed on the standard gradient boosting algorithm that outperform the standard algorithm.
 
-Each of these models will be written in Python and make use of extensive Python libraries. 
-
-There are 2 key steps the design for each method will be separated into:  1 -  Data preparation and 2 - Model design. 
-
-===== Data Preparation <gb-dataprep>
-====== Feature Engineering <gb-featureeng>
+====== Data Preparation <gb-dataprep>
+======= Feature Engineering <gb-featureeng>
 The inclusion of lag electricity demand forecasting was explored, performing experiments with and without these features. The lag features experimented with were:
 - Previous day (1 day prior) - average demand, minimum demand, maximum demand and total demand. 
 - Previous week (7 days prior) - average demand, minimum demand, maximum demand and total demand. 
-====== Data Scaling and Normalisation
+======= Data Scaling and Normalisation
 Scaling and normalising of data is not required for tree-based decision trees as they capture non-linear relationships between features and the target variable and are not sensitive to the scale of features @nw5. 
 
-===== Model Design
-====== Model 1: XGBoost <xg-design>
+====== Model Design
+======= Model 1: XGBoost <xg-design>
 Extreme Gradient Boosting (or XGBoost) is an optimised implementation of gradient boosting, designed for speed and performance @nw6. XGBoost extends a traditional gradient boosting implementation by including regularisation, that helps improve model generalisation and prevents overfitting and utilising the Newton-Raphson method (a mathematical root-finding algorithm) that enables faster model convergence and more accurate model updates at each training step. 
 To implement this model, the python libraries XGBoost and XGBRegressor were used.
 
-#underline("Hyperparameters:")
+======== Hyperparameters
 
 There are a number of tunable hyperparameters included for the XGBoost model. The selected hyperparameters for tuning in this project were max_depth, learning_rate, subsample, colsample_bytree, reg_alpha and reg_lambda, selected based on recommendations in literature @nw2. These hyperparameters mainly help model training and prevent model overfitting. A number of values for each hyperparameter were trialled to determine the values that resulted in the highest performing model. Descriptions of these hyperparameters and the values trialled can be found in @xgboost_hyp. 
 
-====== Model 2: CatBoost
+======= Model 2: CatBoost
 
-CatBoost (or Categorical Boosting) is a gradient boosting method that performs well for categorical features. CatBoost modifies the standard gradient boosting algorithm by incorporating ordered boosting and using target statistics for categorial feature encoding @nw6. Ordered boosting is a method that helps reduce over-fitting, by building each new tree while treating each data point as if it’s not part of the training set when the prediction is being calculated. CatBoost also encodes categorical values based on a distribution of the target variable instead of using the target value itself which helps prevent overfitting @nw6. 
+CatBoost (or Categorical Boosting) is a gradient boosting method that performs well for categorical features. CatBoost modifies the standard gradient boosting algorithm by incorporating ordered boosting and using target statistics for categorial feature encoding @nw6. Ordered boosting is a method that helps reduce over-fitting, by building each new tree while treating each data point as if it’s not part of the training set when the prediction is being calculated. CatBoost also encodes categorical values based on a distribution of the target variable instead of using the target value itself which helps prevent overfitting @nw6. To implement this model, the python libraries CatBoost and CatBoostRegressor were used.
 
-To implement this model, the python libraries CatBoost and CatBoostRegressor were used.
-
-#underline[Hyperparameters:]
+======== Hyperparameters
 
 There are a number of tunable hyperparameters included for the CatBoost model. The selected hyperparameters for tuning in this project were iterations, depth, learning_rate, subsample, colsample_bytree, and l2_leaf_reg, selected as they are the core training parameters for the model @nw9. These hyperparameters help prevent model overfitting. A number of values for each hyperparameter were trialled to determine the values that resulted in the highest performing model. The hyperparameter descriptions and values for learning_rate, subsample and colsample_bylevel are the same as those in XGBoost found in @xgboost_hyp. The different hyperparameters for CatBoost include iterations, depth and l2_leaf_reg. Descriptions of these hyperparameters and the values trialled can be found in @catboost_hyp. 
 
-===== Model 3: LightGBM
+====== Model 3: LightGBM
 
-LightGBM is another gradient boosting method that performs well on categorical features. One of the largest points of difference of LightGBM compared to other gradient boosting methods is that it grows trees leaf-wise and selects the leaf that provides the greatest reduction in loss @nw6. Another difference is that this method relies on an efficient histogram-based method to sort feature values and locate the best split that improves both speed and memory efficiency @nw6. Lastly, it implements gradient-based one-side sampling that focuses on the most informative data samples during training and hence speeds up model training. 
+LightGBM is another gradient boosting method that performs well on categorical features. One of the largest points of difference of LightGBM compared to other gradient boosting methods is that it grows trees leaf-wise and selects the leaf that provides the greatest reduction in loss @nw6. Another difference is that this method relies on an efficient histogram-based method to sort feature values and locate the best split that improves both speed and memory efficiency @nw6. Lastly, it implements gradient-based one-side sampling that focuses on the most informative data samples during training and hence speeds up model training. To implement this model, the python libraries LightGBM and LGBMRegressor were used.
 
-To implement this model, the python libraries LightGBM and LGBMRegressor were used.
-
-#underline[Hyperparameters:
-]
+======= Hyperparameters
 
 There are a number of tunable hyperparameters included for the LightGBM model. The selected hyperparameters for tuning in this project were n_estimators, max_depth, learning_rate, subsample, colsample_bytree, num_leaves and min_data_in_leaf, selected as they are the major training parameters for the model @nw10. These hyperparameters mainly help model training and prevent model overfitting. A number of values for each hyperparameter were trialled to determine the values that resulted in the highest performing model. The hyperparameter descriptions and values for n_estimators, max_depth, learning_rate, subsample and colsample_bylevel are the same as those in XGBoost as found in @xgboost_hyp. The different hyperparameters for LightGBM include num_leaves and min_data_in_leaf. 
 Descriptions of these hyperparameters and the values trialled can be found in @lightgbm_hyp. 
 
-==== Gradient Bagging Decision Trees
+===== Gradient Bagging Decision Trees
 In gradient bagging decision trees, the idea is to use collective knowledge of several decision trees to make accurate predictions @nw16 by aggregating predictions from numerous decision trees and thereby reducing variance and improving generalisation @nw13. Gradient bagging decision trees make multiple decision trees that are trained on subsets of data. Each tree is built using a random selection of features @nw13. The final prediction is obtained by averaging the outputs @nw13. An example of this is shown in @eg-gradbag.
 
 #figure(
@@ -669,22 +671,20 @@ In gradient bagging decision trees, the idea is to use collective knowledge of s
 
 In this project, the gradient bagging decision tree model explored is Random Forest. Random Forest is a popular method to perform regression forecasting and achieve accurate results according to literature @nw12, @nw13, @nw14 and @nw18. 
 
-===== Data Prepration
+====== Data Prepration
 The data feature engineering and scaling and normalisation for Random Forest is the same as for gradient boosting decision trees, as described in Section 3.5.2.1.1. 
 
-===== Model Design
+====== Model Design
 
-Random Forest is a robust and versatile machine learning technique known for its ability to handle regression challenges across multiple domains @nw16. The Random Forest regression approach can handle big datasets of various data types including continuous and categorical variables, can handle non-linear correlations, and due to its ensembling and aggregation approach is robust against overfitting when making predictions. These factors make Random Forest an ideal for load forecasting @nw12. 
+Random Forest is a robust and versatile machine learning technique known for its ability to handle regression challenges across multiple domains @nw16. The Random Forest regression approach can handle big datasets of various data types including continuous and categorical variables, can handle non-linear correlations, and due to its ensembling and aggregation approach is robust against overfitting when making predictions. These factors make Random Forest an ideal for load forecasting @nw12. To implement this model, the python libraries sklearn and RandomForestRegressor were used.
 
-To implement this model, the python libraries sklearn and RandomForestRegressor were used.
-
-#underline[Hyperparameters:]
+======= Hyperparameters
 
 There are a number of tunable hyperparameters included for the Random Forest model. The selected hyperparameters for tuning in this project were n_estimators, max_depth, min_samples_split, min_samples_leaf and max_features, selected based on recommendations in literature @nw22. These hyperparameters mainly help model training and prevent model overfitting. A number of values for each hyperparameter were trialled to determine the values that resulted in the highest performing model. 
 The hyperparameter description and values for n_estimators is the same as those in XGBoost as defined in @xgboost_hyp. The different hyperparameters for Random Forest include max_depth, min_samples_split, min_samples_leaf and max_features.
 Descriptions of these hyperparameters and the values trialled can be found in @rf_hyp. 
 
-=== Long Short-Term Memory Network <lstm_desc>
+==== Long Short-Term Memory Network <lstm_desc>
 
 Long Short-Term memory (or LSTM for short) was derived in 1997 by German researchers Sepp Hochreiter and Jurgen Schmidhuber @lstm2 as a way to mitigate the Vanishing Gradient Problem found in more traditional recurrent neural networks (or RNNs)@lstm1.  They also, unlike RNNs, allow for longer memory processing, which makes them better suited for time series prediction @lstm3.  As can be seen below (@lstm-arc1), the architecture of a LSTM unit includes 3 gates: a forget gate, an input gate and an output gate along with a memory cell.
 #figure(
@@ -697,42 +697,42 @@ As can be inferred, each cell is doing a large amount of processing of the input
 
 The LSTM network is designed to deal effectively with sequential time series data.  As such, sequences of data for a specified time period will be fed through the LSTM to output the electricity demand prediction for the following 24 hour period.  
 
-==== Data Preparation <lstm-dataprep>
+===== Data Preparation <lstm-dataprep>
 
 To prepare the data for input into the LSTM, the dataset must first be broken down by a processor function that will convert the data into an input matrix of shape: $ "(number of days)" * "(number of features)" $ 
 
-===== Feature Engineering
+====== Feature Engineering
 
 The input will start as univariate with a default 7 days of lagged summed temperature demand, and will become multivariate by adding appropriate additional variables in a sequential and experimental manner.
 
 Along with the variables provided in the dataset, a variable representing temperature range will be created with the following equation: $ "temp_range" = "max_temp - min_temp" $ and a $"temp"^2$ variable will also be introduced due to the non-linear patterns in the temperature features discussed in @eda_section.  
 
-===== Data Scaling and Normalisation
+====== Data Scaling and Normalisation
 
 The processor function also uses the MinMaxScaler functionality from the scikit-learn Python library to scale the feature and target inputs, as this is required for the LSTM @lstm7.  This also splits the data into training and test splits as described in @train_test_split.  An additional processor function will be used to tune the model with the addition of a validation set in the early experimentation phase.  The scaling process will be inversed after the model is run to convert the output to a scale consistent with the initial data for measuring the accuracy of the predictions.
 
-==== Model Design
+===== Model Design
 
 The base architecture for the LSTM can be seen in @lstm-arc2.  The tanh activation function is primarily used coming out of the LSTM layer into the fully connected layer as seen  in other successful studies @lstmlit9 @lstmlit6.  The linear activation into the output layer is also standard.  A stacked LSTM structure and a convolutional neural network (CNN) - LSTM hybrid layer will also be explored due to documented success in other research @ref2 @lstmlit5.  The architectures of these models are shown on the right hand side of @lstm-arc2 below.
 #figure(
   grid(
     columns: 2,
     gutter: 7em,
-    image("media/lstm3.png", height: 20%),
-    image("media/lstm4.png", height: 25%),
+    image("media/lstm3.png", height: 15%),
+    image("media/lstm4.png", height: 15%),
   ),
   caption: [Basic and variant LSTM architectures]
 ) <lstm-arc2>
 
 The LSTM functionality will be set up by using the Tensorflow Keras library due to it's simplicity of implementation.  The Adam optimiser was chosen as it is the default optimiser for deep learning models due to it's stability and robustness @ref33.
 
-===== Hyperparameters
+====== Hyperparameters
 
 There are a number of tunable hyperparameters included for the LSTM model.   In the model definition, this is num_lstm_nodes, and will be extended to include dropout and recurrent_dropout in later experiments.  For the optimiser, the tunable hyperparameter is learning_rate, and when fitting the model the tunable hyperparameter is batch_size.  The number of days in the input matrix (window_size) will be adjusted experimentally, however 7 was chosen as a default as it covers a week of data which should pick up variations in demand.  Hyperparameter tuning will be performed iteratively by the Python Optuna package as described in @model-opt.  Further information regarding these hyperparameters, their operations and values can be found in @lstm_hyp.
  
-===== Overfitting Protection
+====== Overfitting Protection
 
-To protect against overfitting, the LSTM models will integrate both ModelCheckpoint and EarlyStopping from the Tensorflow library.  
+To protect against overfitting, the LSTM models will integrate both ModelCheckpoint and EarlyStopping from the TensorFlow library.  
 
 ModelCheckpoint will monitor the validation loss (when that metric is used) and will only save the best model @lstm9.  In isolation, it will run the model for the specified number of epochs (100), but will save the model when the validation loss was at it's lowest point across those epochs.
 
@@ -740,96 +740,98 @@ EarlyStopping monitors the validation loss as well, but will stop the model run 
 
 Once the modelling switches to train test splits only, the metric used will be training loss, and EarlyStopping will no longer be used as it is unreliable without a validation set @lstm9.
 
-=== Transformer
-==== Data Preparation <trans-dataprep>
-- Anything specific for your model / any feature engineering you did / data scaling / normalisation, etc. -> make these subheadings under the section
-===== Feature Engineering
-For this model there was no additional feature engineering. 
-===== Data Scaling
-The features are a range of one hot encoded and continuous features. 
+==== Transformer
 
-==== Model Design
-The Transformer network architecture (@trans-arc) was introduced in 2017 by researchers at Google @google1. It was designed to replace and outperform the primarily recurrence based models used at the time, both in increased performance and reduced training cost due to parallelisation @transformer2. The architecture is a specific instance of the encoder-decoder models that had become popular in the years prior @transformer1. The primary advancement from this architecture was in the space of natural language processing (NLP), with a myriad of models being developed and becoming familiar in the mainstream such as ChatGPT @transformer1. However, this architecture can also still be applied to forecasting problems @transformer2. 
+The Transformer network architecture (@trans-arc) was introduced in 2017 by researchers at Google @google1. It was designed to replace and outperform the primarily recurrence-based models used at the time, both in increased performance and reduced training cost due to parallelisation @transformer2. The architecture is a specific instance of the encoder-decoder models that had become popular in the years prior @transformer1. While originally developed for natural language processing (NLP), this architecture can also be effectively applied to forecasting problems @transformer2.
+
 #figure(
-  image("media/transformer.png", height: 25%),
-  caption: [Transformer Architecture introduced by @google1]
+image("media/transformer.png", height: 25%),
+caption: [Transformer Architecture introduced by @google1]
 ) <trans-arc>
-The novelty of this method lies in the architecture's removal of recurrence entirely, instead relying entirely on attention mechanisms. Attention excels at learning long range dependencies, which is a key challenge in many sequence transduction tasks @google1. A self attention layer connects all positions with a constant ($OO(1)$) number of operations, executed sequentially. In comparison, a recurrent layer requires $OO(n)$ sequential operations. This means that self attention layers are faster than recurrent layers whenever the sequence length $n$ is less than the model dimensionality $d$. 
 
-The transformer takes an input, which in NLP is a sentence or phrase, that is first converted to numbers by an embedding layer before being passed to the encoder portion of the transformer @transformer2. Sequentiality is captured through positional encoding. In our task, we aim to input sequential demand and temperature data, and output a prediction for the next 24 hours of electricity demand.
+Unlike recurrent neural networks, the Transformer removes recurrence entirely and relies on attention mechanisms. Attention excels at learning long-range dependencies, which is a key challenge in many sequence transduction tasks @google1. A self-attention layer connects all positions with a constant ($OO(1)$) number of operations, executed sequentially. In comparison, a recurrent layer requires $OO(n)$ sequential operations. This makes self-attention layers faster than recurrent layers whenever the sequence length $n$ is less than the model dimensionality $d$.
 
-==== Input
-The input can be further broken down between historical data and contextual data. Historical data is the actual temperature and demand recordings. Contextual data is that which can be extracted from the date/time, such as day of the week and month of the year. 
+As can be inferred, each attention layer is doing a large amount of computation across all sequence positions, and as such Transformer models can be computationally expensive with long sequences. However, the architecture allows for capturing long-term dependencies more effectively than recurrent models, while benefiting from efficient parallelisation.
 
-As the transformer interprets sequential dependencies, the sequentiality needs to be encoded into the model. This is done by adding a positional encoding function to the input which embeds each datapoint with a value which indicates its order in the sequence.
+The Transformer is designed to deal effectively with sequential time series data. Sequences of demand and temperature will be fed through the encoder stack to output the demand prediction for the following 24-hour period.
 
-==== Structure
-In essence, the transformer is just another form of neural network. As our task is sequential prediction of only one value at a time, we can simplify the architecture introduced in @google1 and eliminate the need to refeed the already generated outputs back into the model. In addition PyTorch provides an implementation of the attention and feedforward mechanism outlined in @google1 called TransformerEncoderLayer @pytorch1. This allows us to create a straightforward structure as shown in @imp-trans-arc.
+===== Data Preparation <trans-dataprep>
+
+===== Model Design
+
+The transformer takes an input, which in NLP is a sentence or phrase, that is first converted to numbers by an embedding layer before being passed to the encoder portion of the transformer @transformer2. Sequentiality is captured through positional encoding. In this project, the aim is to input sequential demand and temperature data, and output a prediction for the next 24 hours of electricity demand.
+
+====== Input
+The input can be broken down between historical data and contextual data. Historical data is the actual temperature and demand recordings. Contextual data is extracted from the date/time, such as day of the week and month of the year.
+
+As the Transformer interprets sequential dependencies, the sequentiality needs to be encoded into the model. This is done by adding a positional encoding function to the input, which embeds each datapoint with a value indicating its order in the sequence.
+
+====== Structure
+In essence, the Transformer is another form of neural network. As the task is sequential prediction of only one value at a time, the architecture can be simplified as introduced in @google1 and eliminate the need to refeed the already generated outputs back into the model. In addition, PyTorch provides an implementation of the attention and feedforward mechanism outlined in @google1 called TransformerEncoderLayer @pytorch1. This allows a straightforward structure as shown in @imp-trans-arc.
+
 #figure(
-  image(
-    "media/Transformer Architecture.png",
-    height: 25%
-  ),
-  caption: "Implemented Transformer Architecture"
+image("media/Transformer Architecture.png", height: 15%),
+caption: [Implemented Transformer Architecture]
 ) <imp-trans-arc>
-The novelty lies in allowing the attention mechanism (need more understanding) to capture a wide timeframe in training. 
 
-==== Output
-The output of the model is a simple floating point estimation of the total demand over the next 24 hours (Note that this is equivalent to the average demand multiplied by 24).
+====== Output
+The output of the model is a simple floating point estimation of the total demand over the next 24 hours (equivalent to the average demand multiplied by 24).
 
-Inverse Scaling...
+====== Hyperparameters
+There are a number of tunable hyperparameters for the Transformer model. These include: d_model (embedding dimension), num_heads (attention heads), num_layers (stacked encoder layers), dim_feedforward (feedforward hidden size), dropout, learning_rate, batch_size, and sequence_length. Hyperparameter tuning will be performed iteratively by the Python Optuna package as described in @model-opt.
 
-==== Evaluation
+====== Evaluation
 To avoid the effects of variance caused by the inherent randomness present in weight initialisation and dropout, each model was trained 5 times, and the median performing model was chosen as an accurate and reproducible representation of the hyperparameters.
 
+=== Model Optimisation Techniques <model-opt>
+Both the gradient boosting-based and the neural network-based machine learning models require hyperparameter tuning to be completed to result in the most optimal solution.  
 
-== Model Optimisation Techniques <model-opt>
-Both the gradient boosting-based and the neural network-based machine learning models require some kind of hyperparameter tuning to be completed to result in the most optimal solution.  
-
-While this can be done manually, this process would be labour intensive and time consuming.  A widely used alternative in much documentation is the GridSearchCV, which looks at every combination of hyperparameters and thus locates the best one @optuna3.  Although it finds the optimal solution with absolute certainty, it also takes a lot of time and computational resources.  Alternatively, RandomSearchCV selects random combinations and finds the best combination out of those attempted @optuna3.  It is less likely to find the most optimal solution, but also takes a lot less time and resources.
+While this can be done manually, this process would be labour intensive and time consuming.  A widely used alternative in much documentation is the GridSearchCV, which looks at every combination of hyperparameters and thus locates the best one @optuna3. It guarantees an optimal solution, though at a high cost in time and computational resources. Alternatively, RandomSearchCV selects random combinations and finds the best combination @optuna3.  It is less likely to find the most optimal solution, but is more efficient.
 
 Recent literature has shown the rise of a Python library known as Optuna, which assists with automated hyperparameter tuning.  It uses the method of Bayesian Optimisation @optuna3 to move through sets of hyperparameters in a probabilistic way that by definition should improve each iteration, or adjust accordingly.  It is widely used in the last few years due to its platform independence, ease of integration and the ability to visualise the tuning process @optuna2.  A study by Hanifi et al @optuna1 showed Optuna to be the most efficient technique amongst three packages designed for a similar purpose.
 
-== Model Evaluation & Analysis
+=== Model Evaluation & Analysis
 
 
-=== Accuracy
-Accuracy of each model was determined using mean absolute percentage error (MAPE), defined in @mape.
+==== Accuracy
+The primary accuracy measure of each model was determined using mean absolute percentage error (MAPE), defined in @mape.
 $ "MAPE" = 1/N sum_(i=1)^N abs(y_i - hat(y)_i)/y_i $ <mape>
-As each model will be reporting on the same dataset, bothroot mean squared error (RMSE) mean absolute error (MAE) will also be reported metrics.  The equations for these can be seen in @rmse and @mae below:
+As each model will be reporting on the same dataset, secondary metrics root mean squared error (RMSE) and mean absolute error (MAE) will also be reported metrics.  The equations for these can be seen in @rmse and @mae below:
 $ "RMSE" = sqrt(1/N sum_(i=1)^N (y_i - hat(y)_i)^2) $<rmse>
 $ "MAE" = 1/N sum_(i=1)^N abs(y_i - hat(y)_i) $<mae>
 
 #pagebreak()
 = Exploratory Data Analysis <eda_section>
-// Saba
+== Electricity Demand vs. Time Analysis
 @python1 presents the time series of daily total electricity demand (MW) in NSW from 2016 to 2019. Demand is higher in summer (Dec–Feb) and mid-winter (June–August) due to air conditioning and heating needs, and lower in transitional months, consistent with previous Australian studies @ref19. System operators such as AEMO account for these seasonal and calendar effects using month and day-type indicators @ref20. 
-Though the seasonal cycle remains dominant, demand series also demonstrate short-term fluctuations, caused by from weather, daily activity, and extreme events like heatwaves. No upward or downward trend is observed, indicating stable aggregate demand in NSW, where forecasting practice treats trend as weak but emphasizes seasonal and weather-related influences @ref30. Since this study also considers lagged demand features (minimum and maximum 30-minute daily demand), the time series of these variables is presented in Appendix 1. 
+Though the seasonal cycle remains dominant, demand series also demonstrate short-term fluctuations, caused by from weather, daily activity, and extreme events like heatwaves. No upward or downward trend is observed, indicating stable aggregate demand in NSW, where forecasting practice treats trend as weak but emphasises seasonal and weather-related influences @ref30. Since this project also considers lagged demand features (minimum and maximum 30-minute daily demand), the time series of these variables is presented in Appendix 1.
 #figure(
-  image("media/Daily Average 30 min.png",width: 85%),
+  image("media/Daily Average 30 min.png",width: 80%),
   
   caption: "Daily total 30-min electricity demand (mW)(2016-2019)"
 )<python1>
 
-The time series of climate features shows strong seasonal variability essential for demand forecasting (Figure 10). Average daily temperature (°C) has a clear summer-winter cycles, implying heating and cooling needs. Rising temperatures have been linked to higher demand in NSW, especially in summer and spring @ref31. Precipitation appears irregular, with peaks on certain days, indicating its role as an external shock rather than a seasonal influence. Sunlight exposure shows a seasonal cycle, higher in summer and lower in winter, consistent with daylight variation and its influence on solar generation and cooling demand. Solar exposure and temperature extremes significantly improve demand forecasts, including for NSW @ref26. Accordingly, this study also incorporates daily minimum and maximum 30-minute temperatures, as well as cooling degree (CD) and heating degree (HD) variables, with their series shown in Appendix 1.
+== Climate Features vs. Time Analysis
+The time series of climate features shows strong seasonal variability essential for demand forecasting as observed in @python2. Average daily temperature (°C) has a clear summer-winter cycles, implying heating and cooling needs. Rising temperatures have been linked to higher demand in NSW, especially in summer and spring @ref31. Precipitation appears irregular, with peaks on certain days, indicating its role as an external shock rather than a seasonal influence. Sunlight exposure shows a seasonal cycle, higher in summer and lower in winter, consistent with daylight variation and its influence on solar generation and cooling demand. Solar exposure and temperature extremes significantly improve demand forecasts, including for NSW @ref26. Accordingly, this study also incorporates daily minimum and maximum 30-minute temperatures, as well as cooling degree (CDD) and heating degree (HDD) variables, with their series shown in Appendix 1.
 
 #figure(
-  image("media/Python Code 2.png", width: 89%),
+  image("media/Python Code 2.png", width: 80%),
   caption: "Time series plots of climate variables (2016-2019)"
 )<python2>
 
-In terms of variation in demand based on type of days, illustration has been presented for week-wise variation in electricity demand (see Figure 11). It shows a systematic difference between weekdays and weekends. Median demand is consistently higher on weekdays, especially on Monday to Tuesday. By contrast, weekend medians are lower (~360,000 MW). This reduction points to the effect of reduced commercial and industrial activity during weekends. Across weekdays, Tuesday records the highest median demand. The distribution is relatively stable across weekdays, which shows similar variability in typical daily loads. Few outliers are also present across all weekdays, likely corresponding to extreme weather events or unusual system conditions.
-Weekend demand not only has lower medians but also lower maxima compared to weekdays (e.g., ~450,000 MW on Saturday vs ~500,000 MW on Tuesday). This confirms a weekday–weekend effect in NSW demand, consistent with operational expectations where business and industrial loads dominate during weekdays, while residential usage is more prominent during weekends. Earlier NSW and Australian load-forecasting research explicitly recognizes the weekday/weekend effect, for example, Koprinska et al. (2012) @ref32 used separate weekday-based models for NSW load data. 
+== Electricity Demand Per Day Analysis
+In terms of variation in demand based on type of days, illustration has been presented for week-wise variation in electricity demand (see @python3). It shows a systematic difference between weekdays and weekends. Median demand is consistently higher on weekdays, especially on Monday to Tuesday. By contrast, weekend medians are lower (~360,000 MW). This reduction points to the effect of reduced commercial and industrial activity during weekends. Across weekdays, Tuesday records the highest median demand. The distribution is relatively stable across weekdays, which shows similar variability in typical daily loads. Few outliers are also present across all weekdays, likely corresponding to extreme weather events or unusual system conditions.
+Weekend demand not only has lower medians but also lower maxima compared to weekdays (e.g., ~450,000 MW on Saturday vs ~500,000 MW on Tuesday). This confirms a weekday–weekend effect in NSW demand, consistent with operational expectations where business and industrial loads dominate during weekdays, while residential usage is more prominent during weekends. Earlier NSW and Australian load-forecasting research explicitly recognises the weekday/weekend effect, for example, Koprinska et al. (2012) @ref32 used separate weekday-based models for NSW load data. 
  
 
 #figure(
-image("media/python code 3.png", width: 70%),
+image("media/python code 3.png", width: 60%),
   
 caption: "Variation in total electricity demand_t (MW) across weekdays"
 )<python3>
 
-
-In term of monthly variation, demand in NSW shows systematic fluctuations i.e., seasonal cycle (refer to 12). The highest median demand occurs in winter, with June and July around ~420,00 MW recording high levels. It is consistent with heating requirements during colder conditions. Summer months also has high median demand, e.g., January and February both with more than 400,00 MW. These months showed high medians and greater variability. Maximum loads in these months exceed 500,000 MW, which aligns with extreme heat events and widespread air-conditioning use.
+== Electricity Demand Per Month Analysis
+In terms of monthly variation, demand in NSW shows systematic fluctuations i.e., seasonal cycle (see @python4). The highest median demand occurs in winter, with June and July around ~420,00 MW recording high levels. It is consistent with heating requirements during colder conditions. Summer months also has high median demand, e.g., January and February both with more than 400,00 MW. These months showed high medians and greater variability. Maximum loads in these months exceed 500,000 MW, which aligns with extreme heat events and widespread air-conditioning use.
 In contrast, demand is notably lower in the transitional months of autumn and spring. Median decline from March to April, and reached its lowest in October and November. Outliers are most frequent in February, May, December, and July, corresponding to months when weather extremes i.e., heatwaves or cold spells, disrupt typical load patterns. It confirms the importance of using seasonal effects when modelling electricity demand, a practice well established in Australian forecasting studies@ref31,@ref32
 
 
@@ -838,60 +840,79 @@ image("media/python code 4.png", width: 80%),
 caption: "Variation in average electricity demand_t (MW) across months"
 )<python4>
 
-The quarterly boxplots confirm the relevance of seasonality for day-ahead demand forecasting in NSW (see Figure 13). Median demand is highest in Q1 (summer) and Q3 (winter), while Q4 records the lowest levels. This seasonal structure has two implications. First, shifts in load distributions across quarters show that models without seasonal controls risk misestimating demand during transitions between summer/winter peaks and spring/autumn troughs. Second, outliers such as extreme peaks above 500,000 MW in Q1 and anomalies in Q4 suggest weather shocks within seasons. Including quarter or seasonal dummy variables helps model to distinguish baseline demand levels, ensuring that, for example, a hot day in January (Q1) is not treated as equivalent to a hot day in October (Q4).
+== Electricity Demand Per Quarter Analysis
+The quarterly boxplots confirm the relevance of seasonality for day-ahead demand forecasting in NSW (see @python5). Median demand is highest in Q1 (summer) and Q3 (winter), while Q4 records the lowest levels. This seasonal structure has two implications. First, shifts in load distributions across quarters show that models without seasonal controls risk misestimating demand during transitions between summer/winter peaks and spring/autumn troughs. Second, outliers such as extreme peaks above 500,000 MW in Q1 and anomalies in Q4 suggest weather shocks within seasons. Including quarter or seasonal dummy variables helps model to distinguish baseline demand levels, ensuring that, for example, a hot day in January (Q1) is not treated as equivalent to a hot day in October (Q4).
 
 #figure(
-image("media/python code 5.png", width: 60%),
+image("media/python code 5.png", width: 40%),
 caption: "Variation in total electricity demand_t (MW) across quarters of the year"
 )<python5>
 
-To assess the predictive value of lagged demand, scatter plots of previous-day minimum and maximum demand against current total demand are shown in Figure 14. Lagged features are widely used in short-term load forecasting due to temporal dependence in electricity use. Both variables show strong positive associations. However, the wider dispersion for minimum demand suggests it explains less variability, as overnight and off-peak loads are less stable predictors of daily total demand. In contrast, maximum demand shows a tighter fit which indicates greater reliability. Peak demand refers to the periods of system stress caused by climatic conditions, which often persist across consecutive days, making it a stronger predictor of current demand.
+== Lag Electricity Demand and Current Electricity Demand Analysis
+To assess the predictive value of lagged demand, scatter plots of previous-day minimum and maximum demand against current total demand are shown in @python6. Lagged features are widely used in short-term load forecasting due to temporal dependence in electricity use. Both variables show strong positive associations. However, the wider dispersion for minimum demand suggests it explains less variability, as overnight and off-peak loads are less stable predictors of daily total demand. In contrast, maximum demand shows a tighter fit which indicates greater reliability. Peak demand refers to the periods of system stress caused by climatic conditions, which often persist across consecutive days, making it a stronger predictor of current demand.
 
 #figure(
-image("media/python code 6.png", width: 75%),
+image("media/python code 6.png", width: 65%),
 
 caption: "Scatter plot of demand_t (MW) vs. lagged demand (MW) features"
 )<python6>
+== Temperature and Electricity Demand Analysis
 Minimum, maximum, and average temperatures are relevant for demand forecasting due to their influence on electricity use in different ways. Minimum temperature is usually night-time conditions that influence heating needs. Maximum temperature is from daytime heat stress, which influences cooling demand.
-Figure 15 presents non-linear relationships for temperature-based features and demand, estimated by a polynomial fit. Demand rises when days are very hot or very cold, while it stays lower at mild temperatures. Studies on Australian load forecasting @ref22,@ref31 also used quadratic terms to model this curved response. Among the predictors, average temperature is the strongest (R^2 = 0.53). Maximum and minimum temperatures explain less (R^2 = 0.31 and 0.29). This implies that in day-ahead forecasting for NSW, average temperature is more important, and minimum & maximum temperature are useful for extreme weather periods.
+@python7 presents non-linear relationships for temperature-based features and demand, estimated by a polynomial fit. Demand rises when days are very hot or very cold, while it stays lower at mild temperatures. Studies on Australian load forecasting @ref22,@ref31 also used quadratic terms to model this curved response. Among the predictors, average temperature is the strongest (R² = 0.53). Maximum and minimum temperatures explain less (R² = 0.31 and 0.29). This implies that in day-ahead forecasting for NSW, average temperature is more important, and minimum & maximum temperature are useful for extreme weather periods.
 
 
 #figure(
-image("media/python code 7.png", width: 100%),
+image("media/python code 7.png", width: 90%),
 
 caption: "Scatter plot of demand_t (MW) vs. temperature-based features"
 )<python7>
-Lastly, the scatterplots presented in Figure 16 are presented to observe the relationship between electricity demand and climate-based features. Precipitation shows weak relationships with demand. For daily total demand versus precipitation, estimated line shows almost no effect (R² ≈ 0). This may occur because rainfall does not directly influence electricity use. Sunlight exposure also shows a low effect (R^2 = 0.02). Cooling degree (CD) and heating degree (HD) are stronger predictors, as indicated by R^2 of 0.15 and 0.16, respectively. These features are linked with energy requirements for air conditioning and heating, directly relating weather extremes to electricity consumption. 
+== Climate Features and Electricity Demand Analysis
+Lastly, the scatterplots presented in @python8 are presented to observe the relationship between electricity demand and climate-based features. Precipitation shows weak relationships with demand. For daily total demand versus precipitation, estimated line shows almost no effect (R² ≈ 0). This may occur because rainfall does not directly influence electricity use. Sunlight exposure also shows a low effect (R² = 0.02). Cooling degree (CDD) and heating degree (HDD) are stronger predictors, as indicated by R² of 0.15 and 0.16, respectively. These features are linked with energy requirements for air conditioning and heating, directly relating weather extremes to electricity consumption. 
 
 #figure(
-image("media/python code 8.png", width: 90%),
+image("media/python code 8.png", width: 69%),
 
 caption: "Scatter plot of demand_t (MW) vs. rest of the climate features"
 )<python8>
 
+== Exploratory Data Analysis Key Findings 
+There are a number of key findings from the conducted analysis that will drive the direction of the development of data modelling techniques in this project. They are as follows:
+
+- The analysis presented strong seasonal cycles and daily routines influencing NSW electricity demand consumption. The use of lagged features can be most beneficial as supported by the strongest association of current day total demand with previous-day maximum demand. 
+
+- The non-linearity of demand with temperature features can be tackled by using quadratic terms. Moreover, average temperature explains the most variation among temperature-based features. 
+
+- Distinct differences between weekdays, weekends, months, quarters, and seasons justifies the inclusion of time-based dummy variables.
+
+- Using sunlight exposure reflects the rooftop solar effects, while cooling and heating degrees (CD and HD) explains demand shifts more effectively than precipitation. 
+
+- Outliers from extreme weather or holiday periods are retained, as they represent real demand behavior important for forecasting. 
+
+The final feature set comprises lagged demand, polynomial temperature terms, CD, HD, sunlight exposure, and day, months, quarters, and season-based dummy variables. The addition of interaction terms (e.g., summer-temperature, quarter-sunlight) can also be explored in modelling, derived directly from the observed demand patterns in NSW.
 
 #pagebreak()
 = Analysis and Results
 
-== Model Performance
+== Best Model Performance
 @modelcomp shows the best performing model from each of the methodologies. 
 #figure(
   {show table.cell: set text(size: 10pt)
   table(
-  columns: 6,
+  columns: (auto, 130pt, 200pt, auto, auto, auto),
   table.header([Model], [Features], [Notes], [MAPE], [RMSE],[MAE]),
-  [Linear regression], [Demand, Temperature,Calendar-based dummies], [Using lagged min & max demand, all temperature features (linear & quadratic), CD & HD, sunlight exposure, seasons, weekend, holiday, quarters; 80/20 train-test split], [2.22%],[11,446],[8,380],
-  [XGBoost], [], [], [],[],[],
+  [Linear Regression], [Demand, Temperature,Calendar-based variables], [Using lagged min & max demand, all temperature features (linear & quadratic), CDD & HDD, sunlight exposure, seasons, weekend, holiday, quarters; 80/20 train-test split], [2.22%],[11,446],[8,380],
+  [Tree-Based Ensemble Method - CatBoost], [Weather (temperature, precipation, sunlight), Calendar-based variables, Seasonality, Lag Demand], [Used day and week lag demand, all temperature features, CDD & HDD, sunlight, precipitation, seasons, weekend;
+  80/20 train-test split], [1.93%],[10,525],[7,304],
   [LSTM], [Demand, Temperature, Seasonality], [Using Sum Demand, All Temp Features including Temp^2, Seasons & Weekend/Weekday + 75/25 sequential data split], [2.76%],[15,622],[10,608],
   [Transformer], [All], [Using 2010-2018 as training + 90/10 sequential data split], [2.79%], [15,335], [10,776]
   )},
   caption: [Model Performance Comparison]
 ) <modelcomp>
 
-=== Model Specific Results
-==== Linear Regression
-The regression model demonstrated reasonable performance with a testing RMSE of 11,446 MW, MAE of 8,380 MW, and MAPE of 2.22%. On the training set, the model achieved lower errors (RMSE of 9,291 MW, MAE of 6,891 MW, and MAPE of 1.80%), indicating that the fitted regression generalizes well to unseen demand data.
-The comparison of predicted data and historical data for the training period from 2016 to 2018 and testing period of 2019 is depicted in Figure 9. For training data, it can be seen that the predicted values are very close to the historical data. For testing data, model performed best on stable demand days, such as mid-winter and mid-summer, where temperature and lagged demand effects dominate. For instance, test forecasts in June and July closely tracked actual consumption with low deviations. 
+== Model Specific Results
+=== Linear Regression
+The regression model demonstrated reasonable performance with a testing RMSE of 11,446 MW, MAE of 8,380 MW, and MAPE of 2.22%. On the training set, the model achieved lower errors (RMSE of 9,291 MW, MAE of 6,891 MW, and MAPE of 1.80%), indicating that the fitted regression generalises well to unseen demand data.
+The comparison of predicted data and historical data for the training period from 2016 to 2018 and testing period of 2019 is depicted in @lr-results-fig. For training data, it can be seen that the predicted values are very close to the historical data. For testing data, model performed best on stable demand days, such as mid-winter and mid-summer, where temperature and lagged demand effects dominate. For instance, test forecasts in June and July closely tracked actual consumption with low deviations. 
 Notably, demand was overestimated for the end of December, possibly due to Christmas and New Year when commercial and industrial activity declined more sharply than the model’s holiday dummy could adjust for. Conversely, the model tended to under-predict demand on peak summer days (e.g., late January and early February) when extreme temperatures caused higher-than-expected load. Demand was also underestimated in the early December. One of the possible reasons can be the unusual high residential demand for cooling/air filtration due to extreme heat, poor air quality, and disruptions in energy use by severe bushfires @ref69.
 
 #figure(
@@ -934,36 +955,10 @@ Notably, demand was overestimated for the end of December, possibly due to Chris
 #figure(
   image("media/Regression model actual vs predicts .png"),
 caption: [Forecast plots on train and test demand series using regression model]
-)
+) <lr-results-fig>
 
 
-==== Tree-Based Ensemble Methods <gb-results>
-
-#figure(
- image("media/Screenshot 2025-10-03 011838.png"),
-  caption: [Error Results - Tree-Based Ensemble Methods]
-)<gb-table-results>
-
-#figure(
-  stack(
-    spacing: 5mm, // optional spacing between images
-    image("media/Screenshot 2025-10-03 010119.png", width: 100%),
-    image("media/Screenshot 2025-10-03 010433.png", width: 100%)
-  ),
-  caption: "Result Plots of Tree-Based Ensemble Methods"
-)<gb-subplots>
-
-#figure(
- image("media/Tree-Based Feature Importance.png",height:50%),
-  caption: [Feature Importance - Tree-Based Ensemble Methods]
-)<gb-feature-importance-results>
-
-
-#figure(
- image("media/Tree-Based Feature Category.png",height:35%),
-  caption: [Feature Importance by Category - Tree-Based Ensemble Methods]
-)<gb-feature-category-results>
-
+=== Tree-Based Ensemble Methods <gb-results>
 
 For each tree-based ensemble model, a number of experiments were conducted:
 
@@ -979,7 +974,22 @@ Based on the results shown in @gb-table-results, the following observations can 
 - XGBoost’s best performing model used previous day lag demand value as a feature, resulting in a MAPE of 2.08% on the test dataset. 
 - Catboost’s best performing model used both previous day and week lag demand values as features, resulting in a MAPE of 1.93% on the test dataset. It is also the best performing model out of all tree-based ensemble methods trialled in this project. 
 - LightGBM’s best performing model used previous day lag demand value as a feature, resulting in a MAPE of 2.03% on the test dataset. 
-- Random Forest’s best performing model used previous day lag demand value as a feature, resulting in a MAPE of 2.38% on the test dataset. This was the worst performing out of the tree-based ensemble methods trialled in this project. 
+- Random Forest’s best performing model used previous day lag demand value as a feature, resulting in a MAPE of 2.38% on the test dataset. This was the worst performing out of the tree-based ensemble methods trialled in this project.
+
+#figure(
+ image("media/Screenshot 2025-10-03 011838.png",height:35%),
+  caption: [Error Results - Tree-Based Ensemble Methods]
+)<gb-table-results>
+
+#figure(
+ image("media/Screenshot 2025-10-03 162831.png",height:30%),
+  caption: [Feature Importance by Category - Tree-Based Ensemble Methods]
+)<gb-feature-category-results> 
+
+#figure(
+ image("media/Tree-Based Feature Importance.png",height:50%),
+  caption: [Feature Importance - Tree-Based Ensemble Methods]
+)<gb-feature-importance-results>
 
 Feature importance analysis was also conducted on the best performing model of each model type, as observed in @gb-feature-importance-results and @gb-feature-category-results. 
 @gb-feature-category-results maps each feature into a category. The mapping of features to categories can be found in @app-5.
@@ -991,6 +1001,15 @@ From these figures, the following observations can be made:
 - LightGBM’s most important feature was sunlight. The next few most important features include lag features such as previous day’s maximum demand and previous day’s average demand, temperature values maximum and average temperature and precipitation. The feature categories that highly contributed to LightGBM were weather and day lag features. The features least important to the model were season, day of the week, month and temperature derived. 
 - Random Forest’s most important feature was the previous day’s maximum demand. The next few most important features included lag features such as previous day’s average demand, previous day’s total demand and previous day’s minimum demand, average temperature and cd value. The feature category that highly contributed to Random Forest was day lag features. The features least important to the model were temperature derived, season and month. 
 
+#figure(
+  stack(
+    spacing: 5mm, // optional spacing between images
+    image("media/Screenshot 2025-10-03 010119.png", width: 100%),
+    image("media/Screenshot 2025-10-03 010433.png", width: 100%)
+  ),
+  caption: "Result Plots of Tree-Based Ensemble Methods"
+)<gb-subplots>
+
 @gb-subplots shows the actual forecast demand values versus the predicted values per model. Many plotted data points are close to the perfect predicted line, with a R² score of 0.92 for CatBoost, 0.9 for XGBoost & LightGBM and 0.88 for Random Forest. This suggests all models do a good job at predicting forecast demand values and are effectively capturing the relationships and patterns in the data. Comparatively, CatBoost’s datapoints are less scattered and closer to the perfect predicted line compared to the other models. At the higher demand values over 450000 that are also more uncommon given there are not as many data points, all models seem to mostly underestimate the demand values. Comparatively, CatBoost does the best at predicting demand values over 450000 as the data points are closer to the perfect prediction line.
 
 @gb-subplots shows the residuals plot per model. The scatter of data points seem to be fairly random across all models, with no clear pattern and residuals don’t seem to increase or decrease in variance in a particular way. These make for good residual plots and suggest all models perform well.
@@ -998,7 +1017,7 @@ From these figures, the following observations can be made:
 @gb-subplots shows the actual and predicted forecast values on a time series plot, showing all the test dataset per model. Both actual and predicted line graphs per model look fairly similar, suggesting each model performs well to predict demand values. Further, it can be observed that the models behave conservatively for when demand has high peaks, underpredicting demand values a little. For low peaks, the models seem to overpredict demand a little. These observations show that the models mainly struggle with capturing the edges of demand values but according to MAPE values, on average the models are able to predict demand within an error margin of within 1.93% to 2.38% of the actual demand values (depending on which model).  
 
 
-==== Long Short-Term Memory
+=== Long Short-Term Memory <lstm-MandM>
 
 The model runs for LSTM were initially performed to discover the optimal feature set for accurate energy demand predictions.  As can be seen in @lstm_res_4sel below, using the 7 day lagged demand window resulted in a test MAPE under 4%.  The creation of the temp_range feature decreased the overfitting of the model. Experimentation with different window sizes decreased the effectiveness of the model, and within the constraints of the experimentation, 7 days remained the optimal window size.
 
@@ -1054,7 +1073,7 @@ The final optimal model was reached by iteratively introducing the $"temp"^2$ fe
   caption: [Feature Importance - LSTM]
 ) <lstm-feat>
 
-==== Transformer
+=== Transformer
 Model runs were run on the transformer architecture in order to determine the performance. Selected results are shown in @trans-results. Result 1 shows a baseline performed solely using demand to forecast demand. The achieved test MAPE of 3.73% is a strong result. 
 
 #figure(
@@ -1089,22 +1108,25 @@ It was hypothesised that expansion of the dataset to the full 10 year range woul
 ) <trans-best-output>
 
 #figure(
+  {show table.cell: set text(size: 6pt)
   table(
-    columns: 2,
-    inset: 8pt,
+    columns: 9,
     align: left,
-    table.header([Parameter], [Value]),
-    [Learning Rate], [0.0001455],
-    [Batch Size], [50],
-    [Sequence Length], [18],
-    [Encoder Layer Dimension], [64],
-    [Number of Heads], [4],
-    [Feedforward Dimension], [250],
-    [Dropout], [0.03607],
-    [Number of Layers], [1],
-  ),
+    table.header(
+      [Learning Rate],
+      [Batch Size],
+      [Sequence Length],
+      [Encoder Layer Dimension],
+      [Number of Heads],
+      [Feedforward Dimension],
+      [Dropout],
+      [Number of Layers]
+    ),
+    [0.0001455], [50], [18], [64], [4], [250], [0.03607], [1]
+  )},
   caption: [Result 5 Parameters]
 ) <trans-best-params>
+
 Difficulty reproducing results inspired investigation into the effects of random processes such as weight initialisation and dropout in model convergence. @trans-variance shows the resulting MAPE from 100 training iterations of a model with identical hyperparameters. 
 
 #figure(
@@ -1117,7 +1139,7 @@ Difficulty reproducing results inspired investigation into the effects of random
 == Linear Regression
 === Best Model
 
-The regression model is based on the insights observed from exploratory data analysis where alternative weather and seasonal features, in-addition to climate features, were analyzed against demand. It is important to mention here that precipitation (mm/day) was initially included in the regression model but was removed due to a highly non-significant coefficient. The final model specification, presented in 3.5.1.2.1 , demonstrated consistent and statistically significant effects from calendar indicators, temperature features, lagged demand features and selected interaction terms.
+The regression model is based on the insights observed from exploratory data analysis where alternative weather and seasonal features, in-addition to climate features, were analysed against demand. It is important to mention here that precipitation (mm/day) was initially included in the regression model but was removed due to a highly non-significant coefficient. The final model specification, presented in in modelling methods @lr-model-sect, demonstrated consistent and statistically significant effects from calendar indicators, temperature features, lagged demand features and selected interaction terms.Based on model’s performance metrics, the resulting error levels are comparable to previous studies of NSW electricity demand, where approached based on regression typically report MAPE in the range of 2–3% @ref59 @ref43. It means that despite its simplicity, regression remains a reliable baseline method for short-term demand forecasting for NSW.
 
 === Data features
 The explanatory variables incorporated deterministic terms e.g., calendar and seasonal indicators. This included dummies for weekday/weekend, holidays, seasons, and quarters. Linear and square terms of average, minimum, and maximum temperature (°C) were added to address the non-linear effects. Cooling degree days and heating degree days were used for the effect of extremes. Sunlight exposure was tested, and interaction terms were used for conditional effects between climate variables and seasons or quarters. Information on short-term persistence was included by historical demand by adding previous day minimum & maximum demand (MW).
@@ -1128,11 +1150,14 @@ Results of temperature features aligned with earlier observations about its non-
 Interaction terms confirmed conditional effects. Average temperature had an additional positive effect in Quarter 1 (6208.47, p < 0.01) and Quarter 4 (3410.89, p < 0.01), whereas summer showed no significant additional effect. Sunlight exposure reduced demand significantly during Quarter 3 (−617.37, p < 0.01). This is consistent with higher solar generation in that period.
 
 
-== Summary of model results
+=== Summary of model results
 Electricity demand in NSW is strongly influenced by calendar, seasonal, and weather-related factors. Demand is lower on weekends and holidays which aligns with the reduced load on non-working days. This pattern occurs due to lower industrial and commercial activity @ref54 @ref63. Winter is associated with higher demand, which points to the heating needs. Demand rises due to increased use of electric heaters and longer lighting hours during shorter days @ref64. Whereas, quarter indicators show notable reductions in demand during Q1 and Q4. It aligns with annual demand cycles i.e., lower demand due to milder temperatures and holidays in late summer–autumn and spring-early summer @ref63. 
-Lagged demand features are significant, implying the temporal dependence in short-term forecasts. This pattern is consistent with findings that electricity consumption tends to follow strong autocorrelation due to recurring daily usage cycles @ref64 @ref61. Temperature effects are non-linear; negative linear and positive quadratic terms for average, min, and max temperatures. It confirms that both hot and cold extremes result in high demand. Hot weather increases cooling needs due to air conditioning use, while cold weather raises heating requirements, both contributing to peak loads @ref50 @ref49.
-Interaction terms show seasonal asymmetries, such as higher sensitivity to temperature in Q1 and Q4. These quarters coincide with transitional seasons when households rely more on heating or cooling during unexpected extremes, making demand more temperature responsive. In contrast, reduced demand from sunlight in Q3 is likely due to higher solar generation offsetting household consumption @ref53,@ref61. Lastly, cooling degree days demonstrate stronger effects than heating degree days. This result points to the dominant role of cooling needs in NSW, as air conditioning demand during hot periods outweighs heating requirements in winter @ref53 @ref65.
+Lagged demand features are significant, implying the temporal dependence in short-term forecasts. This pattern is consistent with findings that electricity consumption tends to follow strong autocorrelation due to recurring daily usage cycles @ref64 @ref31. Temperature effects are non-linear; negative linear and positive quadratic terms for average, min, and max temperatures. It confirms that both hot and cold extremes result in high demand. Hot weather increases cooling needs due to air conditioning use, while cold weather raises heating requirements, both contributing to peak loads @ref3 @ref32.
+Interaction terms show seasonal asymmetries, such as higher sensitivity to temperature in Q1 and Q4. These quarters coincide with transitional seasons when households rely more on heating or cooling during unexpected extremes, making demand more temperature responsive. In contrast, reduced demand from sunlight in Q3 is likely due to higher solar generation offsetting household consumption @ref22,@ref31. Lastly, cooling degree days demonstrate stronger effects than heating degree days. This result points to the dominant role of cooling needs in NSW, as air conditioning demand during hot periods outweighs heating requirements in winter @ref22 @ref65.
 
+=== Further Direction and Extension <fut1>
+For future work, regression analysis could be extended with more flexible estimation techniques such as generalized additive models (GAMs) or quantile regression to better accommodate non-linear responses and uncertainties. Alternatively, shifting towards classical time series methods such as ARIMAX or state-space models would provide similar to regression interpretability while incorporating temporal dynamics more explicitly.
+Furthermore, forecasting models should incorporate month-specific variables such as heatwave intensity, bushfire smoke or dust events, wind speed, and real-time solar generation, which are increasingly relevant in the NSW context. Studies using exogenous climate features, such as multivariate models for NSW, demonstrated that additional weather-based inputs improved day-ahead peak load accuracy @ref22 . The growing influence of rooftop solar has also been shown to alter grid demand in NSW, which reflects the value of solar exposure in forecasting frameworks. Moreover, electricity prices play an important role in influencing consumption behavior, and their inclusion has been found to improve load modelling in electricity markets similar to NSW.
 == Tree-Based Ensemble Methods
 
 === Best Model
@@ -1151,7 +1176,7 @@ The hyperparameter values that produced the best performing CatBoost model were 
 
 Several observations can be made from the figures in @gb-results:
 - Overall, the combination of multiple explanatory features such as min/max/avg temperature, heating and cooling degree days, day of week and seasonality can help accurately forecast day-ahead electricity demand with tree-based ensemble methods. This can be observed in @gb-table-results, where without lag features, the various models trialled produce results ranging from MAPE 2.49% to 2.75% on the test dataset. These results are similar (with some variation, sometimes better or not as good) to those in literature that use tree-based ensemble methods such as @ref18 and @nw17, and in comparison to other modelling methods as seen in @app-2. 
-- Overall, adding some combination of lag demand values increased model performance. This is consistent across all tree-based ensemble methods, as observed in @gb-table-results, improving model performance and decreasing forecasting errors by MAPE 0.56% for CatBoost (day and week lag), MAPE 0.45% for XGBoost (day lag), MAPE 0.48% for LightGBM (day lag) and MAPE 0.37% for Random Forest (da lag). This suggests that electricity demand patterns are cyclical, where past demand values influence future ones. It also suggests that there are daily and weekly electricity demand patterns, and that with this additional context, the models are able to forecast demand more accurately. 
+- Overall, adding some combination of lag demand values increased model performance. This is consistent across all tree-based ensemble methods, as observed in @gb-table-results, improving model performance and decreasing forecasting errors by MAPE 0.56% for CatBoost (day and week lag), MAPE 0.45% for XGBoost (day lag), MAPE 0.48% for LightGBM (day lag) and MAPE 0.37% for Random Forest (da lag). This suggests that electricity demand patterns are cyclical, where past demand values influence future ones. This observation is also consistent with literature @ref64 @ref31. It also suggests that there are daily and weekly electricity demand patterns, and that with this additional context, the models are able to forecast demand more accurately.  
 - Each model has different features that highly contribute to the accuracy of the model. 
   - As aforementioned, adding lag demand values helped decrease the error margin across all models. For XGBoost, CatBoost and Random Forest, the previous day lag demand features had the most feature influence over the model. 
   - For LightGBM, weather features - specifically sunlight and precipitation - showed to have the most feature influence over the model. 
@@ -1159,10 +1184,14 @@ Several observations can be made from the figures in @gb-results:
 - Across all models, the models are not as good at predicting electricity demand for the last two months of the year (November and December) compared to other months, where the models overpredict demand. This could be due to the presence of more public holidays, the additional use of air conditioning and other factors over this time period that do not align with cyclical demand patterns and hence the model cannot predict demand as accurately. 
 - Across the tree-based models, there does seem to be a degree of model overfitting to the training data despite the various parameters implemented per model to help prevent overfitting. This can be observed by a sizable difference in training dataset MAPE values and test dataset MAPE values, where the train MAPE is lower and hence suggests the model is memorising some of the train features. For example, in the best performing tree-based ensemble method - CatBoost - in this project, the train MAPE is 0.20% compared to the test MAPE of 1.93%. 
 
+=== Further Direction and Extension <fut2>
+==== Advanced Feature Selection
+The results in this project show an increase in accuracy with the addition of lag demand features. Furthermore, the optimised hyperparamter values subsample and colsample_bytree suggest that feature selection produces more accurate results. For future work, more advanced feature selection could be trialled, as well as the exploration of inclusion of additional features - lag based as well as weather.
+
 == Long Short-Term Memory
 === Best Model
 
-The best model for the LSTM gave a training MAPE of 2.43% and a test MAPE of 2.76%. While this model gives a higher MAPE in comparison to the other models in this report, it still falls well within the 2-5% range identified in @lstmlit10 as usable in operational load forecasting, especially with a day-ahead horizon.  A detailed look at the test results show that the maximum and minimum predictions were well inside the range of that of the actual data (in the range of 2.2-3.3%), suggesting that the LSTM in this form is unable to account for unexpected extreme shifts in energy demand.
+The best model for the LSTM gave a training MAPE of 2.43% and a test MAPE of 2.76%. No simple LSTM models in the reviewed literature use the combination of daily demand as a feature and MAPE as a performance metric, and as such no direct comparison is able to be drawn.  However, while this model gives a higher MAPE in comparison to the other models in this report, it still falls well within the 2-5% range identified in @lstmlit10 as usable in operational load forecasting, especially with a day-ahead horizon.  A detailed look at the test results show that the maximum and minimum predictions were well inside the range of that of the actual data (in the range of 2.2-3.3%), suggesting that the LSTM in this form is unable to account for unexpected extreme shifts in energy demand.
 
 === Model Architecture
 
@@ -1176,14 +1205,17 @@ The optimal model included all temperature related features, which allowed it to
 
 The most significant parameter for the effectiveness of this model was the 7 day rolling window.  Efforts to change this resulted in poor metrics, which shows the LSTM model needs to capture the variations over a single week to be most accurate.  The network also needed to integrate dropout mechanisms to ensure it was not overfitting on the training data, and thus was able to generalise to an unseen test dataset.
 
-=== Summary of model results
+=== Summary of model results <lstm_sum>
 
 While remaining adequate for the prediction task in this report, the LSTM model was outperformed by the regression models and tree-based ensemble methods.  The suggestion here is that the dataset is too limited for the LSTM model to perform as well as the architecture was designed to.   Studies have suggested that LSTM models require a large dataset to perform optimally @lstmlit11.
 
 As such, further experimentation was completed, extending the dataset to 10 years of data (see @lstm_res_allfull).  Results showed barely any improvement with a larger training set.  This leads to the conclusion that the size of the data is not important, but rather that improvement could be found in further experimentation around the granularity of the data @lstmlit12, namely by reversing the aggregation of data described in @agg and working with hourly data.
 
-//- Overall summary of model results
-
+=== Further Direction and Extension <fut3>
+==== Architectural Enhancement
+As described in @lstm-MandM, hybrid LSTM methods were trialled as part of the iterative process, with less than stellar results.  This was, however, completed without extensive research into the optimal architecture for these various methods to excel.  Further research and experimentation with these hybrid methods would be the next logical step in improving prediction results, along with adding complexity to the depth of the model.
+==== Dataset Manipulation
+@lstm_sum describes the need for LSTMs to have a larger number of data points to reach the model's full potential.  As such, reversion of the 24-hour data aggregations in conjunction with the original 30 minute temperature data would be a worthy extension, backed up by strong results in documented literature. 
 == Transformer
 === Feature Importance
 As shown in @trans-feat-imp, temporal features—particularly day of week indicators—demonstrated the highest importance, followed by demand-related variables and temperature metrics. Notably, minimum and maximum temperature values outperformed average temperature in feature importance rankings, suggesting extreme weather conditions may have greater impact on energy demand patterns.
@@ -1191,7 +1223,7 @@ As shown in @trans-feat-imp, temporal features—particularly day of week indica
 Despite this feature hierarchy, Results 2 and 3 revealed that model performance remained robust regardless of feature inclusion or exclusion. This resilience to input variations highlights a key strength of the transformer architecture's self-attention mechanism, which can effectively weight relevant features during processing.
 
 === Best Model
-The best model was the result of using all features (apart from sunlight and precipitation as these were not available) on the 2010-2019 dataset, with a test MAPE of 2.79%. This is not a significant improvement on the results produced on the standard dataset.
+The best model was the result of using all features (apart from sunlight and precipitation as these were not available) on the 2010-2019 dataset, with a test MAPE of 2.79%. This is not a significant improvement on the results produced on the 2016-2019 dataset. In the literature, the only transformer that used MAPE got a result of 10.18%, however this was a significantly different application. For forecasting purposes, it is satisfactory to apply the 2%-5% range from @lstmlit10, and therefore declare that this model is sufficient and functional, if not the best performing.
 
 ==== Architecture
 Key architectural parameters influencing performance included transformer encoder dimensionality, feedforward network dimensions, and the number of encoder layers. The optimal configuration utilised just a single transformer layer, suggesting that deeper architectures provided diminishing returns for this specific forecasting task. This simplicity contrasts with typical transformer applications but aligns with the fact that the dataset is significantly smaller than that used for natural language processing applications.
@@ -1202,27 +1234,41 @@ While median aggregation across five training runs successfully mitigated varian
 === Performance Comparison
 This model performed comparably to the LSTM, however was also outperformed in by the linear regression and Tree Based ensemble methods. It is hypothesised that this is due to the difference in application of the dataset, where the high performing models were fed known information of the day in question, in particular weather data was assumed to be known a day in advance. Possibly this assumption was too strong, however it was not within the scope of this report to gather weather forecasting data. In addition, it is possible to modify the architecture of the Transformer in order to feed in known quantities such as date derived features into the prediction as performed by @transformer2. Further investigation would be necessary to determine if this is worthwhile.
 
-=== Future Direction and Extension
+=== Future Direction and Extension <fut4>
 ==== Architectural Enhancement
-Our simplified architecture sacrificed recursive prediction capabilities to reduce complexity. Restoring this functionality could significantly enhance accuracy, particularly for multi-step forecasting scenarios. For example, maintaining 30-minute intervals while predicting 48 steps ahead (24-hour horizon) could yield more valuable operational forecasts for energy grid management.
+The simplified architecture sacrificed recursive prediction capabilities to reduce complexity. Restoring this functionality could significantly enhance accuracy, particularly for multi-step forecasting scenarios. For example, maintaining 30-minute intervals while predicting 48 steps ahead (24-hour horizon) could yield more valuable operational forecasts for energy grid management.\
+In addition, supplementing the prediction with known values on the day of interest as described in @transformer2 would likely give an added boost in model performance, especially if the model were extended to recursive forecasting applications.
 ==== Model Selection Strategy
-While median performance appropriately guided hyperparameter optimization during research, commercial deployment should prioritize best-performing instances. As evidenced in @trans-variance, the 0.5% MAPE range across training runs becomes highly significant given the narrow overall performance distribution (~1% total range across configurations). In addition, the usage of the median assumes that the distribution of performance is equal for all models, which is likely not the case. This would better serve production environments where peak performance is key.
-==== Scope Expansion
-The model should be tested on more data streams, the most applicable of which would be other states of Australia. This would assess the versatility of the architecture in adapting to different regions.
-
+While median performance appropriately guided hyperparameter optimization during research, commercial deployment should prioritize best-performing instances. As evidenced in @trans-variance, the 0.5% MAPE range across training runs becomes highly significant given the narrow overall performance distribution (\~1% total range across configurations). In addition, the usage of the median assumes that the distribution of performance is equal for all models, which is likely not the case. This would better serve production environments where peak performance is key.
 
 
 == Overall
 --The inclusion of the days to be predicted weather data in LR and Tree Based could explain any performance gap between the methodologies.
 A comparison of computational demand of each of the models would perhaps also yield interesting results, it is likely however that the linear regression and tree based ensemble methods would continue to outperform the LSTM and Transformer in this area.
-
+== Scope Expansion
+- The models should be tested on more data streams, the most applicable of which would be other states of Australia. This would assess the versatility of the architecture in adapting to different regions.
+- Model ensembling has also shown to increase forecasting accuracy @ref2 @ref12. There are various model ensembling techniques that can be used to boost predictive accuracy @ref11 @ref12. This could also be a future enhancement. 
 
 
 #pagebreak()
 = Conclusion and Further Issues
-// Cameron
-What are the main conclusions? What are your recommendations for the “client”?
-What further analysis could be done in the future?
+
+== Conclusion
+The aim of this report was to investigate how different modelling techniques could be used to forecast short-term (24-hour ahead) electricity demand in New South Wales, using historical demand combined with temperature and seasonality related explanatory predictors.  By benchmarking various approaches (including traditional linear regression, tree-based ensemble methods, advance machine learning and deep learning frameworks), it can be shown that the choice of model can have a significant impact on the accuracy of these forecasts, which in turn has implications for operational and economic decisions.
+
+The results presented in the report demonstrate that tree-based ensemble methods (particularly CatBoost) consistently produced the most accurate predictions (test MAPE: 1.93%), with better performance than Linear Regression (2.22%), LSTM (2.76%) and Transformer (2.79%) models.  The use of multiple explanatory predictors including minimum, maximum and average temperature along with heating and cooling degree days and calendar-based dummies improved accuracy compared to simply using historical demand and temperature alone, which speaks to the intrinsic value of rich feature sets.  The findings here are in line with collected literature with shared focus, which often highlights the strength of tree-based methods on structured, tabular energy data @ref23.  These sources also suggest that deep learning methods may require larger datasets with a shorter than 24-hour aggregation to fully optimise their potential in energy forecasting.
+
+In summary, this report shows that advanced tree-based ensemble methods, along with simple linear regression, can deliver accurate and practical forecasts with great relevance to the energy sector.  With richer datasets and refinement of prediction methods, short-term electricity demand forecasting can become more effective at supporting economic planning and energy market operations. 
+
+== Future Work
+This report also highlights several opportunities for future improvement and further analysis (see @fut1 @fut2 @fut3 @fut4).  Firstly, expanding the dataset to include hourly demand (or even shorter time periods) and weather observations would allow models such as LSTM and Transformers to better capture the patterns in the temporal data @lstmlit8.  Secondly, the addition of further explanatory factors seen in similar projects such as economic data (such as electricity prices), electric grid data and more advanced meteorological features (such as heatwave intensity, wind speed @reg4 and real-time solar generation) could further enhance the efficacy of forecasts.  Finally, ensembling of tree-based methods with deep learning models have been shown as extremely effective for energy demand prediction tasks @ref24.
+
+
+== Recommendations for Endgame Economics
+=== Model Selection
+There are a number of data modelling techniques that can be used to accurately forecast short-term (24-hour ahead) electricity demand in NSW as explored in this project. However, the use of powerful and lightweight methods such as CatBoost, LightGBM and XGBoost are recommended for use, as they are well suited to accurately forecasting tasks where the demand forecast horizon is short. These models are suitably accurate to be used in industry, with the simplicity and explainability to be used to guide business choices and meet the expectations of shareholders.  Simpler models such as Linear Regression remain useful as baselines and for quickness of deployment, whereas deep learning models may be utilised better in alternate or future scenarios where more granular data is or becomes available.
+=== Feature Selection
+An analysis of most important features across the modelling methods used in this report shows that electricity demand in NSW is shaped by a blend of factors.  Recent electricity load levels are the single strongest predictor, highlighting that energy use doesn't change dramatically from one day to the next.  The high relative importance of calendar effects (primarily the distinction between weekends and weekdays) shows that behavioural patterns strongly influence demand.  Finally, temperature is a key driver in changing energy demand requirements, with maximum temperature and cooling degree days (which are intrinsically linked) being the primary predictors.  In short, for accurate short-term energy forecasting, models must include previous demand, environmental drivers and take into account human activity patterns. 
 
 #pagebreak()
 #head[References]
@@ -1239,333 +1285,206 @@ What further analysis could be done in the future?
   heading(numbering: none)[Appendix]
 }
 == Appendix 1 - Code <app-1>
-=== Data Preprocessing - SQL <app-code-data>
-```sql
-CREATE OR REPLACE VIEW days AS
-SELECT
-  d::date AS date_au,
-  (d::timestamp AT TIME ZONE 'Australia/Sydney') AS datetime_au_start_tz 
-FROM generate_series(
-  '2010-01-01'::date,
-  '2019-12-31'::date,
-  '1 day'::interval
-) AS gs(d);
+All code can be found in the GitHub repo at https://github.com/harrybirdnz/ZZSC9020-Group_F
 
-CREATE OR REPLACE VIEW intervals AS
-SELECT generate_series(
-    '2010-01-01 00:00:00+00'::timestamptz,  
-    '2019-12-31 23:30:00+00'::timestamptz,
-    '30 mins'::interval
-) AS interval_time_utc;
-
-CREATE OR REPLACE VIEW demand AS
-SELECT
-  datetime,                     -- timestamptz as stored
-  AVG(totaldemand) AS demand
-FROM totaldemand_nsw
-WHERE datetime IS NOT NULL
-GROUP BY datetime
-ORDER BY datetime;
-
-DROP MATERIALIZED VIEW IF EXISTS processed_demand;
-CREATE MATERIALIZED VIEW processed_demand AS
-SELECT
-  d.date_au,
-  AVG(t.demand) AS avg_30_min_demand,
-  MIN(t.demand) AS min_30_min_demand,
-  MAX(t.demand) AS max_30_min_demand,
-  SUM(t.demand) AS sum_30_min_demand,
-  COUNT(t.demand) AS count_30_min_points
-FROM days d
-LEFT JOIN demand t
-  ON (t.datetime AT TIME ZONE 'Australia/Sydney')::date = d.date_au
-GROUP BY d.date_au
-ORDER BY d.date_au;
-
-CREATE OR REPLACE VIEW temp_sydney AS
-SELECT datetime, temperature FROM temperature_nsw;
-
-DROP MATERIALIZED VIEW IF EXISTS processed_temperature;
-CREATE MATERIALIZED VIEW processed_temperature AS
-SELECT
-  d.date_au,
-  AVG(t.temperature) AS avg_temp,
-  MIN(t.temperature) AS min_temp,
-  MAX(t.temperature) AS max_temp,
-  GREATEST(17 - AVG(t.temperature), 0) AS hd_next_24h,  
-  GREATEST(AVG(t.temperature) - 19.5, 0) AS cd_next_24h 
-FROM days d
-LEFT JOIN temp_sydney t
-  ON (t.datetime AT TIME ZONE 'Australia/Sydney')::date = d.date_au
-GROUP BY d.date_au
-ORDER BY d.date_au;
-
-CREATE OR REPLACE VIEW processed_precipitation AS
-SELECT
-  (datetime AT TIME ZONE 'Australia/Sydney')::date AS date_au,
-  precipitation
-FROM precipitation_nsw;
-
-CREATE OR REPLACE VIEW processed_sunlight AS
-SELECT
-  (datetime AT TIME ZONE 'Australia/Sydney')::date AS date_au,
-  sunlight
-FROM sunlight_nsw;
-
-CREATE OR REPLACE VIEW processed AS
-SELECT
-  d.date_au AS datetime_au,    
-  CASE WHEN EXTRACT(MONTH FROM d.date_au) IN (12,1,2) THEN 1 ELSE 0 END AS is_summer,
-  CASE WHEN EXTRACT(MONTH FROM d.date_au) IN (3,4,5) THEN 1 ELSE 0 END AS is_autumn,
-  CASE WHEN EXTRACT(MONTH FROM d.date_au) IN (6,7,8) THEN 1 ELSE 0 END AS is_winter,
-  CASE WHEN EXTRACT(MONTH FROM d.date_au) IN (9,10,11) THEN 1 ELSE 0 END AS is_spring,
-  CASE WHEN EXTRACT(DOW FROM d.date_au) = 0 THEN 1 ELSE 0 END AS is_sunday,
-  CASE WHEN EXTRACT(DOW FROM d.date_au) = 1 THEN 1 ELSE 0 END AS is_monday,
-  CASE WHEN EXTRACT(DOW FROM d.date_au) = 2 THEN 1 ELSE 0 END AS is_tuesday,
-  CASE WHEN EXTRACT(DOW FROM d.date_au) = 3 THEN 1 ELSE 0 END AS is_wednesday,
-  CASE WHEN EXTRACT(DOW FROM d.date_au) = 4 THEN 1 ELSE 0 END AS is_thursday,
-  CASE WHEN EXTRACT(DOW FROM d.date_au) = 5 THEN 1 ELSE 0 END AS is_friday,
-  CASE WHEN EXTRACT(DOW FROM d.date_au) = 6 THEN 1 ELSE 0 END AS is_saturday,
-  CASE WHEN EXTRACT(DOW FROM d.date_au) IN (0,6) THEN 1 ELSE 0 END AS is_weekend,
-  CASE WHEN EXTRACT(DOW FROM d.date_au) IN (1,2,3,4,5) THEN 1 ELSE 0 END AS is_weekday,
-  CASE WHEN EXTRACT(MONTH FROM d.date_au) = 1 THEN 1 ELSE 0 END AS is_jan,
-  CASE WHEN EXTRACT(MONTH FROM d.date_au) = 2 THEN 1 ELSE 0 END AS is_feb,
-  CASE WHEN EXTRACT(MONTH FROM d.date_au) = 3 THEN 1 ELSE 0 END AS is_mar,
-  CASE WHEN EXTRACT(MONTH FROM d.date_au) = 4 THEN 1 ELSE 0 END AS is_apr,
-  CASE WHEN EXTRACT(MONTH FROM d.date_au) = 5 THEN 1 ELSE 0 END AS is_may,
-  CASE WHEN EXTRACT(MONTH FROM d.date_au) = 6 THEN 1 ELSE 0 END AS is_jun,
-  CASE WHEN EXTRACT(MONTH FROM d.date_au) = 7 THEN 1 ELSE 0 END AS is_jul,
-  CASE WHEN EXTRACT(MONTH FROM d.date_au) = 8 THEN 1 ELSE 0 END AS is_aug,
-  CASE WHEN EXTRACT(MONTH FROM d.date_au) = 9 THEN 1 ELSE 0 END AS is_sep,
-  CASE WHEN EXTRACT(MONTH FROM d.date_au) = 10 THEN 1 ELSE 0 END AS is_oct,
-  CASE WHEN EXTRACT(MONTH FROM d.date_au) = 11 THEN 1 ELSE 0 END AS is_nov,
-  CASE WHEN EXTRACT(MONTH FROM d.date_au) = 12 THEN 1 ELSE 0 END AS is_dec,
-
-  pd.avg_30_min_demand,
-  pd.min_30_min_demand,
-  pd.max_30_min_demand,
-  pd.sum_30_min_demand,
-  pd.count_30_min_points,
-
-  pt.avg_temp,
-  pt.min_temp,
-  pt.max_temp,
-  pt.hd_next_24h,
-  pt.cd_next_24h,
-
-  pr.precipitation,
-  ps.sunlight
-
-FROM days d
-LEFT JOIN processed_demand pd USING (date_au)
-LEFT JOIN processed_temperature pt USING (date_au)
-LEFT JOIN processed_precipitation pr USING (date_au)
-LEFT JOIN processed_sunlight ps USING (date_au)
-ORDER BY d.date_au;
-
-SELECT d.date_au
-FROM days d
-LEFT JOIN temperature_nsw t
-  ON (t.datetime AT TIME ZONE 'Australia/Sydney')::date = d.date_au
-GROUP BY d.date_au
-HAVING COUNT(t.*) = 0
-ORDER BY d.date_au;
-
-
-COPY (select * from processed)
-TO '/import/processed.csv'
-WITH (
-    FORMAT CSV,
-    HEADER true,
-    DELIMITER ','
-);
-```
-
-=== EDA Code
-```python
-#1. Time Series plot for response variable: Average 30 min demand (t)
-demand_mean = bxp["demand"].mean()
-plt.figure(figsize=(10,3))
-plt.plot(bxp["date"], bxp["demand"], color="steelblue", linewidth=1)
-plt.axhline(demand_mean, color="red", linestyle="--", linewidth=1, label="Mean demand")
-#horizontal mean line
-.ylabel("Electricity Demand (MW)", fontsize=9)
-plt.xlabel("")
-plt.gca().xaxis.set_major_locator(mdates.MonthLocator(interval=4))
-plt.gca().xaxis.set_major_formatter(mdates.DateFormatter("%b %Y"))
-```
-```python
-# 2. Time series plot for derived variables 
-vars_to_plot = {"lag_min_demand": r"Min Demand$_{t-1}$ (MW)", "lag_max_demand": r"Max Demand$_{t-1}$ (MW)", "min_temp": "Min temperature (°C)", "max_temp": "Max temperature (°C)"}
-fig, axes = plt.subplots(nrows=6, ncols=1, figsize=(11, 10), sharex=True)
-axes = axes.flatten()
-for i, (var, ylabel) in enumerate(vars_to_plot.items()):
-    axes[i].plot(bxp["date"], bxp[var], color="steelblue", linewidth=1, label=var)
-    mean_val = bxp[var].mean()
-    axes[i].axhline(mean_val, color="red", linestyle="--", linewidth=0.6)    
-    axes[i].set_ylabel(ylabel, fontsize=8)
-    axes[i].grid(True, linestyle="--", alpha=0.4)
-    axes[i].tick_params(axis="x", labelrotation=0, labelsize=8)
-    axes[i].tick_params(axis="y", labelsize=8)
-axes[-1].xaxis.set_major_locator(mdates.MonthLocator(interval=4))
-axes[-1].xaxis.set_major_formatter(mdates.DateFormatter("%b %Y"))
-
-```
-```python
-# 3. Variation in average electricity demand_t
-plt.figure(figsize=(7,4))
-sns.boxplot(data=bxp, x="day", y="demand", order=day_order,
-            palette="Set2", fliersize=3, linewidth=1, boxprops=dict(edgecolor="black"),
-            whiskerprops=dict(color="black"),
-            capprops=dict(color="black"),
-            medianprops=dict(color="black", linewidth=1.5))
-plt.xlabel("")
-plt.ylabel("Electricity Demand (MW)", fontsize=11)
-plt.xticks(fontsize=10)
-plt.yticks(fontsize=10)
-plt.grid(axis="y", linestyle="--", alpha=0.5)
-plt.tight_layout()
-
-```
-```python
-# 4. Electricity demand by Month
-plt.figure(figsize=(10,7))
-sns.boxplot(data=bxp, x="month", y="demand", order=month_order,
-            palette="Set2", fliersize=3, linewidth=1, boxprops=dict(edgecolor="black"),
-            whiskerprops=dict(color="black"),
-            capprops=dict(color="black"),
-            medianprops=dict(color="black", linewidth=1.5))
-plt.xlabel("")
-plt.ylabel("Electricity Demand (MW)", fontsize=11)
-plt.xticks(fontsize=10)
-plt.yticks(fontsize=10)
-plt.grid(axis="y", linestyle="--", alpha=0.5)
-
-```
-```python
-# 5. Electricity demand by Quarter
-bxp["quarter"] = bxp["date"].dt.quarter
-
-plt.figure(figsize=(6,4))
-sns.boxplot(data=bxp, x="quarter", y="demand", 
-            palette="Set2", fliersize=3, linewidth=1, boxprops=dict(edgecolor="black"),
-            whiskerprops=dict(color="black"),
-            capprops=dict(color="black"),
-            medianprops=dict(color="black", linewidth=1.5))
-plt.xlabel("")
-plt.ylabel("Electricity Demand (MW)", fontsize=11)
-plt.xticks(ticks=[0,1,2,3], labels=["Q1", "Q2", "Q3", "Q4"], fontsize=10)
-plt.xticks(fontsize=10)
-plt.yticks(fontsize=10)
-plt.grid(axis="y", linestyle="--", alpha=0.5)
-plt.tight_layout()
-
-```
-```python
-# 6.Scatter plot of demand at time t vs. Min_demand (t-1) and Max_demand (t-1)
-scatter_pairs = [("lag_min_demand", r"Min Demand$_{t-1}$ (MW)"), ("lag_max_demand", r"Max Demand$_{t-1}$ (MW)")]
-
-fig, axes = plt.subplots(nrows=1, ncols=2, figsize=(8, 4), sharey=True)
-for i, (xvar, xlabel) in enumerate(scatter_pairs):
-    ax = axes[i]
-    # Scatter plot with regression line
-    sns.regplot(x=bxp[xvar], y=bxp["demand"], scatter_kws={"s": 10, "alpha": 0.6, "color": "steelblue"},  line_kws={"color": "red", "lw": 1}, ax=ax)
-    # equation equation and Rsq
-    X = sm.add_constant(bxp[xvar])
-    y = bxp["demand"]
-    model = sm.OLS(y, X).fit()
-    intercept, slope = model.params
-    R2 = model.rsquared
-    #for equation text
-    ax.text(0.05, 0.95,  f"y = {intercept:.2f} + {slope:.2f}x\nR2 = {R2:.2f}", transform=ax.transAxes, ha="left", va="top", fontsize=9,
-            bbox=dict(facecolor="white", alpha=0.6, edgecolor="none"))
-    ax.set_xlabel(xlabel, fontsize=9) # Labels
-    if i == 0:
-        ax.set_ylabel(r"Demand$_{t}$ (MW)", fontsize=9)
-    else:
-        ax.set_ylabel("")
-    ax.grid(True, linestyle="--", alpha=0.4)
-    ax.tick_params(axis="both", labelsize=8)
-
-```
-```python
-# 7. Scatter plot of demand at time t vs.temperature-based variables (t)
-temp_vars = [("min_temp", r"Min Temperature$_{t}$ (°C)"),
-             ("max_temp", r"Max Temperature$_{t}$ (°C)"),
-             ("avg_temp", r"Average Temperature$_{t}$ (°C)")]
-fig, axes = plt.subplots(nrows=1, ncols=3, figsize=(14, 4), sharey=True)
-for i, (xvar, xlabel) in enumerate(temp_vars):
-    ax = axes[i]
-    sns.scatterplot(x=bxp[xvar], y=bxp["demand"], 
-                    ax=ax, color="steelblue", s=10, alpha=0.6)
-    # Polynomial regression fit (degree=2)
-    X_poly = np.column_stack((bxp[xvar], bxp[xvar]**2))
-    X_poly = sm.add_constant(X_poly)  # add intercept
-    y = bxp["demand"]
-    model = sm.OLS(y, X_poly).fit()
-    intercept, beta1, beta2 = model.params
-    R2 = model.rsquared
-    # Generate smooth curve
-    x_range = np.linspace(bxp[xvar].min(), bxp[xvar].max(), 200)
-    y_fit = intercept + beta1 * x_range + beta2 * x_range**2
-    ax.plot(x_range, y_fit, color="red", linewidth=1)
-    # Equation text
-    ax.text(0.05, 0.95,
-            f"y = {intercept:.2f} + {beta1:.2f}x + {beta2:.2f}x²\n2 = {R2:.2f}",
-            transform=ax.transAxes, ha="left", va="top", fontsize=9,
-            bbox=dict(facecolor="white", alpha=0.6, edgecolor="none"))
-    ax.set_xlabel(xlabel, fontsize=9)
-    if i == 0:
-        ax.set_ylabel(r"Demand$_t$ (MW)", fontsize=9)
-    else:
-        ax.set_ylabel("")
-    ax.grid(True, linestyle="--", alpha=0.4)
-    ax.tick_params(axis="both", labelsize=8)
-    
-```
-```python
-# 8. Scatter plot of demand at time t vs. rest of the climate features
-scatter_pairs = [("precipitation", r"Precipitation$_{t}$ (mm/day)"), ("sunlight", r"Sunlight Exposure$_{t}$ (MJ/m²)"), 
-                 ("CD", r"CD$_{t}$ (°C)"), ("HD", r"HD$_{t}$ (°C)")]
-fig, axes = plt.subplots(nrows=2, ncols=2, figsize=(10, 6), sharey=True)
-axes = axes.flatten()  
-for i, (xvar, xlabel) in enumerate(scatter_pairs):
-    ax = axes[i]
-    sns.regplot(x=bxp[xvar], y=bxp["demand"], scatter_kws={"s": 10, "alpha": 0.6, "color": "steelblue"}, line_kws={"color": "red", "lw": 1}, ax=ax)
-    X = sm.add_constant(bxp[xvar])
-    y = bxp["demand"]
-    model = sm.OLS(y, X).fit()
-    intercept, slope = model.params
-    R2 = model.rsquared
-    ax.text( 0.05, 0.95, f"y = {intercept:.2f} + {slope:.2f}x\nR2 = {R2:.2f}", transform=ax.transAxes, ha="left", va="top", fontsize=9,
-        bbox=dict(facecolor="white", alpha=0.6, edgecolor="none")) 
-    ax.set_xlabel(xlabel, fontsize=9)
-    if i == 0:
-        ax.set_ylabel(r"Demand$_{t}$ (MW)", fontsize=9)
-    else:
-        ax.set_ylabel("")
-    ax.grid(True, linestyle="--", alpha=0.4)
-    ax.tick_params(axis="both", labelsize=8)
-
-```
 #pagebreak()
 == Appendix 2 - Tables <app-2>
-=== Initial Literature Review
+=== Literature Review Summary
 
 #figure(
   {show table.cell: set text(size: 6pt)
   table(
-  columns: 6,
-  table.header([Study], [Dataset Location], [Dataset], [Feature(s))], [Model(s)],[Results]),
-  [@ref2],[NSW, Australia],[AEMO, BOM],[Temperature, Humidity, Wind Speed, CDD, HDD],[CNN-LSTM, DNN, CNN, LSTM],[CNN: 11.9% MAPE, CNN-LSTM: 1.89% MAPE, CNN-LSTM ATT: 1.83% MAPE],
-  [@ref8],[Panama],[CND],[Hour of day, Day of week, Holiday, Historical Demand],[Transformer model (complex)],[17/18 39.56 MAE 51.10 RMSE, 19/20 38.76 MAE 54.86 RMSE],
-  [@ref9],[Australia, NEM regions],[BOM],[Operational Demand, Ambient Temp, Temp Forecast, Solar PV, Day-type],[BNN],[Median MAPE % NSW: 5.18],
-  [@ref12],[Australia, NEM regions],[Australian National Energy Market],[Daily Minimum Temperature, Daily Maximum Temperature, Day index, Day-type],[KNN, Ensembling of 3 models],[Model 1 - 5.1% MAPE, Model 2 - 4.8% MAPE, Model 3 - 3.6% MAPE, Ensemble - 1.82% MAPE],
-  [@ref13],[Sydney Airport Station, Australia],[AEMO],[Balance point temperature, CDD, HDD, Working & non-working days, Season],[Regression-based moving window],[Winter week: 1.88% MAPE, Summer week: 4.26% MAPE, Year: 2.30% MAPE],
-  [@ref14],[NSW, Australia],[BOM],[Time of day, Temperature],[GAM],[2.6% SDE],
-  [@ref15],[Bangkok, Thailand & metro areas],[EGAT],[Temperature, Day-type, Season effects, Historical demand, Special events],[OLS regression, GLSAR, FF-ANN],[OLS: 1.97% MAPE, GLSAR: 1.88% MAPE, FF-ANN: 2.72% MAPE],
-  [@ref16],[QLD, Australia],[AEMO],[Historical demand],[MARS, SVR, ARIMA],[MARS: 200.43 MAE, SVR: 162.36 MAE, ARIMA: 474.39 MAE],
-  [@ref18],[NSW, Australia],[AEMO, BOM],[Min temperature, max temperature, Humidity, Solar radiation],[Linear Regression, Random Forest, XGBoost],[MAPE, MSE, R^2: Linear: 5.38%/260792/0.65, Random Forest: 3.03%/91809/0.88, XGBoost: 2.97%/89543/0.88],
+  columns: (auto, auto, 80pt, auto, 80pt, 70pt, 145pt),
+  table.header([Study], [Dataset Location], [Dataset], [Forecast Term],[Feature(s))], [Model(s)],[Results]),
+  [@ref2],[NSW, Australia],[AEMO, BOM],[],[Temperature, Humidity, Wind Speed, CDD, HDD],[CNN-LSTM, DNN, CNN, LSTM],[CNN: 11.9% MAPE, CNN-LSTM: 1.89% MAPE, CNN-LSTM ATT: 1.83% MAPE],
+  [@ref8],[Panama],[CND],[],[Hour of day, Day of week, Holiday, Historical Demand],[Transformer model (complex)],[17/18 39.56 MAE 51.10 RMSE, 19/20 38.76 MAE 54.86 RMSE],
+  [@ref9],[Australia, NEM regions],[BOM],[],[Operational Demand, Ambient Temp, Temp Forecast, Solar PV, Day-type],[BNN],[Median MAPE % NSW: 5.18],
+  [@ref12],[Australia, NEM regions],[Australian National Energy Market],[],[Daily Minimum Temperature, Daily Maximum Temperature, Day index, Day-type],[KNN, Ensembling of 3 models],[Model 1 - 5.1% MAPE, Model 2 - 4.8% MAPE, Model 3 - 3.6% MAPE, Ensemble - 1.82% MAPE],
+  [@ref13],[Sydney Airport Station, Australia],[AEMO],[],[Balance point temperature, CDD, HDD, Working & non-working days, Season],[Regression-based moving window],[Winter week: 1.88% MAPE, Summer week: 4.26% MAPE, Year: 2.30% MAPE],
+  [@ref14],[NSW, Australia],[BOM],[],[Time of day, Temperature],[GAM],[2.6% SDE],
+  [@ref15],[Bangkok, Thailand & metro areas],[EGAT],[],[Temperature, Day-type, Season effects, Historical demand, Special events],[OLS regression, GLSAR, FF-ANN],[OLS: 1.97% MAPE, GLSAR: 1.88% MAPE, FF-ANN: 2.72% MAPE],
+  [@ref16],[QLD, Australia],[AEMO],[],[Historical demand],[MARS, SVR, ARIMA],[MARS: 200.43 MAE, SVR: 162.36 MAE, ARIMA: 474.39 MAE],
+  [@ref18],[NSW, Australia],[AEMO, BOM],[],[Min temperature, max temperature, Humidity, Solar radiation],[Linear Regression, Random Forest, XGBoost],[MAPE, MSE, R²: Linear: 5.38%/260792/0.65, Random Forest: 3.03%/91809/0.88, XGBoost: 2.97%/89543/0.88],
+  [@Reg1],
+  [New South Wales, Australia],
+  [AEMO, Bureau of Meteorology],
+  [Monthly],
+  [CDD, HDD, Humidity, Rainy Days],
+  [Multiple Linear Regression with VIF analysis and Backward Elimination],
+  [MAPE \ MLR: 1.35%],
+  
+  [@ref15],
+  [Thailand],
+  [National electricity demand and weather datasets],
+  [Half-hourly],
+  [Types of days, Temperature, Historical demand, Interaction terms],
+  [OLD Regression, GLS Regression, Feed Forward ANN (FF-ANN)],
+  [MAPE \ FF-ANN: 2.72% \ GLS: 1.88% \ OLS: 1.97%],
+
+  [@reg3],
+  [Hokkaido, Japan],
+  [Hokkaido Electric Power Company (HEPCO), Japan Meteorological Agency (JMA)],
+  [Hourly],
+  [Rainfall, Relative Humidity, Wind Speed, Solar Radiation, Cloud Cover],
+  [Multiple linear models; Model A (deterministic terms, historical demand), Model B (Model A + Temperature), Model C (Model B + atmospheric features) using ARMAX and Bayesian estimation with Gibbs sampling],
+  [MAPE \ Model A: 2.43% \ Model B: 1.98% \ Model C: 1.72%],
+
+  [@reg4],
+  [Muzaffarabad, Pakistan],
+  [Water and power development authority (WAPDA), Pakistan meteorological department (PMD)],
+  [Hourly],
+  [Temperature, due drop, humidity, cloud cover, rainfall, windspeed],
+  [MLR, KNN, SVR-linear, SVR-radial, SVR-polynomial, Random Forest, AdaBoost],
+  [MAPE \ MLR: 9.23% \ KNN: 7.55% \ SVRL: 17.46% \ SVRR: 7.84% \ SVRP: 8.99 \ RF: 7.56% \ AdaBoost: 10.51%],
+  
+  [@reg5],
+  [Tokyo, Japan],
+  [Tokyo Electric Power Company Holdings],
+  [Monthly],
+  [Temperature],
+  [MLR with non-negative least squares (NNLS) and LSE estimations, compared with SVM, RF, Lasso, LGBM, LSTM],
+  [MAPE \ NNLS: 3.2% \ LSE: 3.2% \ SVM: 2.9% \ RF: 3.4% \ Lasso: 3.9% \ LGBM: 3.4% \  LSTM: 6.2%],
+  
+  [@reg6],
+  [Thailand],
+  [EGAT],
+  [Half-hourly],
+  [Temperature, holiday, weekday/weekend],
+  [Voting regression (VR), Gradient-descent LR, OLD and generalised least-squares auto-regression (GLSAR) models, Compared with decision trees (DT) and random forests (RF)],
+  [MAPE \ VR: 1.8% \ LR: 1.9% \ OLS: 1.9% \ GLSAR: 1.96% \ DT: 3.6% \ RF: 3.0%],
+  
+  [@reg7],
+  [South Africa],
+  [Eskom, South Africa's power utility company],
+  [Hourly],
+  [Day types, Months, Holidays, Temperature, Lagged demand at lags 1, 12, and 24],
+  [Additive quantile regression (AQR), AQR with interactions (AQRI), Generalised additive model (GAM), GAM with interactions (GAMI)],
+  [RMSE, MAE, MAPE \ AQR: 736.2, 568.7, 2.15% \ AQRI: 662.4, 516.5, 2.04% \ GAM: 731.5, 549.5, 2.04% \ GAMI: 648.8, 499.7, 1.86%],
+
+  [@nw12],[Not specified], [Kaggle],[Daily],[Historical daily average load, weather, time, day-of-week],[Random Forest Regression],[MSE: 1.897728; R²: 0.431885],
+
+  // --- NW13 ---
+  [@nw13],
+  [Kerala, India],
+  [Kerala State Electricity Board (KSEB)],
+  [Daily],
+  [Date, Demand (MW), Temperature, Dew Point, Humidity, Pressure, Wind speed, Population Density],
+  [LR, DT, RF, SVR, KNN, XGBoost, ANN],
+  [ Accuracy %, MAE, MSE, RMSE \
+
+    LR: 79.39, 0.045, 0.003, 0.060 \
+    DT: 70.74, 0.049, 0.005, 0.073 \
+    RF: 82.72, 0.038, 0.002, 0.054 \
+    SVR: 79.37, 0.048, 0.003, 0.061 \
+    KNN: 79.72, 0.043, 0.003, 0.062 \
+    XGB: 82.11, 0.038, 0.002, 0.054 \
+    ANN: 80.31, 0.043, 0.003, 0.058
+  ],
+
+  // --- NW14 ---
+  [@nw14],
+  [Jordan],
+  [Jordanian EMRC & DOS],
+  [Daily morning & evening peak],
+  [Temp (morning & evening), year-to-year load growth, daily usage (weekday/holiday), population, weekly peaks],
+  [RF, XGB, CatBoost, SVR, GBM, GPR, STL],
+  [
+    Test MAE (MW), test MAPE (%), morning & afternoon demand \
+    
+    GPR: Morning 4.71/0.20, Evening 4.31/0.15 \
+    GBM: Morning 31.98/1.42, Evening 25.03/0.91 \
+    CatBoost: Morning 41.20/1.78, Evening 37.83/1.38 \
+    XGB: Morning 38/1.68, Evening 26.78/0.97 \
+    RF: Morning 33.22/1.47, Evening 27.43/1.00 \
+    SVR: Morning 48.23/2.07, Evening 28.79/1.05 \
+    STL: Morning 161.45/6.63, Evening 124.69/4.51
+  ],
+
+  // --- NW17 ---
+  [@nw17],
+  [VA, NC, SC, USA],
+  [Dominion Energy / PJM (Kaggle)],
+  [Two-week + daily hourly],
+  [Hourly demand, time features (day, month, year, hour)],
+  [RNN, LSTM, XGBoost],
+  [
+    MAE, RMSE, R² Score \ 
+    
+    Deep RNN: 0.0425, 0.02446, 0.959 \
+    Stacked LSTM: 0.0329, 0.01996, 0.973 \
+    XGB: 0.1321, 0.08595, 0.723
+  ],
+
+  // --- NW18 ---
+  [@nw18],
+  [Turkey],
+  [EXIST],
+  [Hourly],
+  [Hourly demand, temperature, month, weekday, holidays],
+  [LR, RF, XGB],
+  [RMSE \
+  LR: 2348.35 \
+  RF: 2075.32 \
+  XGB: 2038.54],
+
+  // --- NW19 ---
+  [@nw19],
+  [Victoria, Australia],
+  [La Trobe Energy AI/Analytics Platform],
+  [Hourly],
+  [Timestamp, air temp, humidity, lag weather],
+  [XGB, LightGBM, CatBoost, GBM],
+  [
+    MAE, RMSE, nRMSE, MSE \ 
+    GBM: 7.499, 9.513, 0.538, 90.92 \
+    XGB: 7.856, 9.906, 0.560, 98.129 \
+    LightGBM: 8.032, 10.077, 0.571, 101.555
+  ],
+
+  // --- NW20 ---
+  [@nw20],
+  [Nashville, TN, USA],
+  [City wireless sensors],
+  [Hourly],
+  [Demand, air pressure, temp, humidity, wind, clouds, irradiation],
+  [LSTM, XGB],
+  [
+    R², RMSE, MAE \
+    
+    LSTM: 0.838, 2.0722, 1.5275 \
+    XGB: 0.859, 1.8803, 1.4299
+  ],
+  [@ref18],[NSW, Australia],[AEMO, BOM],[Daily], [Min temperature, max temperature, Humidity, Solar radiation],[Linear Regression, Random Forest, XGBoost],[MAPE, MSE, R²: Linear: 5.38%/260792/0.65, Random Forest: 3.03%/91809/0.88, XGBoost: 2.97%/89543/0.88],
+
+  [@lstmlit1],[Brescia, Italy],[University of Brescia Energy Management System],[Daily],[Historical Load Data, Change rates, Temperature, Humidity, Wind Speed, Solar Radiation, Hour, Day, Month, Holiday],[LSTM, GRU, RNN, MLP],[RMSE, MAE \ LSTM: 1.93, 1.48 \ GRU: 2.04, 1.56 \ RNN: 2.31, 1.78 \ MLP: 2.40, 1.85],
+  [@lstmlit2],[Salt Lake City, Utah, USA \ Austin, Texas, USA],[Public Safety Building, Utah \ Mesowest, East Austin  RAWS Weather Station],[83 days \ One Year],[Temperature, Humidity, Hour, Day of Week, Day of Month, Month Number, Energy Load],[LSTM-MLP],[RMSE (Utah): \ Model 1: 16.9 \ Model 2: 14.1 \ RMSE (Texas): \ Model 2: 45.35],
+  [@lstmlit3],[London, England],[London Smart Meters],[Daily, 4 months, 13 months],[Sum Demand, Mean Demand],[RNN, LSTM],[RMSE: \ RNN Short term: 0.02 \ RNN Mid term: 0.03 \ RNN Long term: 0.14 \ LSTM Short term: 0.02 \ LSTM Mid term: 0.03 \ LSTM Long term: 0.15 ],
+  [@lstmlit5],[Scotland],[Residential Data],[Daily, Weekly],[30 min demand, hourly temp, solar irradiation, precipitation, wind speed, year, month, day, hour, day of week, holidays, time, solar angles and moon phase],[SB-LSTM],[MAE, MAPE(%) \ Day ahead: 0.411, 1.635 \ Week ahead: 0.495, 1.973],
+  [@lstmlit6],[Bareilly, India],[Smart Meter Data],[3 minutes],[3-min consumption, time, avg voltage, avg current, grid frequency, hour of day, day of week, season],[LSTM],[MAE, MSE, RMSE \ 0.0013, 0.000008, 0.0028],
+  [@lstmlit8],[France],[UCI Learning Repo - Single home data],[Hourly],[1 min demand, day, month, year, hour, minute, global active power, global reactive power, voltage, global intensity, sub metering measures],[LSTM, GRU, BD-LSTM, LSTM-Att, CNN-LSTM],[RMSE, MAE, MAPE \ LSTM: 0.86, 0.63, 51.45 \ GRU: 0.86, 0.63, 51.47 \ BD-LSTM: 0.85, 0.61, 50.1 \ LSTM-Att: 0.84, 0.59, 48.36 \ CNN-LSTM: 0.61, 0.35, 34.84],
+  [@transformer2],
+  [United States],
+  [Kaggle],
+  [12 hour, 24 hour, and 36 hour],
+  [Historical Load Data, Temperature, Date],
+  [Seq2Seq, Transformer],
+  [MAPE \ Seq2Seq: 11.40 \ Transformer: 10.18],
+
+  [@transformer3],
+  [Cornwall UK, and Fintry UK],
+  [SMART Fintry, and Cornwall Local Energy Market],
+  [Synthetic Data Absences],
+  [Electricity Demand Readings],
+  [Mean, Linear, SoftImpute, Mice, SVM, RF, MLP, CNN-LSTM, Transformer],
+  [Average RMSE \ Mean: 47.93 \ Linear: 44.47 \ SoftImpute: 41.54 \ Mice: 35.43 \ SVM: 38.81 \ RF: 31.96 \ MLP: 34.32 \ CNN-LSTM: 28.91 \ Transformer: 20.98],
+
+  [@transformer4],
+  [Multiple unidentified cities and industries],
+  [Unknown],
+  [Daily and Monthly],
+  [Meteorological, Social (holidays, school vacations), Historical Electricity Demand],
+  [Prophet, GBDT, CNN-LSTM, Transformer-F (Transformer plus fully connected NN)],
+  [Month Error \ Prophet: 0.59 \ GBDT: 0.08 \ CNN-LSTM: 0.07 \ Transformer: 0.02],
   )},
   caption: [Literature Review Summary]
 ) <litrevtable>
@@ -1610,8 +1529,8 @@ for i, (xvar, xlabel) in enumerate(scatter_pairs):
     [max_temp], [Maximum temperature], [calculated from temperature dataset],
     [hd_next_24h], [Heating degree next 24 hours], [calculated from @hdd],
     [cd_next_24h], [Cooling degree next 24 hours], [calculated from @cdd],
-    [precipitation], [Precipitation in mm/day], [],
-    [sunlight], [Sunlight intensity/duration], [#highlight[need source]]
+    [precipitation], [Precipitation in mm/day], [@nasa-precip],
+    [sunlight], [Sunlight intensity/duration], [@bom-sunlight]
   )
 
 === LSTM Results
@@ -1693,27 +1612,35 @@ for i, (xvar, xlabel) in enumerate(scatter_pairs):
 ) <lstm_res_allfull>
 
 #pagebreak()
-== Appendix 3 – Supplied Data Description <app-3>
-  
-#strong[Total electricity demand];, in 30 minutes increments for New South Wales. This data is sourced from the Market Management System database, which is published by the market operator from the National Electricity Market (NEM) system. The variables are:
-  
-- DATETIME: Date and time interval of each observation in the format (dd/mm/yyyy hh:mm)
-- TOTALDEMAND: Total demand (MW)
-- REGIONID: Region Identifier (i.e. NSW1)
+== Appendix 3 – Data Description <app-3>
 
-#strong[Air temperature] in New South Wales (as measured from the Bankstown Airport weather station). This data is sourced from the Australian Data Archive for Meteorology. Note: Unlike the total demand and forecast demand, the time interval between each observation may not be constant (i.e. half-hourly data). The variables are:
+#strong[Total electricity demand], in 30-minute increments for New South Wales.  
+This data is sourced from the Market Management System database, published by the market operator of the National Electricity Market (NEM).  
 
-- DATETIME: Date time interval of each observation (dd/mm/yyyy hh:mm)
-- TEMPERATURE: Air temperature (°C)
-- LOCATION: Location of a weather station (i.e., Bankstown weather station)
+The variables are:
+- DATETIME: Date and time interval of each observation (dd/mm/yyyy hh:mm)  
+- TOTALDEMAND: Total demand (MW)  
+- REGIONID: Region identifier (i.e., NSW1)  
 
-*PRECIPITATION*:
-Time Series, Area-Averaged of precipitation daily 0.5 deg. [AIRS, SSMI GPCPDAY v3.3] mm/day over 2016-01-01 00:00:00Z - 2020-01-01 00:00:00Z, 
-Region: 141E, 37.5S, 153.6E, 28S (Boundry box for NSW)
- https://giovanni.gsfc.nasa.gov/giovanni/#service=ArAvTs&starttime=2010-01-01T00:00:00Z&endt…\
-*SOLAR EXPOSURE:*
-Daily solar exposure data from weather station: Sydney Airport 
-https://www.bom.gov.au/climate/data/
+#strong[Air temperature] in New South Wales (as measured from the Bankstown Airport weather station).  
+This data is sourced from the Australian Data Archive for Meteorology.  
+Note: Unlike the total demand and forecast demand, the time interval between each observation may not be constant (i.e., half-hourly data).  
+
+The variables are:
+- DATETIME: Date and time interval of each observation (dd/mm/yyyy hh:mm)  
+- TEMPERATURE: Air temperature (°C)  
+- LOCATION: Weather station location (i.e., Bankstown)  
+
+#strong[Precipitation], area-averaged daily time series.  
+Sourced from AIRS, SSMI GPCPDAY v3.3. Units: mm/day.  
+Coverage: 2016-01-01 to 2020-01-01.  
+Region: 141E, 37.5S to 153.6E, 28S (boundary box for NSW).  
+Source: @nasa-precip 
+
+#strong[Solar exposure], daily solar exposure data.  
+Measured at Sydney Airport weather station.  
+Source: @bom-sunlight
+
 
 #pagebreak()
 == Appendix 4 – Expanded Modelling Explanation <app-4>
@@ -1822,15 +1749,16 @@ Batch size in a neural network based model refers to the number of samples that 
 
 #underline[window_size]
 
-In the context of an LSTM, the window size controls the size of the input matrix as described in @lstm-dataprep.  As we are working with time series data, a window size of 7 (corresponding to a week) will be used as default, as it should capture daily variations.  Experiments will be undertaken to increase and decrease this window size with values in the subset of [5, 10, 14].  For the sake of time limitations for the project, this will not be a part of the Optuna optimisation process.
+In the context of an LSTM, the window size controls the size of the input matrix as described in @lstm-dataprep.  As time series data is being worked with, a window size of 7 (corresponding to a week) will be used as default, as it should capture daily variations.  Experiments will be undertaken to increase and decrease this window size with values in the subset of [5, 10, 14].  For the sake of time limitations for the project, this will not be a part of the Optuna optimisation process.
 
 #pagebreak()
 == Appendix 5 - Feature Category Mapping <app-5>
 
-Weather: avg_temp, min_temp, max_temp, precipitation, sunlight
-Seasonality: is_summer, is_autumn, is_winter, is_spring
-Day_of_Week: is_monday, is_tuesday, is_wednesday, is_thursday, is_friday, is_saturday, is_sunday, is_weekend, is_weekday
-Monthly: is_jan, is_feb, is_mar, is_apr, is_may, is_jun, is_jul, is_aug, is_sep, is_oct, is_nov, is_dec
-Day_Lag_Features: prev_day_avg_demand, prev_day_min_demand,  prev_day_max_demand, prev_day_sum_demand
-Week_Lag_Features: prev_week_avg_demand, prev_week_min_demand, prev_week_max_demand, prev_week_sum_demand
-Temperature_Derived: hd_next_24h, cd_next_24h
+Categories:
+- Weather: avg_temp, min_temp, max_temp, precipitation, sunlight
+- Seasonality: is_summer, is_autumn, is_winter, is_spring
+- Day_of_Week: is_monday, is_tuesday, is_wednesday, is_thursday, is_friday, is_saturday, is_sunday, is_weekend, is_weekday
+- Monthly: is_jan, is_feb, is_mar, is_apr, is_may, is_jun, is_jul, is_aug, is_sep, is_oct, is_nov, is_dec
+- Day_Lag_Features: prev_day_avg_demand, prev_day_min_demand,  prev_day_max_demand, prev_day_sum_demand
+- Week_Lag_Features: prev_week_avg_demand, prev_week_min_demand, prev_week_max_demand, prev_week_sum_demand
+- Temperature_Derived: hd_next_24h, cd_next_24h

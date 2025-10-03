@@ -784,44 +784,44 @@ ref22:
     title: IEEE Transactions on Power Systems
     issue: 1
     volume: 27
-  
+
 ref23:
-  type: misc
-  title: 'Artificial intelligence and statistical techniques in short-term load forecasting: a review'
+  type: article
+  title: 'Electricity demand forecasting methodologies and applications: a review'
   author:
-  - Nassif, A. B.
-  - Soudan, B.
-  - Azzeh, M.
-  - Attilli, I.
-  - AlMulla, O.
-  date: 2021
-  
+  - Ugbehe, Prosper O.
+  - Diemuodeke, Ogheneruona E.
+  - Aikhuele, Daniel O.
+  date: 2025
+  url: https://sustainenergyres.springeropen.com/articles/10.1186/s40807-025-00149-z
+  serial-number:
+    doi: 10.1186/s40807-025-00149-z
+  parent:
+    type: periodical
+    title: Sustainable Energy Research
+    issue: 19
+    volume: 12
+
 ref24:
   type: article
-  title: Novel Predictive Factors to Boost Short-Term Electricity Demand Forecasting Using Machine Learning Models
+  title: An ensemble deep learning framework for energy demand forecasting using genetic algorithm-based feature selection
   author:
-  - Sleem, A. A.
-  - Syed, M. N.
+  - Sakib, Md
+  - Siddiqui, Talha
+  - Mustajab, Syed
+  - Alotaibi, Rami M.
+  - Alshareef, Nasser M.
+  - Khan, Muhammad Z.
   date: 2025
+  page-range: e310465
+  url: https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0310465
+  serial-number:
+    doi: 10.1371/journal.pone.0310465
   parent:
     type: periodical
-    title: IEEE Access
-    
-ref25:
-  type: article
-  title: The importance of environmental factors in forecasting Australian power demand
-  author:
-  - Eshragh, A.
-  - Ganim, B.
-  - Perkins, T.
-  - Bandara, K.
-  date: 2022
-  page-range: 1-11
-  parent:
-    type: periodical
-    title: Environmental Modeling & Assessment
+    title: PLOS ONE
     issue: 1
-    volume: 27
+    volume: 20
     
 ref26:
   type: article
@@ -1368,24 +1368,6 @@ ref41:
     title: IEEE Transactions on Smart Grid
     issue: 1
     volume: 5
-ref42:
-  type: article
-  title: The importance of environmental factors in forecasting Australian power demand
-  author:
-  - Eshragh, A.
-  - Ganim, B.
-  - Perkins, T.
-  - Bandara, K.
-  date: 2022
-  page-range: 1-11
-  serial-number:
-    doi: 10.1007/s10666-021-09768-6
-    issn: 1573-2967
-  parent:
-    type: periodical
-    title: Environmental Modeling & Assessment
-    issue: 1
-    volume: 27
 
 ref43:
   type: article
@@ -1453,64 +1435,7 @@ ref46:
     title: Energies
     issue: 1
     volume: 12
-ref47:
-  type: article
-  title: Density forecasting for long-term peak electricity demand
-  author:
-  - Hyndman, R. J.
-  - Fan, S.
-  date: 2009
-  page-range: 1142-1153
-  serial-number:
-    doi: 10.1109/TPWRS.2009.2016367
-    issn: 1558-0679
-  parent:
-    type: periodical
-    title: IEEE Transactions on Power Systems
-    issue: 2
-    volume: 25
-ref48:
-  type: article
-  title: Short-term load forecasting based on a semi-parametric additive model
-  author:
-  - Fan, S.
-  - Hyndman, R. J.
-  date: 2012
-  page-range: 134-141
-  serial-number:
-    doi: 10.1109/TPWRS.2011.2163029
-    issn: 1558-0679
-  parent:
-    type: periodical
-    title: IEEE Transactions on Power Systems
-    issue: 1
-    volume: 27
-ref49:
-  type: manuscript
-  title: Forecasting high frequency intra-day electricity demand using temperature
-  author:
-  - McCulloch, J.
-  - Ignatieva, K.
-  date: 2017
-  note: Working paper
-ref50:
-  type: article
-  title: The importance of environmental factors in forecasting Australian power demand
-  author:
-  - Eshragh, A.
-  - Ganim, B.
-  - Perkins, T.
-  - Bandara, K.
-  date: 2022
-  page-range: 1-11
-  serial-number:
-    doi: 10.1007/s10666-021-09768-6
-    issn: 1573-2967
-  parent:
-    type: periodical
-    title: Environmental Modeling & Assessment
-    issue: 1
-    volume: 27
+  
 ref51:
   type: article
   title: The impact of climate change on electricity demand in Australia
@@ -1537,22 +1462,6 @@ ref52:
   date: 2019
   organization: Thammasat University
 
-ref53:
-  type: article
-  title: Short-term load forecasting based on a semi-parametric additive model
-  author:
-  - Fan, S.
-  - Hyndman, R. J.
-  date: 2012
-  page-range: 134-141
-  serial-number:
-    doi: 10.1109/TPWRS.2011.2163029
-    issn: 1558-0679
-  parent:
-    type: periodical
-    title: IEEE Transactions on Power Systems
-    issue: 1
-    volume: 27
 ref54:
   type: article
   title: 'Short-term electricity demand forecasting: Impact analysis of temperature for Thailand'
@@ -1643,32 +1552,7 @@ ref59:
     publisher:
       name: Springer
       location: Berlin, Heidelberg
-ref60:
-  type: article
-  title: Density forecasting for long-term peak electricity demand
-  author:
-  - Hyndman, R. J.
-  - Fan, S.
-  date: 2009
-  page-range: 1142-1153
-  parent:
-    type: periodical
-    title: IEEE Transactions on Power Systems
-    issue: 2
-    volume: 25
-ref61:
-  type: article
-  title: 'Short-term load forecasting methods: An evaluation based on European data'
-  author:
-  - Taylor, J. W.
-  - McSharry, P. E.
-  date: 2007
-  page-range: 2213-2219
-  parent:
-    type: periodical
-    title: IEEE Transactions on Power Systems
-    issue: 4
-    volume: 22
+
 ref62:
   type: report
   title: Annual Electricity Network Performance Report 2019–20
@@ -1717,27 +1601,7 @@ ref65:
     title: Energy
     issue: 11
     volume: 34
-ref66:
-  type: misc
-  title: 'Artificial intelligence and statistical techniques in short-term load forecasting: a review'
-  author:
-  - Nassif, A. B.
-  - Soudan, B.
-  - Azzeh, M.
-  - Attilli, I.
-  - AlMulla, O.
-  date: 2021
-  note: Review article; venue not specified in provided citation
-ref67:
-  type: article
-  title: Novel Predictive Factors to Boost Short-Term Electricity Demand Forecasting Using Machine Learning Models
-  author:
-  - Sleem, A. A.
-  - Syed, M. N.
-  date: 2025
-  parent:
-    type: periodical
-    title: IEEE Access
+
 ref68:
   type: article
   title: The impact of climate change on electricity demand in Australia
@@ -1780,3 +1644,16 @@ ref70:
   - Khurram, A.
   note: No. 5244852
 
+nasa-precip:
+  type: web
+  title: Giovanni
+  author: NASA
+  url: https://giovanni.gsfc.nasa.gov/giovanni/
+  date: 2025
+
+bom-sunlight:
+  type: web
+  title: Climate Data Online
+  author: Australian Bureau of Meteorology
+  url: https://www.bom.gov.au/climate/data/
+  date: 2025
