@@ -1081,6 +1081,63 @@ lstmlit9:
     type: periodical
     title: Frontiers in Energy Research
 
+lstmlit10:  
+  type: article
+  title: Global Energy Forecasting Competition 2012
+  author:
+  - Hong, Tao
+  - Pinson, Pierre
+  - Fan, Shu
+  date: 2016
+  page-range: 896-913
+  url: https://doi.org/10.1016/j.ijforecast.2015.11.001
+  serial-number:
+    doi: 10.1016/j.ijforecast.2015.11.001
+  parent:
+    type: periodical
+    title: International Journal of Forecasting
+    publisher: Elsevier
+    issue: 3
+    volume: 32
+
+lstmlit11:
+  type: article
+  title: Electrical Energy Demand Forecasting using Time Series in LSTM and CNN-LSTM Models in Deep Learning Applications
+  author:
+  - Teleron, J. I.
+  - Gonzales, S. L.
+  - Fajardo, A. C.
+  date: 2025
+  page-range: 1-12
+  url: https://jisem-journal.com/index.php/journal/article/view/2511
+  parent:
+    type: periodical
+    title: Journal of Information Systems Engineering and Management
+    publisher: JISEM
+    issue: 15s
+    volume: 10
+
+lstmlit12:
+  type: anthos
+  title: Electricity Demand and Price Forecasting Using LSTM for Smart Grid Operations
+  author:
+  - Hans, A. R.
+  - Sharma, A. K.
+  - Wangkheirakpam, V. D.
+  date: 2025
+  page-range: 213-225
+  url: https://doi.org/10.1007/978-3-031-86193-2_16
+  serial-number:
+    doi: 10.1007/978-3-031-86193-2_16
+  parent:
+    type: anthology
+    title: Big Data Analytics in Astronomy, Science, and Engineering
+    publisher: Springer
+    volume: 15546
+    parent:
+      type: anthology
+      title: Lecture Notes in Computer Science
+
 Reg1:
   type: article
   title: A variance inflation factor and backward elimination based robust regression model for forecasting monthly electricity demand using climatic variables
@@ -1545,6 +1602,7 @@ ref56:
     title: Energies
     issue: 1
     volume: 12
+
 ref57:
   type: article
   title: Machine learning based cost effective electricity load forecasting model using correlated meteorological parameters
@@ -1564,3 +1622,161 @@ ref57:
     type: periodical
     title: IEEE Access
     volume: 8
+
+ref58:
+  type: report
+  title: Electricity Demand Forecasting Methodology
+  author: AEMO
+  date: 2023
+  organization: Australian Energy Market Operator (AEMO)
+ref59:
+  type: article
+  title: 'Electricity load forecasting: a weekday-based approach'
+  author:
+  - Koprinska, I.
+  - Rana, M.
+  - Agelidis, V. G.
+  date: 2012
+  parent:
+    type: proceedings
+    title: International Conference on Artificial Neural Networks (ICANN)
+    publisher:
+      name: Springer
+      location: Berlin, Heidelberg
+ref60:
+  type: article
+  title: Density forecasting for long-term peak electricity demand
+  author:
+  - Hyndman, R. J.
+  - Fan, S.
+  date: 2009
+  page-range: 1142-1153
+  parent:
+    type: periodical
+    title: IEEE Transactions on Power Systems
+    issue: 2
+    volume: 25
+ref61:
+  type: article
+  title: 'Short-term load forecasting methods: An evaluation based on European data'
+  author:
+  - Taylor, J. W.
+  - McSharry, P. E.
+  date: 2007
+  page-range: 2213-2219
+  parent:
+    type: periodical
+    title: IEEE Transactions on Power Systems
+    issue: 4
+    volume: 22
+ref62:
+  type: report
+  title: Annual Electricity Network Performance Report 2019–20
+  author: AER
+  date: 2020
+  organization: Australian Energy Regulator (AER)
+ref63:
+  type: article
+  title: A methodology for electric power load forecasting
+  author:
+  - Almeshaiei, E.
+  - Soltan, H.
+  date: 2011
+  page-range: 137-144
+  parent:
+    type: periodical
+    title: Alexandria Engineering Journal
+    issue: 2
+    volume: 50
+ref64:
+  type: article
+  title: 'Global energy forecasting competition 2017: Hierarchical probabilistic load forecasting'
+  author:
+  - Hong, Tao
+  - Xie, Jingrui
+  - Black, Jonathan
+  date: 2019
+  page-range: 1389-1399
+  parent:
+    type: periodical
+    title: International Journal of Forecasting
+    issue: 4
+    volume: 35
+ref65:
+  type: article
+  title: 'Factors affecting electricity demand in Athens, Greece and London, UK: A comparative assessment'
+  author:
+  - Psiloglou, B. E.
+  - Giannakopoulos, C.
+  - Majithia, S.
+  - Petrakis, M.
+  date: 2009
+  page-range: 1855-1863
+  parent:
+    type: periodical
+    title: Energy
+    issue: 11
+    volume: 34
+ref66:
+  type: misc
+  title: 'Artificial intelligence and statistical techniques in short-term load forecasting: a review'
+  author:
+  - Nassif, A. B.
+  - Soudan, B.
+  - Azzeh, M.
+  - Attilli, I.
+  - AlMulla, O.
+  date: 2021
+  note: Review article; venue not specified in provided citation
+ref67:
+  type: article
+  title: Novel Predictive Factors to Boost Short-Term Electricity Demand Forecasting Using Machine Learning Models
+  author:
+  - Sleem, A. A.
+  - Syed, M. N.
+  date: 2025
+  parent:
+    type: periodical
+    title: IEEE Access
+ref68:
+  type: article
+  title: The impact of climate change on electricity demand in Australia
+  author:
+  - Emodi, N. V.
+  - Chaiechi, T.
+  - Beg, A. R. Alam
+  date: 2018
+  page-range: 1263-1297
+  parent:
+    type: periodical
+    title: Energy & Environment
+    issue: 7
+    volume: 29
+ref69:
+  type: article
+  title: Short-term residential load forecasting based on {LSTM} recurrent neural network
+  author:
+  - Kong, W.
+  - Dong, Z. Y.
+  - Jia, Y.
+  - Hill, D. J.
+  - Xu, Y.
+  - Zhang, Y.
+  date: 2017
+  page-range: 841-851
+  parent:
+    type: periodical
+    title: IEEE Transactions on Smart Grid
+    issue: 1
+    volume: 10
+ref70:
+  type: misc
+  title: Short-Term Probabilistic Forecasting of Individual Household Electricity Consumption Using the Hungarian Algorithm
+  author:
+  - McClone, G.
+  - Zhang, C.
+  - Botman, L.
+  - Kleissl, J.
+  - Khurram, A.
+  note: No. 5244852
+
