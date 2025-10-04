@@ -35,5 +35,5 @@ The repository has the following folder structure:
 - report: RMarkdown or Jupyter notebook report in progress
 - src: source code
 
-  ## Model Files
-  - All model files can be found in src/final_models
+## Model Files
+- All model files can be found in src/final_models
