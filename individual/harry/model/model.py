@@ -373,7 +373,7 @@ def explain_transformer_feature_importance(model, X_train, X_test, params):
         return preds
 
     # Select background and samples to explain
-    background = X_train_flat
+    background = X_train_flat[:500]
     X_explain  = X_test_flat
 
     # SHAP KernelExplainer
